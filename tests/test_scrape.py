@@ -5,7 +5,7 @@ from selenium import webdriver
 from src.google_flight_analysis.scrape import *
 
 def test_chromedriver_found():
-    chrome_driver = webdriver.Chrome()
+    chrome_driver = webdriver.Chrome(executable_path="/usr/bin/google-chrome")
     assert chrome_driver is not None
     
 def test_dataset_generation():
