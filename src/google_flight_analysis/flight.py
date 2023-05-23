@@ -37,9 +37,6 @@ class Flight:
     def __repr__(self):
         return f"{self._id}-{self._origin}-{self._dest}-{self._date}"
 
-    # def __str__(self):
-    #     return "__str__ To be Implemented"
-
     @property
     def roundtrip(self):
         return self._roundtrip
@@ -257,7 +254,7 @@ class Flight:
             data['Price (€)'] += [flight.price]
             data["Price Trend"] += [flight.price_trend[0]]
             data["Price Value"] += [flight.price_trend[1]]
-            data['Access Date'] += [datetime.today().replace(hour = 0, minute = 0, second = 0, microsecond = 0)]
+            data['Access Date'] += [datetime.today()]
             data['Flight Type'] += [("Roundtrip" if flight.roundtrip else "One Way")]
             
         df = pd.DataFrame(data)
@@ -269,6 +266,9 @@ class Flight:
         
         # add column: Days in Advance
         df['Days in Advance'] = (df['Departure datetime'] - df['Access Date']).dt.days
+        
+        # format column: Access Date
+        df['Access Date'] = df['Access Date'].dt.strftime("%Y-%m-%d %H:%M:%S")
 
         return df
      
