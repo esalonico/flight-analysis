@@ -192,16 +192,22 @@ class _Scrape:
     def _clean_results(self, result):
         res2 = [x.encode("ascii", "ignore").decode().strip() for x in result]
         
-        price_trend_dirty = [x for x in res2 if x.startswith("Prices are currently")][0]
+        price_trend_dirty = [x for x in res2 if x.startswith("Prices are currently")]
         price_trend = Scrape.extract_price_trend(price_trend_dirty)
 
         start = res2.index("Sort by:")+1
-        mid_start = res2.index("Price insights")
+        
+        try:
+            mid_start = res2.index("Price insights")
+        except ValueError:
+            mid_start = res2.index("Other flights")
         mid_end = -1
+        
         try:
             mid_end = res2.index("Other departing flights")+1
         except:
             mid_end = res2.index("Other flights")+1
+        
         end  = [i for i, x in enumerate(res2) if x.endswith('more flights')][0]
 
         res3 = res2[start:mid_start] + res2[mid_end:end]
@@ -222,6 +228,10 @@ class _Scrape:
 
     @staticmethod
     def extract_price_trend(s):
+        if not s:
+            return (None, None)
+        
+        s = s[0]
         if s == "Prices are currently typical":
             return ("typical", None)
         
