@@ -118,7 +118,11 @@ class Flight:
         return self._time_arrive
 
 
-    def _classify_arg(self, arg):
+    def _classify_arg(self, arg: str):
+        """
+        Classifies a string (arg) into the correct attribute for a flight,
+        such as price, numer of layover stops, arrival time...
+        """
         if arg == "Change of airport":
             self._stops = self._stops_locations = "Change of airport"
             return
@@ -202,6 +206,11 @@ class Flight:
 
     @staticmethod
     def get_duration_from_string(s):
+        """
+        Returns a better formatted string for a duration element.
+        For example:
+        3 hr 20 min --> 03:20
+        """
         if not bool(re.search("hr|min", str(s))):
             return s
         
@@ -219,6 +228,9 @@ class Flight:
     
     @staticmethod
     def dataframe(flights):
+        """
+        Generate a dataframe from lists of flight data
+        """
         data = {
             'Departure datetime': [],
             'Arrival datetime': [],
@@ -271,17 +283,3 @@ class Flight:
         df['Access Date'] = df['Access Date'].dt.strftime("%Y-%m-%d %H:%M:%S")
 
         return df
-     
-    @staticmethod
-    def assert_error(x, arg): # TODO: this is outdated
-        return [
-            "Parsing Arg 0 as Date Leave elem is incorrect.",
-            "Parsing Arg 1 as Date Return elem is incorrect.",
-            -1,
-            -1,
-            -1,
-            "Parsing Arg 6 as num stop elem is incorrect."
-            "Parsing Arg 7 as CO2 elem is incorrect.",
-            "Parsing Arg 8 as emissions elem is incorrect.",
-            "Parsing Arg 9 as price elem is incorrect."
-        ][x] + ": " + arg 

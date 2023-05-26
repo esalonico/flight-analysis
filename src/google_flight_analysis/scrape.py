@@ -34,7 +34,6 @@ class _Scrape:
 
     def __call__(self, *args):
         if len(args) <= 4:
-            # base call protocol
             self._set_properties(*args)
             self._data = self._scrape_data()
             obj = self.clone(*args)
@@ -89,10 +88,11 @@ class _Scrape:
         obj._set_properties(*args)
         return obj
 
-    '''
-        Set properties upon scraper called.
-    '''
+
     def _set_properties(self, *args):
+        """
+        Set properties from args when the class is called.
+        """
         if len(args) >= 4:
             prop = args
         else:
@@ -104,7 +104,6 @@ class _Scrape:
         self._round_trip = (False if self._date_return is None else True)
   
         
-
     @property
     def origin(self):
         return self._origin
@@ -159,6 +158,10 @@ class _Scrape:
 
 
     def _make_url(self):
+        """
+        From the class parameters, generates a dynamic Google Flight URL to scrape, taking into account if the
+        trip is one way or roundtrip.
+        """
         if self._round_trip:
             return 'https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20from%20{date_leave}%20to%20{date_return}'.format(
                 dest = self._dest,
@@ -174,6 +177,9 @@ class _Scrape:
 
 
     def _get_results(self, url, driver):
+        """
+        Returns the scraped flight results as a DataFrame.
+        """
         results = None
         try:
             results = _Scrape._make_url_request(url, driver)
@@ -190,6 +196,9 @@ class _Scrape:
         return Flight.dataframe(flights)
 
     def _clean_results(self, result):
+        """
+        Cleans and organizes the raw text strings scraped from the Google Flights results page.
+        """
         res2 = [x.encode("ascii", "ignore").decode().strip() for x in result]
         
         price_trend_dirty = [x for x in res2 if x.startswith("Prices are currently")]
@@ -228,6 +237,13 @@ class _Scrape:
 
     @staticmethod
     def extract_price_trend(s):
+        """
+        From a dirty string, return a tuple in format (price_trend, trend value) for a given flight.
+        For example:
+        (typical, None): Prices for that dates/airports are currently average
+        (low, 100): Prices are lower than usual by 100€
+        (high, None): Prices are higher than usual
+        """
         if not s:
             return (None, None)
         
@@ -245,23 +261,12 @@ class _Scrape:
         else:
             return (None, None)
         
-        
-    @staticmethod
-    def _get_driver():
-        driver = None
-        try:
-            driver = webdriver.Chrome() # driver file path could be added here as an argument
-        except:
-            raise Exception(
-                '''Appropriate ChromeDriver version not found.\n
-                Make sure Chromedriver is downloaded with appropriate version of Chrome.\n
-                In Chrome, Go to Settings --> About Chrome to find version.\n
-                Visit https://chromedriver.chromium.org and download matching ChromeDriver version.
-                '''
-            )
    
     @staticmethod
     def _identify_google_terms_page(page_source: str):
+        """
+        Returns True if the page html represent Google's Terms and Coditions page.
+        """
         if "Before you continue to Google" in page_source:
             return True
         return False
@@ -269,7 +274,8 @@ class _Scrape:
     @staticmethod
     def _make_url_request(url, driver):
         """
-        Also handles the Google's Terms & Conditions page.
+        Get raw results from Google Flights page.
+        Also handles auto acceptance of Google's Terms & Conditions page.
         """
         timeout = 15
         driver.get(url)
@@ -288,6 +294,9 @@ class _Scrape:
 
     @staticmethod
     def _get_flight_elements(driver):
+        """
+        Returns all html elements that contain/have to do with flight data.
+        """
         return driver.find_element(by = By.XPATH, value = '//body[@id = "yDmH0d"]').text.split('\n')
 
 Scrape = _Scrape()
