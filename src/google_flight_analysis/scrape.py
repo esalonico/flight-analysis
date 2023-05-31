@@ -7,6 +7,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from datetime import date, datetime, timedelta
+import os
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -19,7 +20,7 @@ __all__ = ['Scrape', '_Scrape']
 
 class _Scrape:
 
-    def __init__(self):
+    def __init__(self, export=False):
         self._origin = None
         self._dest = None
         self._date_leave = None
@@ -30,26 +31,25 @@ class _Scrape:
         self.results_dirty = None
         self.results_clean = None
         self.url = None
+        self.export = export
 
 
     def __call__(self, *args):
-        if len(args) <= 4:
-            self._set_properties(*args)
-            self._data = self._scrape_data()
-            obj = self.clone(*args)
-            
-            obj.data = self._data
-            obj.results_clean = self.results_clean
-            obj.results_dirty = self.results_dirty
-            obj.url = self.url
-            
-            return obj
-        else:
-            # data file being added to new scrape
-            self._set_properties(*(args[:-1]))
-            obj = self.clone(*(args[:-1]))
-            obj.data = args[-1]
-            return obj
+        self._set_properties(*args)
+        self._data = self._scrape_data()
+        obj = self.clone(*args)
+        
+        obj.data = self._data
+        obj.results_clean = self.results_clean
+        obj.results_dirty = self.results_dirty
+        obj.url = self.url
+        obj.export = self.export
+        
+        if obj.export:
+            obj.export_to_csv()
+        
+        return obj
+
 
     def __str__(self):
         if self._date_return is None:
@@ -87,6 +87,36 @@ class _Scrape:
         obj = _Scrape()
         obj._set_properties(*args)
         return obj
+
+    def export_to_csv(self):
+        """
+        Format:
+        {access_date_YYMMDD}_{access_time_HHMM}_{orig}_{dest}_{days_in_avance}_{leave_date_YYMMDD}_{return_date_YYMMDD}
+        """
+        folder = "outputs"
+        
+        # TODO: check
+        # check if output folder exists
+        if not os.path.isdir("folder"):
+            raise FileNotFoundError(f"Check if folder {folder} esists")
+    
+        access_date = datetime.strptime(self.data["Access Date"][0], "%Y-%m-%d").strftime("%y%m%d").strftime("%y%m%d_%H%M")
+        days_in_advance = self.data["Days in Advance"].min()
+        leave_date = datetime.strptime(self._date_leave, "%Y-%m-%d").strftime("%y%m%d")
+        return_date = (datetime.strptime(self._date_return, "%Y-%m-%d").strftime("%y%m%d") if self._date_return else None)
+
+        res = f"{access_date}_{self._origin}_{self._dest}"
+        res += f"_{leave_date}_{days_in_advance}"
+        if return_date:
+            res += f"_{return_date}"
+        res += ".csv"
+        
+        full_filepath = os.path.join(folder, res)
+        
+        # TODO: check
+        # if file already exists, raise ValueError
+        if os.path.isfile(full_filepath):
+            raise ValueError(f"File {full_filepath} already exists")
 
 
     def _set_properties(self, *args):

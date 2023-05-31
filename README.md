@@ -4,7 +4,7 @@
 Welcome to my latest project "Flight Analysis"!
 <br>
 
-It's a handy Python project I created to extract flight price data from Google Flights, to then perform some regression/supervised learning techniques to extract precious and - more importantly - actionable insights.
+It's a handy Python project I created to extract flight price data from Google Flights, to then perform some regression/supervised learning techniques to extract precious and - more importantly - insights I can use to book the most efficient fares.
 <br>
 
 The main features are:
@@ -13,15 +13,16 @@ The main features are:
 
 Currently developing (also see [future implementations](#future-implementations-📈)):
 
-- Data collection and storage (database)
-- Automation of script run
 - ML technique for forecasting/clustering/predicting
+- Data collection and storage (SQL database)
+- Automation of script run to collect and store data automatically on a daily basis
+
 
 ## Motivation 💡
 I've always loved traveling and exploring, especially in new countries with completely different cultures. I also really like data and its powerful usage.
 <br>
 
-That is why I came up with the idea of combining two of my passions into this one personal project, with the aim of showcasing my data-related skills, but also save a great part of my travel budget that I would otherwise spend buying suboptimal plane tickets.
+That is why I came up with the idea of combining two of my passions into this one personal project, with the aim of showcasing my data-related skills, but also saving a great part of my travel budget that I would otherwise spend buying suboptimal plane tickets :)
 
 
 ## Usage ⚙️
@@ -42,7 +43,7 @@ flights = Scrape("MUC", "LAX", "2023-05-28")
 flights.data
 ```
 
-The following lines would produce this output:
+The code above would produce the following output:
 
 |    | Departure datetime   | Arrival datetime    | Airline(s)                                 | Travel Time   | Origin   | Destination   |   Num Stops | Layover   | Stops Location   |   Price (€) | Price Trend   |   Price Value | Access Date         | Flight Type   |   Days in Advance |
 |---:|:---------------------|:--------------------|:-------------------------------------------|:--------------|:---------|:--------------|------------:|:----------|:-----------------|------------:|:--------------|--------------:|:--------------------|:--------------|------------------:|
@@ -89,14 +90,15 @@ Here is a graphical visualization of the price trend, computed over 7 days of fl
 
 ![Example Munich to Rome](assets/muc_fco_example.png)
 <br>
+The darker line represents the average ticket price along all the 7 scraped days, while the green bars below highlight the periods where the ticker prices are in the lowest 25% quartile.
 
 <u>I now know that if I want to minimize the price I pay for my Christmas tickets, I should purchase them between 50 and 78 days in advance, ideally exactly 65 days before the departure.</u>
 <br>
 
 ## Future Implementations 📈
 - [ ] Visualizations of results (flight prices over time, trend, average...)
-- [ ] Flight prices forecasting
+- [ ] Implementation of a database for efficient data storing and organization (SQL/MongoDB)
+- [ ] ML: Flight prices forecasting
+- [ ] ML: Feature engineering for ML tasks
 - [ ] Automatization of script run (to collect data on a periodic base)
 - [ ] Creation of alerts and reports
-- [ ] Also include CO2 emission values
-- [ ] Feature engineering for ML tasks
