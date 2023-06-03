@@ -11,5 +11,6 @@ __pycache__/
 
 # custom
 backups
+private
 prova.py
 simulate_data.ipynb
