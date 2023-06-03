@@ -275,9 +275,6 @@ class Flight:
         # add column: Days in Advance
         df['days_advance'] = (df['departure_datetime'] - df['access_date']).dt.days
         
-        # format column: Access Date
-        df['access_date'] = df['access_date'].dt.strftime("%Y-%m-%d %H:%M:%S")
-
         return df
     
     @staticmethod
@@ -307,6 +304,6 @@ class Flight:
         
         # if file already exists, raise ValueError
         if path.isfile(full_filepath):
-            raise ValueError(f"File {full_filepath} already exists")
+            print(f"File {full_filepath} already exists, overwriting...")
         
         df.to_csv(full_filepath, index=False)
