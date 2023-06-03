@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 import re
+from os import path
 
 __all__ = ['Flight']
 
@@ -232,54 +233,80 @@ class Flight:
         Generate a dataframe from lists of flight data
         """
         data = {
-            'Departure datetime': [],
-            'Arrival datetime': [],
-            'Airline(s)' : [],
-            'Travel Time' : [],
-            'Origin' : [],
-            'Destination' : [],
-            'Num Stops' : [],
-            'Layover' : [],
-            'Stops Location' : [],
-            # 'CO2 Emission (kg)' : [],
-            # 'Emission Diff (%)' : [],
-            'Price (€)' : [],
-            'Price Trend' : [],
-            'Price Value' : [],
-            'Access Date' : [],
-            'Flight Type' : []
-            
+            'departure_datetime': [],
+            'arrival_datetime': [],
+            'airlines' : [],
+            'travel_time' : [],
+            'origin' : [],
+            'destination' : [],
+            'layover_n' : [],
+            'layover_time' : [],
+            'layover_location' : [],
+            'price_eur' : [],
+            'price_trend' : [],
+            'price_value' : [],
+            'access_date' : [],
+            'flight_type' : []
         }
 
         for flight in flights:
-            data['Departure datetime'] += [flight.time_leave]
-            data['Arrival datetime'] += [flight.time_arrive]
-            data['Airline(s)'] += [flight.airline]
-            data['Travel Time'] += [flight.flight_time]
-            data['Origin'] += [flight.origin]
-            data['Destination'] += [flight.dest]
-            data['Num Stops'] += [flight.num_stops]
-            data['Layover'] += [flight.stops]
-            data['Stops Location'] += [flight.stops_locations]
-            # data['CO2 Emission (kg)'] += [flight.co2]
-            # data['Emission Diff (%)'] += [flight.emissions]
-            data['Price (€)'] += [flight.price]
-            data["Price Trend"] += [flight.price_trend[0]]
-            data["Price Value"] += [flight.price_trend[1]]
-            data['Access Date'] += [datetime.today()]
-            data['Flight Type'] += [("Roundtrip" if flight.roundtrip else "One Way")]
+            data['departure_datetime'] += [flight.time_leave]
+            data['arrival_datetime'] += [flight.time_arrive]
+            data['airlines'] += [flight.airline]
+            data['travel_time'] += [flight.flight_time]
+            data['origin'] += [flight.origin]
+            data['destination'] += [flight.dest]
+            data['layover_n'] += [flight.num_stops]
+            data['layover_time'] += [flight.stops]
+            data['layover_location'] += [flight.stops_locations]
+            data['price_eur'] += [flight.price]
+            data["price_trend"] += [flight.price_trend[0]]
+            data["price_value"] += [flight.price_trend[1]]
+            data['access_date'] += [datetime.today()]
+            data['flight_type'] += [("roundtrip" if flight.roundtrip else "oneway")]
             
         df = pd.DataFrame(data)
         
         # further cleaning
 		# convert: travel time to duration
-        df['Travel Time'] = df['Travel Time'].apply(lambda x: Flight.get_duration_from_string(x))
-        df['Layover'] = df['Layover'].apply(lambda x: Flight.get_duration_from_string(x))
+        df['travel_time'] = df['travel_time'].apply(lambda x: Flight.get_duration_from_string(x))
+        df['layover_time'] = df['layover_time'].apply(lambda x: Flight.get_duration_from_string(x))
         
         # add column: Days in Advance
-        df['Days in Advance'] = (df['Departure datetime'] - df['Access Date']).dt.days
+        df['days_advance'] = (df['departure_datetime'] - df['access_date']).dt.days
         
         # format column: Access Date
-        df['Access Date'] = df['Access Date'].dt.strftime("%Y-%m-%d %H:%M:%S")
+        df['access_date'] = df['access_date'].dt.strftime("%Y-%m-%d %H:%M:%S")
 
         return df
+    
+    @staticmethod
+    def export_to_csv(df, origin, dest, date_leave, date_return=None):
+        """
+        Format:
+        {access_date_YYMMDD}_{access_time_HHMM}_{orig}_{dest}_{days_advance}_{leave_date_YYMMDD}_{return_date_YYMMDD}
+        """
+        folder = "outputs"
+        
+        # check if output folder exists
+        if not path.isdir(folder):
+            raise FileNotFoundError(f"Check if folder {folder} esists")
+    
+        access_date = datetime.strptime(df["access_date"][0], "%Y-%m-%d %H:%M:%S").strftime("%y%m%d_%H%M")
+        days_in_advance = df["days_advance"].min()
+        leave_date = datetime.strptime(date_leave, "%Y-%m-%d").strftime("%y%m%d")
+        return_date = (datetime.strptime(date_return, "%Y-%m-%d").strftime("%y%m%d") if date_return else None)
+
+        res = f"{access_date}_{origin}_{dest}"
+        res += f"_{leave_date}_{days_in_advance}"
+        if return_date:
+            res += f"_{return_date}"
+        res += ".csv"
+        
+        full_filepath = path.join(folder, res)
+        
+        # if file already exists, raise ValueError
+        if path.isfile(full_filepath):
+            raise ValueError(f"File {full_filepath} already exists")
+        
+        df.to_csv(full_filepath, index=False)

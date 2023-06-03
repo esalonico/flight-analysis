@@ -14,7 +14,7 @@ from tqdm import tqdm
 
 import sys
 sys.path.append('src/google_flight_analysis')
-from flight import *
+from flight import Flight
 
 __all__ = ['Scrape', '_Scrape']
 
@@ -36,17 +36,15 @@ class _Scrape:
     def __call__(self, *args, export=False):
         self._set_properties(*args)
         self._data = self._scrape_data()
-        self.export = export
         obj = self.clone(*args)
         
         obj.data = self._data
         obj.results_clean = self.results_clean
         obj.results_dirty = self.results_dirty
         obj.url = self.url
-        obj.export = self.export
         
-        if obj.export:
-            obj.export_to_csv()
+        if export:
+            Flight.export_to_csv(obj.data,obj._origin, obj._dest, obj._date_leave, obj._date_return)
         
         return obj
 
@@ -87,36 +85,6 @@ class _Scrape:
         obj = _Scrape()
         obj._set_properties(*args)
         return obj
-
-    def export_to_csv(self):
-        """
-        Format:
-        {access_date_YYMMDD}_{access_time_HHMM}_{orig}_{dest}_{days_in_avance}_{leave_date_YYMMDD}_{return_date_YYMMDD}
-        """
-        folder = "outputs"
-        
-        # check if output folder exists
-        if not os.path.isdir(folder):
-            raise FileNotFoundError(f"Check if folder {folder} esists")
-    
-        access_date = datetime.strptime(self.data["Access Date"][0], "%Y-%m-%d %H:%M:%S").strftime("%y%m%d_%H%M")
-        days_in_advance = self.data["Days in Advance"].min()
-        leave_date = datetime.strptime(self._date_leave, "%Y-%m-%d").strftime("%y%m%d")
-        return_date = (datetime.strptime(self._date_return, "%Y-%m-%d").strftime("%y%m%d") if self._date_return else None)
-
-        res = f"{access_date}_{self._origin}_{self._dest}"
-        res += f"_{leave_date}_{days_in_advance}"
-        if return_date:
-            res += f"_{return_date}"
-        res += ".csv"
-        
-        full_filepath = os.path.join(folder, res)
-        
-        # if file already exists, raise ValueError
-        if os.path.isfile(full_filepath):
-            raise ValueError(f"File {full_filepath} already exists")
-        
-        self.data.to_csv(full_filepath, index=False)
 
 
     def _set_properties(self, *args):
