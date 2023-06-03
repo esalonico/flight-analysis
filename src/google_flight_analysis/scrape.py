@@ -20,7 +20,7 @@ __all__ = ['Scrape', '_Scrape']
 
 class _Scrape:
 
-    def __init__(self, export=False):
+    def __init__(self):
         self._origin = None
         self._dest = None
         self._date_leave = None
@@ -31,12 +31,12 @@ class _Scrape:
         self.results_dirty = None
         self.results_clean = None
         self.url = None
-        self.export = export
 
 
-    def __call__(self, *args):
+    def __call__(self, *args, export=False):
         self._set_properties(*args)
         self._data = self._scrape_data()
+        self.export = export
         obj = self.clone(*args)
         
         obj.data = self._data
@@ -95,12 +95,11 @@ class _Scrape:
         """
         folder = "outputs"
         
-        # TODO: check
         # check if output folder exists
-        if not os.path.isdir("folder"):
+        if not os.path.isdir(folder):
             raise FileNotFoundError(f"Check if folder {folder} esists")
     
-        access_date = datetime.strptime(self.data["Access Date"][0], "%Y-%m-%d").strftime("%y%m%d").strftime("%y%m%d_%H%M")
+        access_date = datetime.strptime(self.data["Access Date"][0], "%Y-%m-%d %H:%M:%S").strftime("%y%m%d_%H%M")
         days_in_advance = self.data["Days in Advance"].min()
         leave_date = datetime.strptime(self._date_leave, "%Y-%m-%d").strftime("%y%m%d")
         return_date = (datetime.strptime(self._date_return, "%Y-%m-%d").strftime("%y%m%d") if self._date_return else None)
@@ -113,10 +112,11 @@ class _Scrape:
         
         full_filepath = os.path.join(folder, res)
         
-        # TODO: check
         # if file already exists, raise ValueError
         if os.path.isfile(full_filepath):
             raise ValueError(f"File {full_filepath} already exists")
+        
+        self.data.to_csv(full_filepath, index=False)
 
 
     def _set_properties(self, *args):
