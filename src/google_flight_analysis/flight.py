@@ -133,7 +133,7 @@ class Flight:
         if arg == "Change of airport":
             self._stops = self._stops_locations = "Change of airport"
             return
-        elif arg in ["round trip", "Climate friendly"]:
+        elif arg in ["round trip", "Climate friendly"] or arg.startswith("Delayed"):
             return
 
         # arrival or departure time
@@ -158,6 +158,7 @@ class Flight:
 
         # co2 
         elif arg.endswith('CO2') and (self._co2 is None):
+            arg = arg.replace(',','')
             self._co2 = int(arg.split()[0])
         
         # emissions
@@ -199,6 +200,9 @@ class Flight:
                 airline = arg.split("Operated")[0]
             else:
                 airline = arg
+                
+            # split camel case
+            airline = re.sub('([a-z])([A-Z])', r'\1, \2', airline)
     
             self._airline = airline
         
