@@ -4,3 +4,4 @@ pandas
 selenium
 pytest
 pymongo
+configparser
