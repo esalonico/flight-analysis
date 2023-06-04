@@ -8,6 +8,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from datetime import date, datetime, timedelta
 import os
+import re
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
@@ -102,6 +103,10 @@ class Scrape:
     @date_return.setter
     def date_return(self, x : str) -> None:
         self._date_return = x
+        
+    @property
+    def round_trip(self):
+        return self._round_trip
 
     @property
     def data(self):
@@ -114,6 +119,7 @@ class Scrape:
     @property
     def url(self):
         return self._url
+    
 
 
     def _scrape_data(self):
@@ -163,7 +169,6 @@ class Scrape:
             return -1
 
         flights = self._clean_results(results)
-        self.results_clean = flights
         return Flight.dataframe(flights)
 
     def _clean_results(self, result):
@@ -192,8 +197,23 @@ class Scrape:
 
         res3 = res2[start:mid_start] + res2[mid_end:end]
 
-        matches = [i for i, x in enumerate(res3) if len(x) > 2 and ((x[-2] != '+' and (x.endswith('PM') or x.endswith('AM'))) or x[-2] == '+')][::2]
+        matches = []
+        # Enumerate over the list 'res3'
+        for index, element in enumerate(res3):
 
+            # Check if the length of the element is more than 2
+            if len(element) <= 2:
+                continue
+            
+            # Check if the element ends with 'AM' or 'PM' (or AM+, PM+)
+            is_time_format = bool(re.search("\d{1,2}\:\d{2}(?:AM|PM)\+{0,1}\d{0,1}", element))
+            
+            # If the element doesn't end with '+' and is in time format, then add it to the matches list
+            if (element[-2] != '+' and is_time_format):
+                matches.append(index)
+
+        # Keep only every second item in the matches list
+        matches = matches[::2]
 
         flights = [
             Flight(
