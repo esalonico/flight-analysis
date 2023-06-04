@@ -12,43 +12,32 @@ import numpy as np
 import pandas as pd
 from tqdm import tqdm
 
+# TODO: simplify
 import sys
 sys.path.append('src/google_flight_analysis')
+
 from flight import Flight
 
-__all__ = ['Scrape', '_Scrape']
+class Scrape:
 
-class _Scrape:
-
-    def __init__(self):
-        self._origin = None
-        self._dest = None
-        self._date_leave = None
-        self._date_return = None
-        self._round_trip = None
+    def __init__(self, orig, dest, date_leave, date_return=None, export=False):
+        self._origin = orig
+        self._dest = dest
+        self._date_leave = date_leave
+        self._date_return = date_return
+        self._round_trip = (True if date_return is not None else False)
+        self._export = export
         self._data = None
+        self._url = None
+        
 
-        self.results_dirty = None
-        self.results_clean = None
-        self.url = None
-
-
-    def __call__(self, *args, export=False):
-        self._set_properties(*args)
+    def run_scrape(self):
         self._data = self._scrape_data()
-        obj = self.clone(*args)
         
-        obj.data = self._data
-        obj.results_clean = self.results_clean
-        obj.results_dirty = self.results_dirty
-        obj.url = self.url
-        
-        if export:
-            Flight.export_to_csv(obj.data,obj._origin, obj._dest, obj._date_leave, obj._date_return)
-        
-        return obj
-
-
+        if self._export:
+            Flight.export_to_csv(self._data, self._origin, self._dest, self._date_leave, self._date_return)  
+    
+    
     def __str__(self):
         if self._date_return is None:
             return "{dl}: {org} --> {dest}".format(
@@ -80,26 +69,6 @@ class _Scrape:
                 org = self._origin,
                 dest = self._dest
             )
-
-    def clone(self, *args):
-        obj = _Scrape()
-        obj._set_properties(*args)
-        return obj
-
-
-    def _set_properties(self, *args):
-        """
-        Set properties from args when the class is called.
-        """
-        if len(args) >= 4:
-            prop = args
-        else:
-            prop = (args + (None,))
-
-        (self._origin, self._dest, self._date_leave, self._date_return) = prop
-        
-        # compute if the trip is a round trip
-        self._round_trip = (False if self._date_return is None else True)
   
         
     @property
@@ -141,17 +110,21 @@ class _Scrape:
     @data.setter
     def data(self, x):
         self._data = x
+        
+    @property
+    def url(self):
+        return self._url
 
-    '''
-        Scrape the object
-    '''
+
     def _scrape_data(self):
+        """
+        Scrapes the Google Flights page and returns a DataFrame of the results.
+        """
         driver = webdriver.Chrome()
-        # driver.maximize_window()
-        url = self._make_url()
-        self.url = url
-        flight_results = self._get_results(url, driver)
+        self._url = self._make_url()
+        flight_results = self._get_results(driver)
         driver.quit()
+        
         return flight_results
 
 
@@ -174,13 +147,13 @@ class _Scrape:
             )
 
 
-    def _get_results(self, url, driver):
+    def _get_results(self, driver):
         """
         Returns the scraped flight results as a DataFrame.
         """
         results = None
         try:
-            results = _Scrape._make_url_request(url, driver)
+            results = Scrape._make_url_request(self._url, driver)
             self.results_dirty = results
         except TimeoutException:
             print(
@@ -285,8 +258,8 @@ class _Scrape:
         WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all')]"))).click()
 
         # wait for flight data to load and initial XPATH cleaning
-        WebDriverWait(driver, timeout).until(lambda d: len(_Scrape._get_flight_elements(d)) > 100)
-        results = _Scrape._get_flight_elements(driver)
+        WebDriverWait(driver, timeout).until(lambda d: len(Scrape._get_flight_elements(d)) > 100)
+        results = Scrape._get_flight_elements(driver)
 
         return results
 
@@ -296,5 +269,3 @@ class _Scrape:
         Returns all html elements that contain/have to do with flight data.
         """
         return driver.find_element(by = By.XPATH, value = '//body[@id = "yDmH0d"]').text.split('\n')
-
-Scrape = _Scrape()
