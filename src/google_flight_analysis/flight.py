@@ -118,104 +118,102 @@ class Flight:
     def time_arrive(self):
         return self._time_arrive
 
-
     def _classify_arg(self, arg: str):
-        """
-        Classifies a string (arg) into the correct attribute for a flight,
-        such as price, numer of layover stops, arrival time...
-        """
-        
-        # handle emptu strings
-        if arg is None or arg == "":
-            return
-        
-        # handle special cases
-        if arg == "Change of airport":
-            self._stops = self._stops_locations = "Change of airport"
-            return
-        elif arg in ["round trip", "Climate friendly"] or arg.startswith("Delayed"):
-            return
-
-        # arrival or departure time
-        # regex: AM/PM (for example: 10:30AM, 4:11PM)
-        if bool(re.search("\d{1,2}\:\d{2}(?:AM|PM)\+{0,1}\d{0,1}", arg)) and (len(self._times) < 2):
-            delta = timedelta(days = 0)
-            if arg[-2] == '+':
-                delta = timedelta(days = int(arg[-1]))
-                arg = arg[:-2]
-
-            date_format = "%Y-%m-%d %I:%M%p"
-            self._times += [datetime.strptime(self._date + " " + arg, date_format) + delta]
-
-        # flight time       
-        # regex:  3 hr 35 min, 45 min, 5 hr
-        elif bool(re.search("\d{1,2} (?:hr|min)$", arg)) and (self._flight_time is None):
-            self._flight_time = arg
-   
-        # number of stops
-        elif ((arg == "Nonstop") or bool(re.search("\d stop", arg))) and (self._num_stops is None):
-            self._num_stops = (0 if arg == 'Nonstop' else int(arg.split()[0]))
-
-        # co2 
-        elif arg.endswith('CO2') and (self._co2 is None):
-            arg = arg.replace(',','')
-            self._co2 = int(arg.split()[0])
-        
-        # emissions
-        elif arg.endswith('emissions') and (self._emissions is None):
-            emission_val = arg.split()[0]
-            self._emissions = 0 if emission_val == 'Avg' else int(emission_val[:-1])
-        
-        # price
-        elif arg.replace(',','').isdigit() and (self._price is None):
-            self._price = int(arg.replace(',',''))
-   
-        # origin/dest        
-        elif (len(arg) == 6 and arg.isupper() or "Flight + Train" in arg) and (self._origin is None) and (self._dest is None):
-            if "Flight + Train" in arg:
-                self._origin = self._dest = "Flight + Train"
-            else:
-                self._origin = arg[:3]
-                self._dest = arg[3:]
-
-        # layover
-        # regex 1: matches "FCO, JFK, ABC, DEF", "5 min Ancona", "3 hr 13 min FCO", "FCO, JFK"
-        elif bool(re.search("\d{0,2} (?:min|hr) (\d{0,2} (?:min|hr))?\w+", arg)) and self._stops_locations is None:
-            # get stops locations
-            if "," in arg: # multiple stops
-                self._stops_locations = arg
-            else: # single stop
-                self._stops_locations = arg.split(" ")[-1]
-                
-            # get stops time
-            if "," in arg:
-                self._stops = arg.split(", ")[0]
-            else:
-                self._stops = re.search("([0-9]+ hr )?([0-9]+ min )?", arg).group().strip()
-                
-        
-        # airline
-        elif len(arg) > 0 and (self._airline is None):
-            if "Operated" in arg:
-                airline = arg.split("Operated")[0]
-            else:
-                airline = arg
-                
-            # split camel case
-            airline = re.sub('([a-z])([A-Z])', r'\1, \2', airline)
-    
-            self._airline = airline
-        
-        # other (trash)
-        else:
-            self._trash += [arg]
+            """
+            Classifies a string (arg) into the correct attribute for a flight,
+            such as price, numer of layover stops, arrival time...
+            """
             
-        # if we have both arrival and departure time, set them
-        if len(self._times) == 2:
-            self._time_leave = self._times[0]
-            self._time_arrive = self._times[1]
-        
+            # handle empty strings
+            if arg is None or arg == "":
+                return
+            
+            # handle special cases
+            if arg == "Change of airport":
+                self._stops = self._stops_locations = "Change of airport"
+                return
+            elif arg in ["round trip", "Climate friendly"] or arg.startswith("Delayed"):
+                return
 
+            # arrival or departure time
+            # regex: AM/PM (for example: 10:30AM, 4:11PM)
+            if bool(re.search("\d{1,2}\:\d{2}(?:AM|PM)\+{0,1}\d{0,1}", arg)) and (len(self._times) < 2):
+                delta = timedelta(days = 0)
+                if arg[-2] == '+':
+                    delta = timedelta(days = int(arg[-1]))
+                    arg = arg[:-2]
+
+                date_format = "%Y-%m-%d %I:%M%p"
+                self._times += [datetime.strptime(self._date + " " + arg, date_format) + delta]
+
+            # flight time       
+            # regex:  3 hr 35 min, 45 min, 5 hr
+            elif bool(re.search("\d{1,2} (?:hr|min)$", arg)) and (self._flight_time is None):
+                self._flight_time = arg
+    
+            # number of stops
+            elif ((arg == "Nonstop") or bool(re.search("\d stop", arg))) and (self._num_stops is None):
+                self._num_stops = (0 if arg == 'Nonstop' else int(arg.split()[0]))
+
+            # co2 
+            elif arg.endswith('CO2') and (self._co2 is None):
+                arg = arg.replace(',','')
+                self._co2 = int(arg.split()[0])
+            
+            # emissions
+            elif arg.endswith('emissions') and (self._emissions is None):
+                emission_val = arg.split()[0]
+                self._emissions = 0 if emission_val == 'Avg' else int(emission_val[:-1])
+            
+            # price
+            elif arg.replace(',','').isdigit() and (self._price is None):
+                self._price = int(arg.replace(',',''))
+    
+            # origin/dest        
+            elif (len(arg) == 6 and arg.isupper() or "Flight + Train" in arg) and (self._origin is None) and (self._dest is None):
+                if "Flight + Train" in arg:
+                    self._origin = self._dest = "Flight + Train"
+                else:
+                    self._origin = arg[:3]
+                    self._dest = arg[3:]
+
+            # layover
+            # regex 1: matches "FCO, JFK, ABC, DEF", "5 min Ancona", "3 hr 13 min FCO", "FCO, JFK"
+            elif bool(re.search("\d{0,2} (?:min|hr) (\d{0,2} (?:min|hr))?\w+", arg)) and self._stops_locations is None:
+                # get stops locations
+                if "," in arg: # multiple stops
+                    self._stops_locations = arg
+                else: # single stop
+                    self._stops_locations = arg.split(" ")[-1]
+                    
+                # get stops time
+                if "," in arg:
+                    self._stops = arg.split(", ")[0]
+                else:
+                    self._stops = re.search("([0-9]+ hr )?([0-9]+ min )?", arg).group().strip()
+                    
+            
+            # airline
+            elif len(arg) > 0 and (self._airline is None):
+                if "Operated" in arg:
+                    airline = arg.split("Operated")[0]
+                else:
+                    airline = arg
+                    
+                # split camel case
+                airline = re.sub('([a-z])([A-Z])', r'\1, \2', airline)
+        
+                self._airline = airline
+            
+            # other (trash)
+            else:
+                self._trash += [arg]
+                
+            # if we have both arrival and departure time, set them
+            if len(self._times) == 2:
+                self._time_leave = self._times[0]
+                self._time_arrive = self._times[1]
+        
     def _parse_args(self, args):
         for arg in args:
             self._classify_arg(arg)
