@@ -2,6 +2,9 @@
 # author: Emanuele Salonico, 2023
 
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
@@ -121,12 +124,22 @@ class Scrape:
         return self._url
     
 
+    def create_driver(self):
+        options = Options()
+        # options.add_argument('--headless') # TODO: this option messes with the scraping
+        # options.add_argument('--no-sandbox')
+        # options.add_argument('--disable-dev-shm-usage')
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        
+        return driver
+
+        
 
     def _scrape_data(self):
         """
         Scrapes the Google Flights page and returns a DataFrame of the results.
         """
-        driver = webdriver.Chrome()
+        driver = self.create_driver()
         self._url = self._make_url()
         flight_results = self._get_results(driver)
         driver.quit()

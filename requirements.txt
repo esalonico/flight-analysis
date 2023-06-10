@@ -2,6 +2,7 @@ tqdm
 numpy
 pandas
 selenium
+webdriver_manager
 pytest
 pymongo
 configparser
