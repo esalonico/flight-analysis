@@ -10,8 +10,8 @@ class Database:
         self.collection_name = collection_name
         
         self.client = self.connect_to_mongo()
-        self.db = self.get_db()
-        self.collection = self.get_collection()
+        self.db = self.get_db(create=True)
+        self.collection = self.get_collection(create=True)
         
         self.create_indexes()
         
@@ -28,23 +28,29 @@ class Database:
         except Exception as e:
             raise ConnectionError(e)
         
-    def get_db(self):
+    def get_db(self, create=False):
         """
         Get a database from a MongoClient object.
         """
         # check if db exists
-        if self.db_name not in self.client.list_database_names():
+        if self.db_name not in self.client.list_database_names() and not create:
             raise ValueError(f"Database {self.db_name} not found.")
+        
+        if create:
+            self.client[self.db_name]
         
         return self.client[self.db_name]
     
-    def get_collection(self):
+    def get_collection(self, create=False):
         """
         Get a collection from a database.
         """
         # check if collection exists
-        if self.collection_name not in self.db.list_collection_names():
+        if self.collection_name not in self.db.list_collection_names() and not create:
             raise ValueError(f"Collection {self.collection_name} not found.")
+        
+        if create:
+            self.db[self.collection_name]
         
         return self.db[self.collection_name]
     
