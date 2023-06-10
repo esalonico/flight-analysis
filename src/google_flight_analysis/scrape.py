@@ -143,13 +143,13 @@ class Scrape:
         trip is one way or roundtrip.
         """
         if self._round_trip:
-            return 'https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20from%20{date_leave}%20to%20{date_return}'.format(
+            return 'https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20from%20{date_leave}%20to%20{date_return}&curr=EUR&gl=IT'.format(
                 dest=self._dest,
                 org=self._origin,
                 date_leave=self._date_leave,
                 date_return=self._date_return)
         else:
-            return 'https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20on%20{date_leave}%20oneway'.format(
+            return 'https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20on%20{date_leave}%20oneway&curr=EUR&gl=IT'.format(
                 dest=self._dest,
                 org=self._origin,
                 date_leave=self._date_leave
@@ -271,17 +271,15 @@ class Scrape:
         timeout = 15
         driver.get(url)
 
-        # detect Google's Terms & Conditions page
-        WebDriverWait(driver, timeout).until(
-            lambda s: Scrape._identify_google_terms_page(s.page_source))
+        # detect Google's Terms & Conditions page (not always there, only in EU)
+        if Scrape._identify_google_terms_page(driver.page_source):
+            WebDriverWait(driver, timeout).until(lambda s: Scrape._identify_google_terms_page(s.page_source))
 
-        # click on accept terms button
-        WebDriverWait(driver, timeout).until(EC.element_to_be_clickable(
-            (By.XPATH, "//button[contains(., 'Accept all')]"))).click()
+            # click on accept terms button
+            WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all')]"))).click()
 
         # wait for flight data to load and initial XPATH cleaning
-        WebDriverWait(driver, timeout).until(
-            lambda d: len(Scrape._get_flight_elements(d)) > 100)
+        WebDriverWait(driver, timeout).until(lambda d: len(Scrape._get_flight_elements(d)) > 100)
         results = Scrape._get_flight_elements(driver)
 
         return results

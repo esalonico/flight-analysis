@@ -65,6 +65,8 @@ if __name__ == "__main__":
     
     logging.debug(all_results_df.head())
     
+    # TODO: implement push to database after every route (error handling basically)
+    
     # 2. add results to mongo_db
     database = Database(private.DB_URL, private.DB_NAME, private.DB_COLL)
     database.add_pandas_df(all_results_df)
