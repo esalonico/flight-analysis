@@ -17,3 +17,6 @@ prova.py
 temp.txt
 temp.ipynb
 simulate_data.ipynb
+
+# logging
+logs.log
