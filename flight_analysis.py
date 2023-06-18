@@ -5,6 +5,7 @@ import json
 import logging
 from datetime import timedelta, datetime
 import pandas as pd
+import numpy as np
 
 from src.google_flight_analysis.scrape import Scrape
 from src.google_flight_analysis.database import Database
@@ -43,6 +44,7 @@ if __name__ == "__main__":
     # 1. scrape routes
     routes = get_routes()
     all_results = []
+    all_iter_times = []
     
     for route in routes:
         origin = route[0]
@@ -54,8 +56,15 @@ if __name__ == "__main__":
             scrape = Scrape(origin, destination, date)
             
             try:
+                time_start = datetime.now()
                 scrape.run_scrape()
-                logger.info(f"[{i+1}/{len(date_range)}] Scraped: {origin} {destination} {date} - ({scrape.data.shape[0]}) results")
+                time_end = datetime.now()
+                
+                time_iteration = (time_end - time_start).seconds + round(((time_end - time_start).microseconds * 1e-6), 2)
+                all_iter_times.append(time_iteration)
+                avg_iter_time = round(np.array(all_iter_times).mean(), 2)
+                
+                logger.info(f"[{i+1}/{len(date_range)}] [{time_iteration} sec - avg: {avg_iter_time}] Scraped: {origin} {destination} {date} - {scrape.data.shape[0]} results")
                 all_results.append(scrape.data)
             except Exception as e:
                 logger.error(f"[{i+1}/{len(date_range)}] ERROR WITH {origin} {destination} {date}")
