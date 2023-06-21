@@ -6,6 +6,7 @@ import logging
 from datetime import timedelta, datetime
 import pandas as pd
 import numpy as np
+from os import path
 
 from src.google_flight_analysis.scrape import Scrape
 from src.google_flight_analysis.database import Database
@@ -13,13 +14,13 @@ from src.google_flight_analysis.database import Database
 import private.private as private
 
 config = configparser.ConfigParser()
-config.read('config.ini')
+config.read(path.join(path.dirname(__file__), "config.ini"))
 
 # TODO: improve
 logger = logging.getLogger("flight_analysis")
 logger.setLevel('DEBUG')
 log_format = '%(asctime)s - %(levelname)s - %(message)s'
-file_handler = logging.FileHandler("logs.log")
+file_handler = logging.FileHandler(path.join(path.dirname(__file__), "logs.log"))
 stream_handler = logging.StreamHandler()
 formatter = logging.Formatter(log_format)
 file_handler.setFormatter(formatter)
@@ -83,7 +84,7 @@ if __name__ == "__main__":
     print(db.list_all_databases())
     
     # prepare database and tables
-    db.prepare_db_and_tables(overwrite_table=True)
+    db.prepare_db_and_tables(overwrite_table=False)
     
     # add results to database
     db.add_pandas_df_to_db(all_results_df)
