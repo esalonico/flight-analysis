@@ -13,11 +13,13 @@ __all__ = ['Flight']
 
 class Flight:
 
-    def __init__(self, dl, roundtrip, price_trend, *args):
+    def __init__(self, dl, roundtrip, queried_orig, queried_dest, price_trend, *args):
         self._roundtrip = roundtrip
         self._id = 1
         self._origin = None
+        self._queried_orig = queried_orig
         self._dest = None
+        self._queried_dest = queried_dest
         self._date = dl
         self._dow = datetime.strptime(dl, '%Y-%m-%d').isoweekday() # day of week
         self._airline = None
@@ -32,6 +34,7 @@ class Flight:
         self._times = []
         self._time_leave = None
         self._time_arrive = None
+        self.has_train = False
         self._trash = []
         self._parse_args(*args)
 
@@ -117,7 +120,16 @@ class Flight:
     @property
     def time_arrive(self):
         return self._time_arrive
+    
+    @property
+    def has_train(self):
+        return self._has_train
+    
+    @has_train.setter
+    def has_train(self, x: bool) -> None:
+        self._has_train = x
 
+    
     def _classify_arg(self, arg: str):
             """
             Classifies a string (arg) into the correct attribute for a flight,
@@ -172,7 +184,9 @@ class Flight:
             # origin/dest        
             elif (len(arg) == 6 and arg.isupper() or "Flight + Train" in arg) and (self._origin is None) and (self._dest is None):
                 if "Flight + Train" in arg:
-                    self._origin = self._dest = "Flight + Train"
+                    self._origin = self._queried_orig
+                    self._dest = self._queried_dest
+                    self._has_train = True
                 else:
                     self._origin = arg[:3]
                     self._dest = arg[3:]
@@ -202,6 +216,9 @@ class Flight:
                     
                 # split camel case
                 airline = re.sub('([a-z])([A-Z])', r'\1, \2', airline)
+                
+                # make it into an array (list)
+                airline = airline.split(", ")
         
                 self._airline = airline
             
@@ -219,14 +236,18 @@ class Flight:
             self._classify_arg(arg)
 
     @staticmethod
-    def get_duration_from_string(s):
+    def get_duration_in_minutes_from_string(s):
         """
-        Returns a better formatted string for a duration element.
-        For example:
-        3 hr 20 min --> 03:20
+        Returns the duration in minutes from a string of the form:
+        3 hr 20 min --> 60*3 + 20 = 200
+        20 min --> 20
+        5 hr 55 min --> 60*5 + 55 = 355
         """
+        if s is None:
+            return None
+        
         if not bool(re.search("hr|min", str(s))):
-            return s
+            raise ValueError("Invalid duration string:", s)
         
         h = 0
         m = 0
@@ -236,8 +257,7 @@ class Flight:
         if "min" in s:
             m = int(re.split("hr|min", s)[-2])
 
-        # return timedelta(hours=h, minutes=m)
-        return f"{h:02d}:{m:02d}"
+        return 60*h + m
         
     
     @staticmethod
@@ -259,7 +279,8 @@ class Flight:
             'price_trend' : [],
             'price_value' : [],
             'access_date' : [],
-            'flight_type' : []
+            'one_way' : [],
+            'has_train' : []
         }
 
         for flight in flights:
@@ -276,14 +297,16 @@ class Flight:
             data["price_trend"] += [flight.price_trend[0]]
             data["price_value"] += [flight.price_trend[1]]
             data['access_date'] += [datetime.today()]
-            data['flight_type'] += [("roundtrip" if flight.roundtrip else "oneway")]
+            data['one_way'] += [(False if flight.roundtrip else True)]
+            data['has_train'] += [flight.has_train]
+            
             
         df = pd.DataFrame(data)
         
         # further cleaning
 		# convert: travel time to duration
-        df['travel_time'] = df['travel_time'].apply(lambda x: Flight.get_duration_from_string(x))
-        df['layover_time'] = df['layover_time'].apply(lambda x: Flight.get_duration_from_string(x))
+        df['travel_time'] = df['travel_time'].apply(lambda x: Flight.get_duration_in_minutes_from_string(x))
+        df['layover_time'] = df['layover_time'].apply(lambda x: Flight.get_duration_in_minutes_from_string(x))
         
         # add column: Days in Advance
         df['days_advance'] = (df['departure_datetime'] - df['access_date']).dt.days

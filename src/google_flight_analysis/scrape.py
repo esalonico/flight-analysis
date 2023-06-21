@@ -117,9 +117,9 @@ class Scrape:
 
     def create_driver(self):
         options = Options()
+        options.add_argument('--no-sandbox')
         options.add_argument('--headless')
         options.add_argument("--window-size=1920,1080") # otherwise data such as layover location and emissions is not displayed
-        # options.add_argument('--no-sandbox')
         # options.add_argument('--disable-dev-shm-usage')
         driver = webdriver.Chrome(service=Service(
             ChromeDriverManager().install()), options=options)
@@ -219,9 +219,11 @@ class Scrape:
 
         flights = [
             Flight(
-                self._date_leave,
-                self._round_trip,
-                price_trend,
+                self._date_leave, # date_leave
+                self._round_trip, # round_trip
+                self._origin,
+                self._dest,
+                price_trend, 
                 res3[matches[i]:matches[i+1]]) for i in range(len(matches)-1)
         ]
 

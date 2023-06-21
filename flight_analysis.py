@@ -76,7 +76,15 @@ if __name__ == "__main__":
     
     # TODO: implement push to database after every route (error handling basically)
     
-    # 2. add results to mongo_db
-    database = Database(private.DB_URL, private.DB_NAME, private.DB_COLL)
-    database.add_pandas_df(all_results_df)
+    # 2. add results to postgresql
+    
+    # connect to database
+    db = Database(db_host=private.DB_HOST, db_name=private.DB_NAME, db_user=private.DB_USER, db_pw=private.DB_PW, db_table=private.DB_TABLE)
+    print(db.list_all_databases())
+    
+    # prepare database and tables
+    db.prepare_db_and_tables(overwrite_table=True)
+    
+    # add results to database
+    db.add_pandas_df_to_db(all_results_df)
     

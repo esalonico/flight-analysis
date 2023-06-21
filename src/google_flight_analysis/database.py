@@ -1,84 +1,162 @@
 # author: Emanuele Salonico, 2023
 
-from pymongo import MongoClient
+import psycopg2
 import pandas as pd
+import numpy as np
+import ast
+import psycopg2.extras as extras
+
+
 
 class Database:
-    def __init__(self, db_url, db_name, collection_name):
-        self.db_url = db_url
+    def __init__(self, db_host, db_name, db_user, db_pw, db_table):
+        self.db_host = db_host
         self.db_name = db_name
-        self.collection_name = collection_name
-        
-        self.client = self.connect_to_mongo()
-        self.db = self.get_db(create=True)
-        self.collection = self.get_collection(create=True)
-        
-        self.create_indexes()
-        
+        self.db_user = db_user
+        self.db_table = db_table
+        self.__db_pw = db_pw
+
+        self.conn = self.connect_to_postgresql()
+        self.conn.autocommit = True
+
     def __repr__(self):
-        return f"Database [{self.db_name}], collection [{self.collection_name}]"
-        
-        
-    def connect_to_mongo(self):
+        return f"Database: {self.db_name}"
+
+    def connect_to_postgresql(self):
         """
-        Connect to MongoDB Atlas and return a MongoClient object.
+        Connect to Postgresql and return a connection object.
         """
         try:
-            return MongoClient(self.db_url)
+            conn = psycopg2.connect(host=self.db_host,
+                                    database=self.db_name,
+                                    user=self.db_user,
+                                    password=self.__db_pw)
+            return conn
         except Exception as e:
             raise ConnectionError(e)
-        
-    def get_db(self, create=False):
+
+    def list_all_databases(self):
+        cursor = self.conn.cursor()
+        cursor.execute(
+            "SELECT datname FROM pg_database WHERE datistemplate = false;")
+        result = cursor.fetchall()
+        cursor.close()
+
+        return [x[0] for x in result]
+
+    def list_all_tables(self):
+        cursor = self.conn.cursor()
+        cursor.execute(
+            "SELECT * FROM information_schema.tables WHERE table_schema = 'public';")
+        result = cursor.fetchall()
+        cursor.close()
+
+        return [x[2] for x in result]
+
+    def create_db(self):
         """
-        Get a database from a MongoClient object.
+        Creates a new database for flight_analysis data.
         """
-        # check if db exists
-        if self.db_name not in self.client.list_database_names() and not create:
-            raise ValueError(f"Database {self.db_name} not found.")
+        cursor = self.conn.cursor()
+        query = """CREATE DATABASE flight_analysis WITH OWNER = postgres ENCODING = 'UTF8' CONNECTION LIMIT = -1 IS_TEMPLATE = False;"""
+        cursor.execute(query)
+        cursor.close()
+
+        print("Database [flight_analysis] created.")
+
+    def create_scraped_table(self, overwrite):
+        query = ""
+        if overwrite:
+            query += "DROP TABLE IF EXISTS public.scraped;\n"
+
+        query += """
+            CREATE TABLE IF NOT EXISTS public.scraped
+            (
+                id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+                departure_datetime timestamp with time zone,
+                arrival_datetime timestamp with time zone,
+                airlines text[] COLLATE pg_catalog."default",
+                travel_time smallint NOT NULL,
+                origin character(3) COLLATE pg_catalog."default"  NOT NULL,
+                destination character(3) COLLATE pg_catalog."default"  NOT NULL,
+                layover_n smallint NOT NULL,
+                layover_time numeric,
+                layover_location text COLLATE pg_catalog."default",
+                price_eur smallint NOT NULL,
+                price_trend text COLLATE pg_catalog."default",
+                price_value text COLLATE pg_catalog."default",
+                access_date timestamp with time zone NOT NULL,
+                one_way boolean NOT NULL,
+                has_train boolean NOT NULL,
+                days_advance smallint NOT NULL
+            )
+
+            TABLESPACE pg_default;
+
+            ALTER TABLE IF EXISTS public.scraped OWNER to postgres;
+            """
+            
+        cursor = self.conn.cursor()
+        cursor.execute(query)
+        cursor.close()
+
+    def prepare_db_and_tables(self, overwrite_table=False):
+        # create table
+        if self.db_name not in self.list_all_databases():
+            self.create_db()
+        else:
+            print(f"Database [{self.db_name}] already exists.")
+
+        # create table
+        self.create_scraped_table(overwrite_table)
         
-        if create:
-            self.client[self.db_name]
+    def transform_and_clean_df(self, df):
+        """
+        Some necessary cleaning and transforming operations to the df
+        before sending its content to the database
+        """
+
+        df["airlines"] = df.airlines.apply(lambda x: np.array(ast.literal_eval(str(x).replace("[", '"{').replace("]", '}"'))))
+        df['layover_time'] = df['layover_time'].fillna(-1)
+        df["layover_location"] = df["layover_location"].fillna(np.nan).replace([np.nan], [None])
+        df["price_value"] = df["price_value"].fillna(np.nan).replace([np.nan], [None])
+
+        return df
         
-        return self.client[self.db_name]
+    def add_pandas_df_to_db(self, df):
+        # clean df
+        df = self.transform_and_clean_df(df)
+        
+        # Create a list of tuples from the dataframe values
+        tuples = [tuple(x) for x in df.to_numpy()]
     
-    def get_collection(self, create=False):
-        """
-        Get a collection from a database.
-        """
-        # check if collection exists
-        if self.collection_name not in self.db.list_collection_names() and not create:
-            raise ValueError(f"Collection {self.collection_name} not found.")
-        
-        if create:
-            self.db[self.collection_name]
-        
-        return self.db[self.collection_name]
+        # Comma-separated dataframe columns
+        cols = ','.join(list(df.columns))
     
-    def add_pandas_df(self, df):
-        """
-        Adds a Pandas dataframe to the database.
-        # TODO: check for duplicate rows
-        """
-        if not isinstance(df, pd.DataFrame):
-            raise ValueError("Input must be a Pandas dataframe.")
-        if df.empty:
-            raise ValueError("Input dataframe is empty.")
+        cursor = self.conn.cursor()
+    
+        # SQL quert to execute
+        query  = "INSERT INTO %s(%s) VALUES %%s" % (self.db_table, cols)
+        try:
+            extras.execute_values(cursor, query, tuples)
+        except (Exception, psycopg2.DatabaseError) as error:
+            print("Error: %s" % error)
+            self.conn.rollback()
+            cursor.close()
         
-        df_dict = df.to_dict(orient="records")
-        self.collection.insert_many(df_dict)
+        print("execute_values() done")
+        cursor.close()
         
-        print(f"Added {len(df_dict)} rows to collection [{self.collection_name}]")
-        
-    def create_indexes(self):
+        # fix layover time
+        # TODO: improve this
+        cursor = self.conn.cursor()
+        query = f"""
+            UPDATE {self.db_table}
+            SET layover_time = CASE
+            WHEN layover_time = -1 THEN null ELSE layover_time END;
+
+            ALTER TABLE public.scraped 
+            ALTER COLUMN layover_time TYPE smallint;
         """
-        Create indexes on the collection.
-        # TODO: add more useful indexes
-        """
-        indexes = {"origin": "origin_index",
-                   "destination": "destination_index"}
-        
-        for new_idx, new_idx_name in indexes.items():
-            # if index does not exist, create it
-            if not new_idx_name in self.collection.list_indexes():
-                self.collection.create_index(new_idx, name=new_idx_name)
-                print(f"Created index [{new_idx_name}] on collection [{self.collection_name}]")
+        cursor.execute(query)
+        cursor.close()

@@ -6,3 +6,4 @@ webdriver_manager
 pytest
 pymongo
 configparser
+psycopg2-binary
