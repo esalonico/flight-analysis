@@ -144,7 +144,7 @@ class Database:
             self.conn.rollback()
             cursor.close()
         
-        print("execute_values() done")
+        print("{} rows added to table [{}]".format(len(df), self.db_table))
         cursor.close()
         
         # fix layover time
