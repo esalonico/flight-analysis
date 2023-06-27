@@ -5,7 +5,12 @@ import pandas as pd
 import numpy as np
 import ast
 import psycopg2.extras as extras
+import os
+import logging
 
+# logging
+logger_name = os.path.basename(__file__)
+logger = logging.getLogger(logger_name)
 
 
 class Database:
@@ -62,7 +67,7 @@ class Database:
         cursor.execute(query)
         cursor.close()
 
-        print("Database [flight_analysis] created.")
+        logger.info("Database [flight_analysis] created.")
 
     def create_scraped_table(self, overwrite):
         query = ""
@@ -101,11 +106,9 @@ class Database:
         cursor.close()
 
     def prepare_db_and_tables(self, overwrite_table=False):
-        # create table
+        # create database
         if self.db_name not in self.list_all_databases():
             self.create_db()
-        else:
-            print(f"Database [{self.db_name}] already exists.")
 
         # create table
         self.create_scraped_table(overwrite_table)
@@ -140,11 +143,11 @@ class Database:
         try:
             extras.execute_values(cursor, query, tuples)
         except (Exception, psycopg2.DatabaseError) as error:
-            print("Error: %s" % error)
+            logger.error("Error: %s" % error)
             self.conn.rollback()
             cursor.close()
         
-        print("{} rows added to table [{}]".format(len(df), self.db_table))
+        logger.info("{} rows added to table [{}]".format(len(df), self.db_table))
         cursor.close()
         
         # fix layover time

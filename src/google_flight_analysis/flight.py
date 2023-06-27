@@ -338,8 +338,4 @@ class Flight:
         
         full_filepath = path.join(folder, res)
         
-        # if file already exists, raise ValueError
-        if path.isfile(full_filepath):
-            print(f"File {full_filepath} already exists, overwriting...")
-        
         df.to_csv(full_filepath, index=False)

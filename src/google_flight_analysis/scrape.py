@@ -172,10 +172,7 @@ class Scrape:
         try:
             results = Scrape._make_url_request(self._url, driver)
         except TimeoutException:
-            print(
-                '''TimeoutException, try again and check your internet connection!\n
-                Also possible that no flights exist for your query :('''.replace('\t', '')
-            )
+            logger.error(f"Scrape timeout reached. It could mean that no flights exist for the combination of airports and dates." )
             return -1
 
         flights = self._clean_results(results)

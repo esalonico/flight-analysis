@@ -4,6 +4,7 @@ import logging.config
 
 # logging
 LOGS_PATH = os.path.join(os.path.dirname(__file__), "logs")
+LOG_LEVEL = "INFO"
 LOGGING_CONFIG_DICT = {
     'version': 1,
     'formatters': {
@@ -15,20 +16,20 @@ LOGGING_CONFIG_DICT = {
         'console': {
             'class': 'logging.StreamHandler',
             'formatter': 'standard',
-            'level': 'INFO',
+            'level': LOG_LEVEL,
             'stream': 'ext://sys.stdout'
         },
         'file': {
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'formatter': 'standard',
             'filename': os.path.join(LOGS_PATH, "logs.log"),
-            "when": "S",  # TODO: CHANGE
+            "when": "W6", # sunday, 
             'backupCount': 8
         },
     },
     'root': {
         'handlers': ['console', 'file'],
-        'level': 'INFO'
+        'level': LOG_LEVEL
     }
 }
 
