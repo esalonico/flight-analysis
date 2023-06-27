@@ -19,4 +19,4 @@ temp.ipynb
 simulate_data.ipynb
 
 # logging
-logs.log
+logs/

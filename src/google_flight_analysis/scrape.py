@@ -1,7 +1,7 @@
 # Inspired and adapted from https://pypi.org/project/google-flight-analysis/
 # author: Emanuele Salonico, 2023
 
-from src.google_flight_analysis.flight import Flight
+import logging
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
@@ -11,11 +11,18 @@ from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from datetime import date, datetime, timedelta
-import os
 import re
+import os
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
+
+from src.google_flight_analysis.flight import Flight
+
+# logging
+logger_name = os.path.basename(__file__)
+logger = logging.getLogger(logger_name)
+
 
 class Scrape:
 
@@ -33,7 +40,8 @@ class Scrape:
         self._data = self._scrape_data()
 
         if self._export:
-            Flight.export_to_csv(self._data, self._origin, self._dest, self._date_leave, self._date_return)
+            Flight.export_to_csv(self._data, self._origin,
+                                 self._dest, self._date_leave, self._date_return)
 
     def __str__(self):
         if self._date_return is None:
@@ -119,7 +127,8 @@ class Scrape:
         options = Options()
         options.add_argument('--no-sandbox')
         options.add_argument('--headless')
-        options.add_argument("--window-size=1920,1080") # otherwise data such as layover location and emissions is not displayed
+        # otherwise data such as layover location and emissions is not displayed
+        options.add_argument("--window-size=1920,1080")
         # options.add_argument('--disable-dev-shm-usage')
         driver = webdriver.Chrome(service=Service(
             ChromeDriverManager().install()), options=options)
@@ -178,7 +187,8 @@ class Scrape:
         """
         res2 = [x.encode("ascii", "ignore").decode().strip() for x in result]
 
-        price_trend_dirty = [x for x in res2 if x.startswith("Prices are currently")]
+        price_trend_dirty = [
+            x for x in res2 if x.startswith("Prices are currently")]
         price_trend = Scrape.extract_price_trend(price_trend_dirty)
 
         start = res2.index("Sort by:")+1
@@ -219,11 +229,11 @@ class Scrape:
 
         flights = [
             Flight(
-                self._date_leave, # date_leave
-                self._round_trip, # round_trip
+                self._date_leave,  # date_leave
+                self._round_trip,  # round_trip
                 self._origin,
                 self._dest,
-                price_trend, 
+                price_trend,
                 res3[matches[i]:matches[i+1]]) for i in range(len(matches)-1)
         ]
 
@@ -275,13 +285,16 @@ class Scrape:
 
         # detect Google's Terms & Conditions page (not always there, only in EU)
         if Scrape._identify_google_terms_page(driver.page_source):
-            WebDriverWait(driver, timeout).until(lambda s: Scrape._identify_google_terms_page(s.page_source))
+            WebDriverWait(driver, timeout).until(
+                lambda s: Scrape._identify_google_terms_page(s.page_source))
 
             # click on accept terms button
-            WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all')]"))).click()
+            WebDriverWait(driver, timeout).until(EC.element_to_be_clickable(
+                (By.XPATH, "//button[contains(., 'Accept all')]"))).click()
 
         # wait for flight data to load and initial XPATH cleaning
-        WebDriverWait(driver, timeout).until(lambda d: len(Scrape._get_flight_elements(d)) > 100)
+        WebDriverWait(driver, timeout).until(
+            lambda d: len(Scrape._get_flight_elements(d)) > 100)
         results = Scrape._get_flight_elements(driver)
 
         return results
