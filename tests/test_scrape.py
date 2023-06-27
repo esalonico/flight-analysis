@@ -1,22 +1,34 @@
 import pytest
 import pandas as pd
-from selenium import webdriver
 import numpy as np
+from datetime import datetime, timedelta
 
-from src.google_flight_analysis.scrape import *
+from src.google_flight_analysis.scrape import Scrape
+from src.google_flight_analysis.database import Database
 
-test_df = pd.read_csv("./outputs/MUC_JFK_test.csv")
+import private.private as private
+import configparser
 
-def test_dataframe_type():
-    assert isinstance(test_df, pd.DataFrame)
+
+def test_database_connection():
+    db = Database(db_host=private.DB_HOST, db_name=private.DB_NAME, db_user=private.DB_USER, db_pw=private.DB_PW, db_table=private.DB_TABLE)
+    try:
+        conn = db.connect_to_postgresql()
+    except ConnectionError as e:
+        assert False, e
+        
     
-def test_dataframe_shape():
-    assert np.array_equal(test_df.shape, np.array([241, 16]))
-
-# def test_chromedriver_found():
-#     chrome_driver = webdriver.Chrome(executable_path="/usr/bin/google-chrome")
-#     assert chrome_driver is not None
+def test_dataset_generation():
+    ten_days_ahead = (datetime.today() + timedelta(5)).strftime("%Y-%m-%d")
+    scrape_obj = Scrape("MUC", "FCO", ten_days_ahead)
+    scrape_obj.run_scrape()
+    assert isinstance(scrape_obj.data, pd.DataFrame)
     
-# def test_dataset_generation():
-#     scrape_obj = Scrape("MUC", "FCO", "2023-11-22")
-#     assert isinstance(scrape_obj.data, pd.DataFrame)
+def test_config_file():
+    try:
+        config = configparser.ConfigParser()
+        config.read("config.ini")
+    except Exception as e:
+        assert False, e
+        
+    

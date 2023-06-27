@@ -10,7 +10,6 @@ logger = utils.setup_logger(logger_name)
 import numpy as np
 import pandas as pd
 from datetime import timedelta, datetime
-import json
 import configparser
 
 from src.google_flight_analysis.scrape import Scrape
@@ -22,21 +21,10 @@ config = configparser.ConfigParser()
 config.read(os.path.join(os.path.dirname(__file__), "config.ini"))
 
 
-def get_routes_from_config():
-    """
-    Returns a list of routes from the config file.
-    """
-    routes = []
-    for route in config["routes"]:
-        routes.append(json.loads(config["routes"][route]))
-
-    return routes
-
-
 if __name__ == "__main__":
 
     # 1. scrape routes
-    routes = get_routes_from_config()
+    routes = utils.get_routes_from_config(config)
     
     # compute number of total scrapes
     n_total_scrapes = sum([x[2] for x in routes])
