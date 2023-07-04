@@ -243,11 +243,8 @@ class Flight:
         20 min --> 20
         5 hr 55 min --> 60*5 + 55 = 355
         """
-        if s is None:
+        if s is None or not bool(re.search("hr|min", str(s))):
             return None
-        
-        if not bool(re.search("hr|min", str(s))):
-            raise ValueError("Invalid duration string:", s)
         
         h = 0
         m = 0
