@@ -10,13 +10,10 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
-from datetime import date, datetime, timedelta
 import re
 import os
-import numpy as np
-import pandas as pd
 
-from src.google_flight_analysis.flight import Flight
+from src.flight_analysis.flight import Flight
 
 # logging
 logger_name = os.path.basename(__file__)
@@ -24,113 +21,49 @@ logger = logging.getLogger(logger_name)
 
 
 class Scrape:
-
-    def __init__(self, orig, dest, date_leave, date_return=None, export=False):
-        self._origin = orig
+    def __init__(self, orig, dest, date_leave, date_return=None):
+        self._orig = orig
         self._dest = dest
         self._date_leave = date_leave
         self._date_return = date_return
-        self._round_trip = (True if date_return is not None else False)
-        self._export = export
+        self._round_trip = True if date_return is not None else False
         self._data = None
         self._url = None
+        
+    @property
+    def data(self):
+        return self._data
 
-    def run_scrape(self):
-        self._data = self._scrape_data()
-
-        if self._export:
-            Flight.export_to_csv(self._data, self._origin,
-                                 self._dest, self._date_leave, self._date_return)
-
-    def __str__(self):
+    def __repr__(self):
         if self._date_return is None:
             return "{dl}: {org} --> {dest}".format(
-                dl=self._date_leave,
-                org=self._origin,
-                dest=self._dest
+                dl=self._date_leave, org=self._orig, dest=self._dest
             )
         else:
             return "{dl}: {org} --> {dest}\n{dr}: {dest} --> {org}".format(
                 dl=self._date_leave,
                 dr=self._date_return,
-                org=self._origin,
-                dest=self._dest
+                org=self._orig,
+                dest=self._dest,
             )
 
-    def __repr__(self):
-        if self._date_return is None:
-            return "{n} RESULTS FOR:\n{dl}: {org} --> {dest}".format(
-                n=self._data.shape[0],
-                dl=self._date_leave,
-                org=self._origin,
-                dest=self._dest
-            )
-        else:
-            return "{n} RESULTS FOR:\n{dl}: {org} --> {dest}\n{dr}: {dest} --> {org}".format(
-                n=self._data.shape[0],
-                dl=self._date_leave,
-                dr=self._date_return,
-                org=self._origin,
-                dest=self._dest
-            )
+    def run_scrape(self):
+        self._data = self._scrape_data()
 
-    @property
-    def origin(self):
-        return self._origin
-
-    @origin.setter
-    def origin(self, x: str) -> None:
-        self._origin = x
-
-    @property
-    def dest(self):
-        return self._dest
-
-    @dest.setter
-    def dest(self, x: str) -> None:
-        self._dest = x
-
-    @property
-    def date_leave(self):
-        return self._date_leave
-
-    @date_leave.setter
-    def date_leave(self, x: str) -> None:
-        self._date_leave = x
-
-    @property
-    def date_return(self):
-        return self._date_return
-
-    @date_return.setter
-    def date_return(self, x: str) -> None:
-        self._date_return = x
-
-    @property
-    def round_trip(self):
-        return self._round_trip
-
-    @property
-    def data(self):
-        return self._data
-
-    @data.setter
-    def data(self, x):
-        self._data = x
-
-    @property
-    def url(self):
-        return self._url
-
-    def create_driver(self):
+    def _create_driver(self):
+        """
+        Creates a Chrome webdriver instance.
+        """
         options = Options()
-        options.add_argument('--no-sandbox')
-        options.add_argument('--headless')
-        # otherwise data such as layover location and emissions is not displayed
-        options.add_argument("--window-size=1920,1080")
-        # options.add_argument('--disable-dev-shm-usage')
-        driver = webdriver.Chrome(service=Service(
-            ChromeDriverManager().install()), options=options)
+        options.add_argument("--no-sandbox")
+        options.add_argument("--headless")
+        options.add_argument(
+            "--window-size=1920,1080"
+        )  # otherwise data such as layover location and emissions is not displayed
+
+        driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()), options=options
+        )
 
         return driver
 
@@ -138,7 +71,7 @@ class Scrape:
         """
         Scrapes the Google Flights page and returns a DataFrame of the results.
         """
-        driver = self.create_driver()
+        driver = self._create_driver()
         self._url = self._make_url()
         flight_results = self._get_results(driver)
         driver.quit()
@@ -151,16 +84,15 @@ class Scrape:
         trip is one way or roundtrip.
         """
         if self._round_trip:
-            return 'https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20from%20{date_leave}%20to%20{date_return}&curr=EUR&gl=IT'.format(
+            return "https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20from%20{date_leave}%20to%20{date_return}&curr=EUR&gl=IT".format(
                 dest=self._dest,
-                org=self._origin,
+                org=self._orig,
                 date_leave=self._date_leave,
-                date_return=self._date_return)
+                date_return=self._date_return,
+            )
         else:
-            return 'https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20on%20{date_leave}%20oneway&curr=EUR&gl=IT'.format(
-                dest=self._dest,
-                org=self._origin,
-                date_leave=self._date_leave
+            return "https://www.google.com/travel/flights?q=Flights%20to%20{dest}%20from%20{org}%20on%20{date_leave}%20oneway&curr=EUR&gl=IT".format(
+                dest=self._dest, org=self._orig, date_leave=self._date_leave
             )
 
     def _get_results(self, driver):
@@ -172,11 +104,12 @@ class Scrape:
             results = Scrape._make_url_request(self._url, driver)
         except TimeoutException:
             logger.error(
-                f"Scrape timeout reached. It could mean that no flights exist for the combination of airports and dates.")
+                f"Scrape timeout reached. It could mean that no flights exist for the combination of airports and dates."
+            )
             return -1
 
         flights = self._clean_results(results)
-        return Flight.dataframe(flights)
+        return Flight.make_dataframe(flights)
 
     def _clean_results(self, result):
         """
@@ -184,11 +117,10 @@ class Scrape:
         """
         res2 = [x.encode("ascii", "ignore").decode().strip() for x in result]
 
-        price_trend_dirty = [
-            x for x in res2 if x.startswith("Prices are currently")]
+        price_trend_dirty = [x for x in res2 if x.startswith("Prices are currently")]
         price_trend = Scrape.extract_price_trend(price_trend_dirty)
 
-        start = res2.index("Sort by:")+1
+        start = res2.index("Sort by:") + 1
 
         try:
             mid_start = res2.index("Price insights")
@@ -197,28 +129,28 @@ class Scrape:
         mid_end = -1
 
         try:
-            mid_end = res2.index("Other departing flights")+1
+            mid_end = res2.index("Other departing flights") + 1
         except:
-            mid_end = res2.index("Other flights")+1
+            mid_end = res2.index("Other flights") + 1
 
-        end = [i for i, x in enumerate(res2) if x.endswith('more flights')][0]
+        end = [i for i, x in enumerate(res2) if x.endswith("more flights")][0]
 
         res3 = res2[start:mid_start] + res2[mid_end:end]
 
         matches = []
         # Enumerate over the list 'res3'
         for index, element in enumerate(res3):
-
             # Check if the length of the element is more than 2
             if len(element) <= 2:
                 continue
 
             # Check if the element ends with 'AM' or 'PM' (or AM+, PM+)
             is_time_format = bool(
-                re.search("\d{1,2}\:\d{2}(?:AM|PM)\+{0,1}\d{0,1}", element))
+                re.search("\d{1,2}\:\d{2}(?:AM|PM)\+{0,1}\d{0,1}", element)
+            )
 
             # If the element doesn't end with '+' and is in time format, then add it to the matches list
-            if (element[-2] != '+' and is_time_format):
+            if element[-2] != "+" and is_time_format:
                 matches.append(index)
 
         # Keep only every second item in the matches list
@@ -228,10 +160,12 @@ class Scrape:
             Flight(
                 self._date_leave,  # date_leave
                 self._round_trip,  # round_trip
-                self._origin,
+                self._orig,
                 self._dest,
                 price_trend,
-                res3[matches[i]:matches[i+1]]) for i in range(len(matches)-1)
+                res3[matches[i] : matches[i + 1]],
+            )
+            for i in range(len(matches) - 1)
         ]
 
         return flights
@@ -283,15 +217,20 @@ class Scrape:
         # detect Google's Terms & Conditions page (not always there, only in EU)
         if Scrape._identify_google_terms_page(driver.page_source):
             WebDriverWait(driver, timeout).until(
-                lambda s: Scrape._identify_google_terms_page(s.page_source))
+                lambda s: Scrape._identify_google_terms_page(s.page_source)
+            )
 
             # click on accept terms button
-            WebDriverWait(driver, timeout).until(EC.element_to_be_clickable(
-                (By.XPATH, "//button[contains(., 'Accept all')]"))).click()
+            WebDriverWait(driver, timeout).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//button[contains(., 'Accept all')]")
+                )
+            ).click()
 
         # wait for flight data to load and initial XPATH cleaning
         WebDriverWait(driver, timeout).until(
-            lambda d: len(Scrape._get_flight_elements(d)) > 100)
+            lambda d: len(Scrape._get_flight_elements(d)) > 100
+        )
         results = Scrape._get_flight_elements(driver)
 
         return results
@@ -301,4 +240,6 @@ class Scrape:
         """
         Returns all html elements that contain/have to do with flight data.
         """
-        return driver.find_element(by=By.XPATH, value='//body[@id = "yDmH0d"]').text.split('\n')
+        return driver.find_element(
+            by=By.XPATH, value='//body[@id = "yDmH0d"]'
+        ).text.split("\n")

@@ -46,14 +46,3 @@ def setup_logger(logger_name):
     logging.getLogger('WDM').setLevel(logging.NOTSET)
     logging.config.dictConfig(LOGGING_CONFIG_DICT)
     return logging.getLogger(logger_name)
-
-
-def get_routes_from_config(config_obj):
-    """
-    Returns a list of routes from the config file.
-    """
-    routes = []
-    for route in config_obj["routes"]:
-        routes.append(json.loads(config_obj["routes"][route]))
-
-    return routes

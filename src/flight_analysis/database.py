@@ -106,6 +106,9 @@ class Database:
         cursor.close()
 
     def prepare_db_and_tables(self, overwrite_table=False):
+        """
+        Creates the database and the table if they don't exist.
+        """
         # create database
         if self.db_name not in self.list_all_databases():
             self.create_db()
