@@ -36,7 +36,7 @@ The whole project is written has been created with Python 3.11 and is based on t
 
 A very simple example of the main scraping functionality could be the following (get all flight from Munich (MUC) to Los Angeles (LAX) on May 28th, 2023):
 ```
-from google_flight_analysis.scrape import *
+from flight_analysis.scrape import *
 
 flights = Scrape("MUC", "LAX", "2023-05-28")
 flights.data

@@ -12,8 +12,8 @@ import pandas as pd
 from datetime import timedelta, datetime
 import configparser
 
-from src.google_flight_analysis.scrape import Scrape
-from src.google_flight_analysis.database import Database
+from src.flight_analysis.scrape import Scrape
+from src.flight_analysis.database import Database
 import private.private as private
 
 # config
