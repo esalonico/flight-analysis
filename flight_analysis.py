@@ -18,7 +18,7 @@ import private.private as private
 
 # config
 config = configparser.ConfigParser()
-config.read(os.path.join(os.path.dirname(__file__), "config.ini"))
+config.read(os.path.join(os.path.dirname(__file__), "routes.ini"))
 
 
 if __name__ == "__main__":

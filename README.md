@@ -32,7 +32,6 @@ The whole project is written has been created with Python 3.11 and is based on t
 - numpy
 - matplotlib
 - selenium
-- tqdm
 - pytest
 
 A very simple example of the main scraping functionality could be the following (get all flight from Munich (MUC) to Los Angeles (LAX) on May 28th, 2023):

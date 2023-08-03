@@ -24,7 +24,7 @@ LOGGING_CONFIG_DICT = {
             'class': 'logging.handlers.TimedRotatingFileHandler',
             'formatter': 'standard',
             'filename': os.path.join(LOGS_PATH, "logs.log"),
-            "when": "W6", # sunday, 
+            "when": "W6",  # sunday,
             'backupCount': 8
         },
     },
@@ -38,10 +38,12 @@ LOGGING_CONFIG_DICT = {
 def create_logs_folder():
     if not os.path.isdir(LOGS_PATH):
         os.mkdir(LOGS_PATH)
-        
+
+
 def setup_logger(logger_name):
     create_logs_folder()
-    logging.getLogger('WDM').setLevel(logging.NOTSET) # suppress WDM (Webdrive Manager) logs
+    # suppress WDM (Webdrive Manager) logs
+    logging.getLogger('WDM').setLevel(logging.NOTSET)
     logging.config.dictConfig(LOGGING_CONFIG_DICT)
     return logging.getLogger(logger_name)
 

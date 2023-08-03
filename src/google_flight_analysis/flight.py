@@ -4,7 +4,6 @@
 from datetime import date, datetime, timedelta
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 import re
 from os import path
 
@@ -316,13 +315,16 @@ class Flight:
         Format:
         {access_date_YYMMDD}_{access_time_HHMM}_{orig}_{dest}_{days_advance}_{leave_date_YYMMDD}_{return_date_YYMMDD}
         """
-        folder = "outputs"
+        folder = "scrapes_csv"
+        folder = path.join(path.dirname(__file__), folder)
+        print("folder is", folder)
+        
         
         # check if output folder exists
         if not path.isdir(folder):
             raise FileNotFoundError(f"Check if folder {folder} esists")
     
-        access_date = datetime.strptime(df["access_date"][0], "%Y-%m-%d %H:%M:%S").strftime("%y%m%d_%H%M")
+        access_date = df["access_date"][0].to_pydatetime().strftime("%y%m%d_%H%M")
         days_in_advance = df["days_advance"].min()
         leave_date = datetime.strptime(date_leave, "%Y-%m-%d").strftime("%y%m%d")
         return_date = (datetime.strptime(date_return, "%Y-%m-%d").strftime("%y%m%d") if date_return else None)

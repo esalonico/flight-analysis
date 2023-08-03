@@ -12,12 +12,7 @@ __pycache__/
 # custom
 backups
 private
-outputs
-prova.py
-temp.txt
-temp.ipynb
-main.ipynb
-simulate_data.ipynb
+scrapes_csv
 
 # logging
 logs/

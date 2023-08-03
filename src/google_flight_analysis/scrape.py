@@ -15,7 +15,6 @@ import re
 import os
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
 
 from src.google_flight_analysis.flight import Flight
 
@@ -172,7 +171,8 @@ class Scrape:
         try:
             results = Scrape._make_url_request(self._url, driver)
         except TimeoutException:
-            logger.error(f"Scrape timeout reached. It could mean that no flights exist for the combination of airports and dates." )
+            logger.error(
+                f"Scrape timeout reached. It could mean that no flights exist for the combination of airports and dates.")
             return -1
 
         flights = self._clean_results(results)
