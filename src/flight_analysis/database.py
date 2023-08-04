@@ -183,10 +183,14 @@ class Database:
         Returns: the path to the dumped .tar file.
         """
         BACKUPS_FOLDER_NAME = "db_backups"
-        
-        # specify the backup file and folder name
-        date_str = datetime.now().strftime("%Y%m%d%H%M%S")
+                
+        # create the backup folder if it doesn't exist
         backup_folder = os.path.join(os.path.dirname(__file__), BACKUPS_FOLDER_NAME)
+        if not os.path.exists(backup_folder):
+            os.makedirs(backup_folder)
+        
+        # specify backup filename
+        date_str = datetime.now().strftime("%Y%m%d%H%M")
         backup_file = os.path.join(backup_folder, f"{date_str}_{self.db_name}.tar")
 
         # run the pg_dump command to create a backup

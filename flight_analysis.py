@@ -2,6 +2,7 @@
 
 import utils
 import os
+import sys
 
 # logging
 logger_name = os.path.basename(__file__)
@@ -59,7 +60,7 @@ def compute_iteration_time(start: datetime, end: datetime):
 def get_routes_df(routes: list):
     """
     Returns a pandas dataframe with all the scraped results.
-    
+
     Input: routes (list of lists)
     """
     # compute number of total scrapes
@@ -106,6 +107,8 @@ def get_routes_df(routes: list):
 
 
 if __name__ == "__main__":
+    SKIP_SAVE_TO_DB = len(sys.argv) > 1 and sys.argv[1] == "nodb"
+
     # retreive routes to scrape
     routes = read_routes_from_file()
 
@@ -125,7 +128,8 @@ if __name__ == "__main__":
     db.prepare_db_and_tables(overwrite_table=False)
 
     # add results to database
-    db.add_pandas_df_to_db(scraped_flights)
-    
+    if not SKIP_SAVE_TO_DB:
+        db.add_pandas_df_to_db(scraped_flights)
+
     # handle backup here
     db.dump_database_to_sql_file()
