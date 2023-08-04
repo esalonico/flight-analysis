@@ -17,3 +17,6 @@ test.py
 
 # logging
 logs/
+
+# database backups
+db_backups
