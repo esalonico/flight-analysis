@@ -17,14 +17,23 @@ logger = logging.getLogger(logger_name)
 
 class Database:
     def __init__(self, db_host, db_name, db_user, db_pw, db_table):
+        # connection
         self.db_host = db_host
         self.db_name = db_name
         self.db_user = db_user
         self.db_table = db_table
+        self.db_port = 5432
         self.__db_pw = db_pw
-
+        
         self.conn = self.connect_to_postgresql()
         self.conn.autocommit = True
+        
+        # backups
+        self.backup_folder_name = "db_backups"
+        self.backup_folder = os.path.join(os.path.abspath(os.curdir), self.backup_folder_name)
+        self.n_backups_to_keep = 2 # TODO: change to 5
+        
+
 
     def __repr__(self):
         return f"Database: {self.db_name}"
@@ -177,30 +186,62 @@ class Database:
         cursor.execute(query)
         cursor.close()
 
-    def dump_database_to_sql_file(self):
+    def dump_database_to_file(self):
         """
-        Dump the database to a .tar file.
-        Returns: the path to the dumped .tar file.
+        Dump the database to a .dump file.
+        Returns: the path to the dumped .dump file (archived file, recoverable with pg_restore)
         """
-        BACKUPS_FOLDER_NAME = "db_backups"
-                
+
         # create the backup folder if it doesn't exist
-        backup_folder = os.path.join(os.path.dirname(__file__), BACKUPS_FOLDER_NAME)
-        if not os.path.exists(backup_folder):
-            os.makedirs(backup_folder)
-        
+        if not os.path.exists(self.backup_folder):
+            os.makedirs(self.backup_folder)
+
         # specify backup filename
         date_str = datetime.now().strftime("%Y%m%d%H%M")
-        backup_file = os.path.join(backup_folder, f"{date_str}_{self.db_name}.tar")
+        backup_file = os.path.join(self.backup_folder, f"{date_str}_{self.db_name}.dump")
 
         # run the pg_dump command to create a backup
-        dump_command = f"pg_dump --format=tar -U {self.db_user} -f {backup_file} {self.db_name}"
         try:
-            subprocess.call(dump_command)
+            logger.info(f"Dumping database to file: {backup_file}")
+            
+            subprocess.run(
+                [
+                    "pg_dump",
+                    f"--dbname=postgresql://{self.db_user}:{self.__db_pw}@{self.db_host}:{self.db_port}/{self.db_name}",
+                    "-Fc",
+                    "-f",
+                    backup_file,
+                    "-v",
+                ]
+            )
+            
+            logger.info(f"Database dumped to file: {backup_file}")
             return backup_file
+
         except Exception as e:
             logger.error(f"Error while dumping database to file: {e}")
+            
+            
+    def rotate_database_backups(self):
+        """
+        Rotate database backups.
+        """
+        # get list of all backup files
+        all_backups = os.listdir(self.backup_folder)
+        all_backups = [os.path.join(self.backup_folder, x) for x in all_backups]
+        all_backups = [x for x in all_backups if x.endswith(".dump")]
         
+        # if there are no backups, return
+        if not all_backups or len(all_backups) == 0:
+            return
         
-
+        # sort the list of backup files by creation time
+        all_backups.sort(key=os.path.getctime)
+        
+        # ff the number of backups is greater than the rotation limit, delete the oldest file
+        while len(all_backups) > self.n_backups_to_keep:
+            os.remove(all_backups[0])
+            del all_backups[0]
+            
+        logger.info(f"Rotated database backups. Current number of backups: {len(all_backups)}")
         
