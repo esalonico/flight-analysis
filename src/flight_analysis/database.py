@@ -20,20 +20,20 @@ class Database:
         self.db_user = db_user
         self.db_port = 5432
         self.__db_pw = db_pw
-        
+
         # tables
         self.table_scraped = "scraped"
         self.table_scraped_airlines = "scraped_airlines"
-        
+
         self.conn = self.connect_to_postgresql()
         self.conn.autocommit = True
-        
+
         # backups
         self.backup_folder_name = "db_backups"
-        self.backup_folder = os.path.join(os.path.abspath(os.curdir), self.backup_folder_name)
-        self.n_backups_to_keep = 2 # TODO: change to 5
-        
-
+        self.backup_folder = os.path.join(
+            os.path.abspath(os.curdir), self.backup_folder_name
+        )
+        self.n_backups_to_keep = 2  # TODO: change to 5
 
     def __repr__(self):
         return f"Database: {self.db_name}"
@@ -88,6 +88,7 @@ class Database:
             CREATE TABLE IF NOT EXISTS public.{self.table_scraped}
             (
                 id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+                uuid uuid NOT NULL,
                 departure_datetime timestamp with time zone,
                 arrival_datetime timestamp with time zone,
                 travel_time smallint NOT NULL,
@@ -133,7 +134,6 @@ class Database:
         cursor.execute(query)
         cursor.close()
 
-
     def prepare_db_and_tables(self):
         """
         Creates the database and the table if they don't exist.
@@ -145,17 +145,19 @@ class Database:
         # create scraped table
         if self.table_scraped not in self.list_all_tables():
             self.create_scraped_table()
-            
+
         # create scraped_airlines table
         if self.table_scraped_airlines not in self.list_all_tables():
             self.create_scraped_airlines_table()
 
-
     def add_pandas_df_to_db(self, df, table_name):
         extras.register_uuid()
-        
+
         # Create a list of tuples from the dataframe values
+        if table_name == self.table_scraped:
+            df = df.reset_index() # otherwise the index (uuid) is not added to the table. TODO: improve this
         tuples = [tuple(x) for x in df.to_numpy()]
+        print(tuples[0])
 
         # Comma-separated dataframe columns
         cols = ",".join(list(df.columns))
@@ -166,13 +168,13 @@ class Database:
         query = "INSERT INTO %s(%s) VALUES %%s" % (table_name, cols)
         try:
             extras.execute_values(cursor, query, tuples)
+            logger.info("{} rows added to table [{}]".format(len(df), table_name))
         except (Exception, psycopg2.DatabaseError) as error:
             logger.error("Error: %s" % error)
             self.conn.rollback()
-            cursor.close()
-
-        logger.info("{} rows added to table [{}]".format(len(df), table_name))
+            
         cursor.close()
+
 
         # fix layover time
         # TODO: improve this
@@ -201,12 +203,14 @@ class Database:
 
         # specify backup filename
         date_str = datetime.now().strftime("%Y%m%d%H%M")
-        backup_file = os.path.join(self.backup_folder, f"{date_str}_{self.db_name}.dump")
+        backup_file = os.path.join(
+            self.backup_folder, f"{date_str}_{self.db_name}.dump"
+        )
 
         # run the pg_dump command to create a backup
         try:
             logger.info(f"Dumping database to file: {backup_file}")
-            
+
             subprocess.run(
                 [
                     "pg_dump",
@@ -217,14 +221,13 @@ class Database:
                     "-v",
                 ]
             )
-            
+
             logger.info(f"Database dumped to file: {backup_file}")
             return backup_file
 
         except Exception as e:
             logger.error(f"Error while dumping database to file: {e}")
-            
-            
+
     def rotate_database_backups(self):
         """
         Rotate database backups.
@@ -233,18 +236,19 @@ class Database:
         all_backups = os.listdir(self.backup_folder)
         all_backups = [os.path.join(self.backup_folder, x) for x in all_backups]
         all_backups = [x for x in all_backups if x.endswith(".dump")]
-        
+
         # if there are no backups, return
         if not all_backups or len(all_backups) == 0:
             return
-        
+
         # sort the list of backup files by creation time
         all_backups.sort(key=os.path.getctime)
-        
+
         # ff the number of backups is greater than the rotation limit, delete the oldest file
         while len(all_backups) > self.n_backups_to_keep:
             os.remove(all_backups[0])
             del all_backups[0]
-            
-        logger.info(f"Rotated database backups. Current number of backups: {len(all_backups)}")
-        
+
+        logger.info(
+            f"Rotated database backups. Current number of backups: {len(all_backups)}"
+        )

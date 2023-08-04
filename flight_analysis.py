@@ -171,7 +171,6 @@ if __name__ == "__main__":
     # add results to database
     if not SKIP_SAVE_TO_DB:
         db.add_pandas_df_to_db(scraped_flights, table_name=db.table_scraped)
-
         print(scraped_airlines)
         db.add_pandas_df_to_db(scraped_airlines, table_name=db.table_scraped_airlines)
 
