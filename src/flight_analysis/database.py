@@ -16,14 +16,17 @@ logger = logging.getLogger(logger_name)
 
 
 class Database:
-    def __init__(self, db_host, db_name, db_user, db_pw, db_table):
+    def __init__(self, db_host, db_name, db_user, db_pw):
         # connection
         self.db_host = db_host
         self.db_name = db_name
         self.db_user = db_user
-        self.db_table = db_table
         self.db_port = 5432
         self.__db_pw = db_pw
+        
+        # tables
+        self.table_scraped = "scraped"
+        self.table_scraped_airlines = "scraped_airlines"
         
         self.conn = self.connect_to_postgresql()
         self.conn.autocommit = True
@@ -71,7 +74,7 @@ class Database:
 
         return [x[2] for x in result]
 
-    def create_db(self):
+    def create_flight_analysis_db(self):
         """
         Creates a new database for flight_analysis data.
         """
@@ -82,13 +85,10 @@ class Database:
 
         logger.info("Database [flight_analysis] created.")
 
-    def create_scraped_table(self, overwrite):
+    def create_scraped_table(self):
         query = ""
-        if overwrite:
-            query += "DROP TABLE IF EXISTS public.scraped;\n"
-
-        query += """
-            CREATE TABLE IF NOT EXISTS public.scraped
+        query += f"""
+            CREATE TABLE IF NOT EXISTS public.{self.table_scraped}
             (
                 id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
                 departure_datetime timestamp with time zone,
@@ -111,14 +111,33 @@ class Database:
 
             TABLESPACE pg_default;
 
-            ALTER TABLE IF EXISTS public.scraped OWNER to postgres;
+            ALTER TABLE IF EXISTS public.{self.table_scraped} OWNER to postgres;
             """
 
         cursor = self.conn.cursor()
         cursor.execute(query)
         cursor.close()
 
-    def prepare_db_and_tables(self, overwrite_table=False):
+    def create_scraped_airlines_table(self):
+        query = ""
+        query += f"""
+            CREATE TABLE IF NOT EXISTS public.{self.table_scraped_airlines}
+            (
+                id uuid PRIMARY KEY NOT NULL,
+                airline text COLLATE pg_catalog."default"
+            )
+
+            TABLESPACE pg_default;
+
+            ALTER TABLE IF EXISTS public.{self.table_scraped_airlines} OWNER to postgres;
+            """
+
+        cursor = self.conn.cursor()
+        cursor.execute(query)
+        cursor.close()
+
+
+    def prepare_db_and_tables(self):
         """
         Creates the database and the table if they don't exist.
         """
@@ -126,8 +145,13 @@ class Database:
         if self.db_name not in self.list_all_databases():
             self.create_db()
 
-        # create table
-        self.create_scraped_table(overwrite_table)
+        # create scraped table
+        if self.table_scraped not in self.list_all_tables():
+            self.create_scraped_table()
+            
+        # create scraped_airlines table
+        if self.table_scraped_airlines not in self.list_all_tables():
+            self.create_scraped_airlines_table()
 
     def transform_and_clean_df(self, df):
         """
@@ -148,7 +172,7 @@ class Database:
 
         return df
 
-    def add_pandas_df_to_db(self, df):
+    def add_pandas_df_to_db(self, df, table_name):
         # clean df
         df = self.transform_and_clean_df(df)
 
@@ -161,7 +185,7 @@ class Database:
         cursor = self.conn.cursor()
 
         # SQL quert to execute
-        query = "INSERT INTO %s(%s) VALUES %%s" % (self.db_table, cols)
+        query = "INSERT INTO %s(%s) VALUES %%s" % (table_name, cols)
         try:
             extras.execute_values(cursor, query, tuples)
         except (Exception, psycopg2.DatabaseError) as error:
@@ -169,22 +193,23 @@ class Database:
             self.conn.rollback()
             cursor.close()
 
-        logger.info("{} rows added to table [{}]".format(len(df), self.db_table))
+        logger.info("{} rows added to table [{}]".format(len(df), table_name))
         cursor.close()
 
         # fix layover time
         # TODO: improve this
-        cursor = self.conn.cursor()
-        query = f"""
-            UPDATE {self.db_table}
-            SET layover_time = CASE
-            WHEN layover_time = -1 THEN null ELSE layover_time END;
+        if table_name == self.table_scraped:
+            cursor = self.conn.cursor()
+            query = f"""
+                UPDATE {self.table_scraped}
+                SET layover_time = CASE
+                WHEN layover_time = -1 THEN null ELSE layover_time END;
 
-            ALTER TABLE public.scraped 
-            ALTER COLUMN layover_time TYPE smallint;
-        """
-        cursor.execute(query)
-        cursor.close()
+                ALTER TABLE public.{self.table_scraped}
+                ALTER COLUMN layover_time TYPE smallint;
+            """
+            cursor.execute(query)
+            cursor.close()
 
     def dump_database_to_file(self):
         """

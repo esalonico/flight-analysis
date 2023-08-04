@@ -3,6 +3,7 @@
 import utils
 import os
 import sys
+import uuid
 
 # logging
 logger_name = os.path.basename(__file__)
@@ -103,7 +104,29 @@ def get_routes_df(routes: list):
 
             n_iter += 1
 
-    return pd.concat(all_results)
+        final_df = pd.concat(all_results).reset_index(drop=True)
+        final_df["uuid"] = [uuid.uuid4() for _ in range(final_df.shape[0])]
+        final_df = final_df.set_index("uuid")
+
+    return final_df
+
+
+def generate_airline_df_from_flights(flights_df):
+    """
+    From a flights dataframe, generate an airline dataframe.
+    Goal: respect good database conditions.
+    """
+    # check if all indices are unique
+    if not flights_df.index.is_unique:
+        flights_df = flights_df.reset_index(drop=True)
+
+    # create a dataframe with all the airlines, referencing the index
+    airlines_df = flights_df.explode("airlines")[["airlines"]]
+
+    # rename column to "airline"
+    airlines_df = airlines_df.rename(columns={"airlines": "airline"})
+
+    return airlines_df
 
 
 if __name__ == "__main__":
@@ -115,21 +138,28 @@ if __name__ == "__main__":
     # scrape routes into a dataframe
     scraped_flights = get_routes_df(routes)
 
+    # generate an airline dataframe
+    scraped_airlines = generate_airline_df_from_flights(scraped_flights)
+
+    # drop airlines from flights dataframe
+    # scraped_flights = scraped_flights.drop(columns=["airlines"])
+
     # connect to database
     db = Database(
         db_host=private.DB_HOST,
         db_name=private.DB_NAME,
         db_user=private.DB_USER,
         db_pw=private.DB_PW,
-        db_table=private.DB_TABLE,
     )
 
     # prepare database and tables
-    db.prepare_db_and_tables(overwrite_table=False)
+    db.prepare_db_and_tables()
 
     # add results to database
     if not SKIP_SAVE_TO_DB:
-        db.add_pandas_df_to_db(scraped_flights)
+        db.add_pandas_df_to_db(scraped_flights, table_name=db.table_scraped)
+        db.add_pandas_df_to_db(scraped_airlines, table_name=db.table_scraped_airlines)
+        
 
     # if it's a monday, backup the database
     if datetime.today().weekday() == 0:
