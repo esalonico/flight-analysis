@@ -131,5 +131,10 @@ if __name__ == "__main__":
     if not SKIP_SAVE_TO_DB:
         db.add_pandas_df_to_db(scraped_flights)
 
-    # handle backup here
-    db.dump_database_to_sql_file()
+    # if it's a monday, backup the database
+    if datetime.today().weekday() == 0:
+        # dump database to file
+        db.dump_database_to_file()
+
+        # handle database backup rotation
+        db.rotate_database_backups()
