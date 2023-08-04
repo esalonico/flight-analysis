@@ -104,7 +104,18 @@ def get_routes_df(routes: list):
 
             n_iter += 1
 
+        # concatenate all results into a single dataframe
         final_df = pd.concat(all_results).reset_index(drop=True)
+
+        # clean and transform the dataframe
+        final_df["layover_time"] = final_df["layover_time"].fillna(-1)
+        final_df["layover_location"] = (
+            final_df["layover_location"].fillna(np.nan).replace([np.nan], [None])
+        )
+        final_df["price_value"] = (
+            final_df["price_value"].fillna(np.nan).replace([np.nan], [None])
+        )
+
         final_df["uuid"] = [uuid.uuid4() for _ in range(final_df.shape[0])]
         final_df = final_df.set_index("uuid")
 
@@ -121,10 +132,12 @@ def generate_airline_df_from_flights(flights_df):
         flights_df = flights_df.reset_index(drop=True)
 
     # create a dataframe with all the airlines, referencing the index
-    airlines_df = flights_df.explode("airlines")[["airlines"]]
+    airlines_df = flights_df.explode("airlines")[["airlines"]].reset_index()
 
     # rename column to "airline"
-    airlines_df = airlines_df.rename(columns={"airlines": "airline"})
+    airlines_df = airlines_df.rename(
+        columns={"uuid": "flight_uuid", "airlines": "airline"}
+    )
 
     return airlines_df
 
@@ -142,7 +155,7 @@ if __name__ == "__main__":
     scraped_airlines = generate_airline_df_from_flights(scraped_flights)
 
     # drop airlines from flights dataframe
-    # scraped_flights = scraped_flights.drop(columns=["airlines"])
+    scraped_flights = scraped_flights.drop(columns=["airlines"])
 
     # connect to database
     db = Database(
@@ -158,8 +171,9 @@ if __name__ == "__main__":
     # add results to database
     if not SKIP_SAVE_TO_DB:
         db.add_pandas_df_to_db(scraped_flights, table_name=db.table_scraped)
+
+        print(scraped_airlines)
         db.add_pandas_df_to_db(scraped_airlines, table_name=db.table_scraped_airlines)
-        
 
     # if it's a monday, backup the database
     if datetime.today().weekday() == 0:

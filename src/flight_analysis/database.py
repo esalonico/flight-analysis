@@ -1,9 +1,6 @@
 # author: Emanuele Salonico, 2023
 
 import psycopg2
-import pandas as pd
-import numpy as np
-import ast
 import psycopg2.extras as extras
 import os
 import logging
@@ -93,7 +90,6 @@ class Database:
                 id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
                 departure_datetime timestamp with time zone,
                 arrival_datetime timestamp with time zone,
-                airlines text[] COLLATE pg_catalog."default",
                 travel_time smallint NOT NULL,
                 origin character(3) COLLATE pg_catalog."default"  NOT NULL,
                 destination character(3) COLLATE pg_catalog."default"  NOT NULL,
@@ -123,7 +119,8 @@ class Database:
         query += f"""
             CREATE TABLE IF NOT EXISTS public.{self.table_scraped_airlines}
             (
-                id uuid PRIMARY KEY NOT NULL,
+                id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+                flight_uuid uuid NOT NULL,
                 airline text COLLATE pg_catalog."default"
             )
 
@@ -153,29 +150,10 @@ class Database:
         if self.table_scraped_airlines not in self.list_all_tables():
             self.create_scraped_airlines_table()
 
-    def transform_and_clean_df(self, df):
-        """
-        Some necessary cleaning and transforming operations to the df
-        before sending its content to the database
-        """
-
-        df["airlines"] = df.airlines.apply(
-            lambda x: np.array(
-                ast.literal_eval(str(x).replace("[", '"{').replace("]", '}"'))
-            )
-        )
-        df["layover_time"] = df["layover_time"].fillna(-1)
-        df["layover_location"] = (
-            df["layover_location"].fillna(np.nan).replace([np.nan], [None])
-        )
-        df["price_value"] = df["price_value"].fillna(np.nan).replace([np.nan], [None])
-
-        return df
 
     def add_pandas_df_to_db(self, df, table_name):
-        # clean df
-        df = self.transform_and_clean_df(df)
-
+        extras.register_uuid()
+        
         # Create a list of tuples from the dataframe values
         tuples = [tuple(x) for x in df.to_numpy()]
 
