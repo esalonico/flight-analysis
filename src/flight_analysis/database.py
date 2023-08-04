@@ -7,6 +7,8 @@ import ast
 import psycopg2.extras as extras
 import os
 import logging
+from datetime import datetime
+import subprocess
 
 # logging
 logger_name = os.path.basename(__file__)
@@ -32,18 +34,19 @@ class Database:
         Connect to Postgresql and return a connection object.
         """
         try:
-            conn = psycopg2.connect(host=self.db_host,
-                                    database=self.db_name,
-                                    user=self.db_user,
-                                    password=self.__db_pw)
+            conn = psycopg2.connect(
+                host=self.db_host,
+                database=self.db_name,
+                user=self.db_user,
+                password=self.__db_pw,
+            )
             return conn
         except Exception as e:
             raise ConnectionError(e)
 
     def list_all_databases(self):
         cursor = self.conn.cursor()
-        cursor.execute(
-            "SELECT datname FROM pg_database WHERE datistemplate = false;")
+        cursor.execute("SELECT datname FROM pg_database WHERE datistemplate = false;")
         result = cursor.fetchall()
         cursor.close()
 
@@ -52,7 +55,8 @@ class Database:
     def list_all_tables(self):
         cursor = self.conn.cursor()
         cursor.execute(
-            "SELECT * FROM information_schema.tables WHERE table_schema = 'public';")
+            "SELECT * FROM information_schema.tables WHERE table_schema = 'public';"
+        )
         result = cursor.fetchall()
         cursor.close()
 
@@ -100,7 +104,7 @@ class Database:
 
             ALTER TABLE IF EXISTS public.scraped OWNER to postgres;
             """
-            
+
         cursor = self.conn.cursor()
         cursor.execute(query)
         cursor.close()
@@ -115,44 +119,50 @@ class Database:
 
         # create table
         self.create_scraped_table(overwrite_table)
-        
+
     def transform_and_clean_df(self, df):
         """
         Some necessary cleaning and transforming operations to the df
         before sending its content to the database
         """
 
-        df["airlines"] = df.airlines.apply(lambda x: np.array(ast.literal_eval(str(x).replace("[", '"{').replace("]", '}"'))))
-        df['layover_time'] = df['layover_time'].fillna(-1)
-        df["layover_location"] = df["layover_location"].fillna(np.nan).replace([np.nan], [None])
+        df["airlines"] = df.airlines.apply(
+            lambda x: np.array(
+                ast.literal_eval(str(x).replace("[", '"{').replace("]", '}"'))
+            )
+        )
+        df["layover_time"] = df["layover_time"].fillna(-1)
+        df["layover_location"] = (
+            df["layover_location"].fillna(np.nan).replace([np.nan], [None])
+        )
         df["price_value"] = df["price_value"].fillna(np.nan).replace([np.nan], [None])
 
         return df
-        
+
     def add_pandas_df_to_db(self, df):
         # clean df
         df = self.transform_and_clean_df(df)
-        
+
         # Create a list of tuples from the dataframe values
         tuples = [tuple(x) for x in df.to_numpy()]
-    
+
         # Comma-separated dataframe columns
-        cols = ','.join(list(df.columns))
-    
+        cols = ",".join(list(df.columns))
+
         cursor = self.conn.cursor()
-    
+
         # SQL quert to execute
-        query  = "INSERT INTO %s(%s) VALUES %%s" % (self.db_table, cols)
+        query = "INSERT INTO %s(%s) VALUES %%s" % (self.db_table, cols)
         try:
             extras.execute_values(cursor, query, tuples)
         except (Exception, psycopg2.DatabaseError) as error:
             logger.error("Error: %s" % error)
             self.conn.rollback()
             cursor.close()
-        
+
         logger.info("{} rows added to table [{}]".format(len(df), self.db_table))
         cursor.close()
-        
+
         # fix layover time
         # TODO: improve this
         cursor = self.conn.cursor()
@@ -166,3 +176,27 @@ class Database:
         """
         cursor.execute(query)
         cursor.close()
+
+    def dump_database_to_sql_file(self):
+        """
+        Dump the database to a .tar file.
+        Returns: the path to the dumped .tar file.
+        """
+        BACKUPS_FOLDER_NAME = "db_backups"
+        
+        # specify the backup file and folder name
+        date_str = datetime.now().strftime("%Y%m%d%H%M%S")
+        backup_folder = os.path.join(os.path.dirname(__file__), BACKUPS_FOLDER_NAME)
+        backup_file = os.path.join(backup_folder, f"{date_str}_{self.db_name}.tar")
+
+        # run the pg_dump command to create a backup
+        dump_command = f"pg_dump --format=tar -U {self.db_user} -f {backup_file} {self.db_name}"
+        try:
+            subprocess.call(dump_command)
+            return backup_file
+        except Exception as e:
+            logger.error(f"Error while dumping database to file: {e}")
+        
+        
+
+        

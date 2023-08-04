@@ -13,6 +13,7 @@ __pycache__/
 backups
 private
 scrapes_csv
+test.py
 
 # logging
 logs/

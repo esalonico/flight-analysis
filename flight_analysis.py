@@ -126,3 +126,6 @@ if __name__ == "__main__":
 
     # add results to database
     db.add_pandas_df_to_db(scraped_flights)
+    
+    # handle backup here
+    db.dump_database_to_sql_file()
