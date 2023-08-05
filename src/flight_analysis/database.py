@@ -87,15 +87,14 @@ class Database:
         query += f"""
             CREATE TABLE IF NOT EXISTS public.{self.table_scraped}
             (
-                id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
                 uuid uuid NOT NULL,
                 departure_datetime timestamp with time zone,
                 arrival_datetime timestamp with time zone,
                 travel_time smallint NOT NULL,
-                origin character(3) COLLATE pg_catalog."default"  NOT NULL,
-                destination character(3) COLLATE pg_catalog."default"  NOT NULL,
+                origin character(3) COLLATE pg_catalog."default" NOT NULL,
+                destination character(3) COLLATE pg_catalog."default" NOT NULL,
                 layover_n smallint NOT NULL,
-                layover_time numeric,
+                layover_time smallint,
                 layover_location text COLLATE pg_catalog."default",
                 price_eur smallint NOT NULL,
                 price_trend text COLLATE pg_catalog."default",
@@ -103,7 +102,8 @@ class Database:
                 access_date timestamp with time zone NOT NULL,
                 one_way boolean NOT NULL,
                 has_train boolean NOT NULL,
-                days_advance smallint NOT NULL
+                days_advance smallint NOT NULL,
+                CONSTRAINT scraped_pkey PRIMARY KEY (uuid)
             )
 
             TABLESPACE pg_default;
@@ -120,14 +120,24 @@ class Database:
         query += f"""
             CREATE TABLE IF NOT EXISTS public.{self.table_scraped_airlines}
             (
-                id uuid DEFAULT gen_random_uuid() PRIMARY KEY,
+                uuid uuid NOT NULL DEFAULT gen_random_uuid(),
                 flight_uuid uuid NOT NULL,
-                airline text COLLATE pg_catalog."default"
-            )
+                airline text COLLATE pg_catalog."default",
+                CONSTRAINT scraped_airlines_pkey PRIMARY KEY (uuid),
+                CONSTRAINT flight_uuid FOREIGN KEY (flight_uuid)
+                REFERENCES public.scraped (uuid) MATCH SIMPLE
+                ON UPDATE CASCADE
+                ON DELETE CASCADE
+)
 
             TABLESPACE pg_default;
 
             ALTER TABLE IF EXISTS public.{self.table_scraped_airlines} OWNER to postgres;
+            
+            CREATE INDEX IF NOT EXISTS fki_flight_uuid
+                ON public.scraped_airlines USING btree
+                (flight_uuid ASC NULLS LAST)
+                TABLESPACE pg_default;
             """
 
         cursor = self.conn.cursor()
@@ -154,8 +164,8 @@ class Database:
         extras.register_uuid()
 
         # Create a list of tuples from the dataframe values
-        if table_name == self.table_scraped:
-            df = df.reset_index() # otherwise the index (uuid) is not added to the table. TODO: improve this
+        df = df.reset_index() # otherwise the index (uuid) is not added to the table
+        
         tuples = [tuple(x) for x in df.to_numpy()]
         print(tuples[0])
 
@@ -172,9 +182,8 @@ class Database:
         except (Exception, psycopg2.DatabaseError) as error:
             logger.error("Error: %s" % error)
             self.conn.rollback()
-            
-        cursor.close()
 
+        cursor.close()
 
         # fix layover time
         # TODO: improve this
