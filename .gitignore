@@ -14,6 +14,7 @@ backups
 private
 scrapes_csv
 test.py
+sql_queries
 
 # logging
 logs/

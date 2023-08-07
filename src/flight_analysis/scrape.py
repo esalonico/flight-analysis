@@ -29,7 +29,7 @@ class Scrape:
         self._round_trip = True if date_return is not None else False
         self._data = None
         self._url = None
-        
+
     @property
     def data(self):
         return self._data
@@ -106,7 +106,7 @@ class Scrape:
             logger.error(
                 f"Scrape timeout reached. It could mean that no flights exist for the combination of airports and dates."
             )
-            return -1
+            return None
 
         flights = self._clean_results(results)
         return Flight.make_dataframe(flights)
@@ -140,7 +140,7 @@ class Scrape:
         matches = []
         # Enumerate over the list 'res3'
         for index, element in enumerate(res3):
-            # Check if the length of the element is more than 2
+            # Check if element is not an empty string
             if len(element) <= 2:
                 continue
 
@@ -153,20 +153,30 @@ class Scrape:
             if element[-2] != "+" and is_time_format:
                 matches.append(index)
 
-        # Keep only every second item in the matches list
-        matches = matches[::2]
+        # handles the identification of whole flights, instead of splitting every
+        # time a time is found
+        # TODO: document better
+        matches_ok = [matches[0]]
 
-        flights = [
-            Flight(
-                self._date_leave,  # date_leave
-                self._round_trip,  # round_trip
-                self._orig,
-                self._dest,
-                price_trend,
-                res3[matches[i] : matches[i + 1]],
-            )
-            for i in range(len(matches) - 1)
-        ]
+        for i in range(1, len(matches)):
+            if matches[i] - matches[i - 1] < 4:
+                continue
+            matches_ok.append(matches[i])
+
+        flights = []
+        for i in range(len(matches_ok) - 1):
+            flight_args = res3[matches_ok[i] : matches_ok[i + 1]]
+
+            if len(flight_args) > 5:
+                f = Flight(
+                    self._date_leave,  # date_leave
+                    self._round_trip,  # round_trip
+                    self._orig,
+                    self._dest,
+                    price_trend,
+                    flight_args,
+                )
+                flights.append(f)
 
         return flights
 

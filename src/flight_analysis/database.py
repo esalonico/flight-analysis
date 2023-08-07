@@ -24,6 +24,7 @@ class Database:
         # tables
         self.table_scraped = "scraped"
         self.table_scraped_airlines = "scraped_airlines"
+        self.table_scraped_layovers = "scraped_layovers"
 
         self.conn = self.connect_to_postgresql()
         self.conn.autocommit = True
@@ -125,7 +126,7 @@ class Database:
                 airline text COLLATE pg_catalog."default",
                 CONSTRAINT scraped_airlines_pkey PRIMARY KEY (uuid),
                 CONSTRAINT flight_uuid FOREIGN KEY (flight_uuid)
-                REFERENCES public.scraped (uuid) MATCH SIMPLE
+                REFERENCES public.{self.table_scraped} (uuid) MATCH SIMPLE
                 ON UPDATE CASCADE
                 ON DELETE CASCADE
 )
@@ -135,7 +136,7 @@ class Database:
             ALTER TABLE IF EXISTS public.{self.table_scraped_airlines} OWNER to postgres;
             
             CREATE INDEX IF NOT EXISTS fki_flight_uuid
-                ON public.scraped_airlines USING btree
+                ON public.{self.table_scraped_airlines} USING btree
                 (flight_uuid ASC NULLS LAST)
                 TABLESPACE pg_default;
             """
@@ -144,6 +145,36 @@ class Database:
         cursor.execute(query)
         cursor.close()
 
+    def create_scraped_layovers_table(self):
+        query = ""
+        query += f"""
+            CREATE TABLE IF NOT EXISTS public.{self.table_scraped_layovers}
+            (
+                uuid uuid NOT NULL DEFAULT gen_random_uuid(),
+                flight_uuid uuid NOT NULL,
+                layover_location text COLLATE pg_catalog."default",
+                CONSTRAINT scraped_layovers_pkey PRIMARY KEY (uuid),
+                CONSTRAINT flight_uuid FOREIGN KEY (flight_uuid)
+                REFERENCES public.{self.table_scraped} (uuid) MATCH SIMPLE
+                ON UPDATE CASCADE
+                ON DELETE CASCADE
+    )
+
+            TABLESPACE pg_default;
+
+            ALTER TABLE IF EXISTS public.{self.table_scraped_layovers} OWNER to postgres;
+            
+            CREATE INDEX IF NOT EXISTS fki_flight_uuid
+                ON public.{self.table_scraped_layovers} USING btree
+                (flight_uuid ASC NULLS LAST)
+                TABLESPACE pg_default;
+            """
+
+        cursor = self.conn.cursor()
+        cursor.execute(query)
+        cursor.close()
+
+    
     def prepare_db_and_tables(self):
         """
         Creates the database and the table if they don't exist.
@@ -164,10 +195,10 @@ class Database:
         extras.register_uuid()
 
         # Create a list of tuples from the dataframe values
-        df = df.reset_index() # otherwise the index (uuid) is not added to the table
+        if table_name == self.table_scraped:
+            df = df.reset_index() # otherwise the index (uuid) is not added to the table
         
         tuples = [tuple(x) for x in df.to_numpy()]
-        print(tuples[0])
 
         # Comma-separated dataframe columns
         cols = ",".join(list(df.columns))
