@@ -108,10 +108,12 @@ def get_routes_df(routes: list):
         final_df = pd.concat(all_results).reset_index(drop=True)
 
         # clean and transform the dataframe
-        final_df["layover_time"] = final_df["layover_time"].fillna(-1)
-        final_df["layover_location"] = (
-            final_df["layover_location"].fillna(np.nan).replace([np.nan], [None])
-        )
+        # convert layover time and travel time to minutes
+        final_df["layover_time"] = final_df["layover_time"].dt.total_seconds() / 60
+        final_df["layover_time"] = final_df["layover_time"].fillna(0).astype(int)
+        final_df["travel_time"] = final_df["travel_time"].dt.total_seconds() / 60
+        final_df["travel_time"] = final_df["travel_time"].fillna(0).astype(int)
+
         final_df["price_value"] = (
             final_df["price_value"].fillna(np.nan).replace([np.nan], [None])
         )
@@ -122,7 +124,7 @@ def get_routes_df(routes: list):
     return final_df
 
 
-def generate_airline_df_from_flights(flights_df):
+def generate_airlines_df_from_flights(flights_df):
     """
     From a flights dataframe, generate an airline dataframe.
     Goal: respect good database conditions.
@@ -145,6 +147,32 @@ def generate_airline_df_from_flights(flights_df):
     return airlines_df
 
 
+def generate_layovers_df_from_flights(flights_df):
+    """
+    From a flights dataframe, generate a layovers dataframe.
+    Goal: respect good database conditions.
+    """
+    # check if all indices are unique
+    if not flights_df.index.is_unique:
+        flights_df = flights_df.reset_index(drop=True)
+
+    # create a dataframe with all the layovers, referencing the index
+    layovers_df = flights_df.explode("layover_location")[
+        ["layover_location"]
+    ].reset_index()
+
+    # get rid of rows with no layover
+    layovers_df = layovers_df.dropna().reset_index(drop=True)
+
+    # rename column
+    layovers_df = layovers_df.rename(columns={"uuid": "flight_uuid"})
+
+    # rename index to uuid
+    layovers_df.index.names = ["uuid"]
+
+    return layovers_df
+
+
 if __name__ == "__main__":
     SKIP_SAVE_TO_DB = len(sys.argv) > 1 and sys.argv[1] == "nodb"
 
@@ -154,11 +182,12 @@ if __name__ == "__main__":
     # scrape routes into a dataframe
     scraped_flights = get_routes_df(routes)
 
-    # generate an airline dataframe
-    scraped_airlines = generate_airline_df_from_flights(scraped_flights)
+    # generate airline and layovers dataframe
+    scraped_airlines = generate_airlines_df_from_flights(scraped_flights)
+    scraped_layovers = generate_layovers_df_from_flights(scraped_flights)
 
-    # drop airlines from flights dataframe
-    scraped_flights = scraped_flights.drop(columns=["airlines"])
+    # drop airlines and layovers from flights dataframe
+    scraped_flights = scraped_flights.drop(columns=["airlines", "layover_location"])
 
     # connect to database
     db = Database(
@@ -175,6 +204,7 @@ if __name__ == "__main__":
     if not SKIP_SAVE_TO_DB:
         db.add_pandas_df_to_db(scraped_flights, table_name=db.table_scraped)
         db.add_pandas_df_to_db(scraped_airlines, table_name=db.table_scraped_airlines)
+        db.add_pandas_df_to_db(scraped_layovers, table_name=db.table_scraped_layovers)
 
     # if it's a monday, backup the database
     if datetime.today().weekday() == 0:

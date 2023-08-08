@@ -117,6 +117,13 @@ class Flight:
         # example: MUCFCO, BCNMAD
         if len(arg) == 6 and arg.isupper():
             return True
+
+        return False
+
+    def _is_arg_train_service(self, arg):
+        train_keywords = ["Train service", "Flight + Train"]
+        if arg in train_keywords:
+            return True
         return False
 
     # ---------------------------------------------------------------
@@ -197,13 +204,13 @@ class Flight:
         return int(arg.replace(",", ""))
 
     def _parse_orig_dest(self, arg):
-        # special case: "Flight + Train"
-        if "Flight + Train" in arg:
-            self._has_train = True
-            return (self._queried_orig, self._queried_dest)
-
         # regular case: like MUCFCO, LAXJFK
         return (arg[:3], arg[3:])
+
+    def _parse_train_service(self, arg):
+        if "Train service" in arg:
+            self._has_train = True
+            return (self._queried_orig, self._queried_dest)
 
     # ---------------------------------------------------------------
 
@@ -212,8 +219,6 @@ class Flight:
         Classifies a string (arg) into the correct attribute for a flight,
         such as price, numer of layover stops, arrival time...
         """
-        parsed = False
-
         # define cases for which to return early
         arg_empty = arg is None or arg == "" or len(arg) == 0
         arg_useless = arg in ["Change of airport", "round trip", "Climate friendly"]
@@ -237,6 +242,10 @@ class Flight:
             self._separate_tickets = False
             self._airline = arg.split(", ")
             return
+
+        # train service
+        if self._is_arg_train_service(arg):
+            self._origin, self._dest = self._parse_train_service(arg)
 
         # departure and arrival times
         if self._is_arg_departure_arrival_times(arg):
@@ -330,7 +339,7 @@ class Flight:
             "access_date": [],
             "one_way": [],
             "has_train": [],
-            # "days_advance": [],
+            "days_advance": [],
         }
 
         # populate the dictionary
@@ -351,9 +360,9 @@ class Flight:
                 data["access_date"] += [datetime.today()]
                 data["one_way"] += [(False if flight._roundtrip else True)]
                 data["has_train"] += [flight._has_train]
-                # data["days_advance"] += [
-                #     (flight._time_departure - datetime.today()).days
-                # ]
+                data["days_advance"] += [
+                    (flight._time_departure - datetime.today()).days
+                ]
             except Exception as e:
                 print("Error with flight", flight, flight._price)
                 print(e)

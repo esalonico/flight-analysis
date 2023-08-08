@@ -6,6 +6,8 @@ import os
 import logging
 from datetime import datetime
 import subprocess
+import pandas as pd
+import numpy as np
 
 # logging
 logger_name = os.path.basename(__file__)
@@ -96,7 +98,6 @@ class Database:
                 destination character(3) COLLATE pg_catalog."default" NOT NULL,
                 layover_n smallint NOT NULL,
                 layover_time smallint,
-                layover_location text COLLATE pg_catalog."default",
                 price_eur smallint NOT NULL,
                 price_trend text COLLATE pg_catalog."default",
                 price_value text COLLATE pg_catalog."default",
@@ -110,6 +111,11 @@ class Database:
             TABLESPACE pg_default;
 
             ALTER TABLE IF EXISTS public.{self.table_scraped} OWNER to postgres;
+            
+            CREATE INDEX idx_access_date ON public.{self.table_scraped} USING btree (access_date);
+            CREATE INDEX idx_origin ON public.{self.table_scraped} USING btree (origin);
+            CREATE INDEX idx_destination ON public.{self.table_scraped} USING btree (destination);
+            CREATE INDEX idx_origin_destination ON public.{self.table_scraped} USING btree (origin, destination);
             """
 
         cursor = self.conn.cursor()
@@ -139,6 +145,8 @@ class Database:
                 ON public.{self.table_scraped_airlines} USING btree
                 (flight_uuid ASC NULLS LAST)
                 TABLESPACE pg_default;
+                
+            CREATE INDEX idx_airline ON public.{self.table_scraped_airlines} USING btree (airline ASC NULLS LAST);
             """
 
         cursor = self.conn.cursor()
@@ -168,13 +176,98 @@ class Database:
                 ON public.{self.table_scraped_layovers} USING btree
                 (flight_uuid ASC NULLS LAST)
                 TABLESPACE pg_default;
+                   
+            CREATE INDEX idx_layover_location ON public.{self.table_scraped_layovers} USING btree (layover_location ASC NULLS LAST);
             """
 
         cursor = self.conn.cursor()
         cursor.execute(query)
         cursor.close()
 
-    
+    def create_data_airports_table(self):
+        # create empty table
+        query = """
+        CREATE TABLE IF NOT EXISTS public.data_airports
+            (
+                iata character(3) NOT NULL,
+                name text,
+                country character(2),
+                lat numeric,
+                lon numeric,
+                region text,
+                municipality text,
+                continent character(2),
+                PRIMARY KEY (iata)
+            )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS public.data_airports
+            OWNER to postgres;
+            
+        CREATE INDEX idx_iata
+            ON public.data_airports USING hash
+            (iata)
+        """
+
+        cursor = self.conn.cursor()
+        cursor.execute(query)
+        cursor.close()
+        logger.info("Table [data_airports] created.")
+
+        # download airports data
+        airports_df = self.download_data_airports()
+
+        # add airports data to table
+        logger.info("Adding airports data to table [data_airports]...")
+        self.add_pandas_df_to_db(airports_df, table_name="data_airports")
+
+    def download_data_airports(self):
+        AIRPORTS_DF_URL = "https://raw.githubusercontent.com/datasets/airport-codes/master/data/airport-codes.csv"
+        df = pd.read_csv(AIRPORTS_DF_URL, encoding="utf-8")
+
+        # filter original data
+        # take only aiprort that have a IATA code
+        df = df.loc[df.iata_code.notnull()]
+
+        # exclude closed, seaplane_base and heliport
+        df = df.loc[df.type.isin(["large_airport", "medium_airport", "small_airport"])]
+
+        # split coordinates in latitude and longitude
+        df["lat"] = (
+            df.coordinates.apply(lambda x: x.split(",")[0]).astype(float).round(4)
+        )
+        df["lon"] = (
+            df.coordinates.apply(lambda x: x.split(",")[1]).astype(float).round(4)
+        )
+
+        # take only useful columns
+        cols = [
+            "iata_code",
+            "name",
+            "iso_country",
+            "lat",
+            "lon",
+            "iso_region",
+            "municipality",
+            "continent",
+        ]
+        df = df[cols]
+
+        # rename columns
+        df = df.rename(
+            columns={
+                "iata_code": "iata",
+                "iso_country": "country",
+                "iso_region": "region",
+            }
+        )
+
+        # replace nan with None
+        df = df.replace({pd.NA: None, np.nan: None})
+
+        return df.reset_index(drop=True)
+
     def prepare_db_and_tables(self):
         """
         Creates the database and the table if they don't exist.
@@ -182,6 +275,10 @@ class Database:
         # create database
         if self.db_name not in self.list_all_databases():
             self.create_db()
+
+        # create data_airports table
+        if "data_airports" not in self.list_all_tables():
+            self.create_data_airports_table()
 
         # create scraped table
         if self.table_scraped not in self.list_all_tables():
@@ -191,13 +288,19 @@ class Database:
         if self.table_scraped_airlines not in self.list_all_tables():
             self.create_scraped_airlines_table()
 
+        # create scraped_layovers table
+        if self.table_scraped_layovers not in self.list_all_tables():
+            self.create_scraped_layovers_table()
+
     def add_pandas_df_to_db(self, df, table_name):
         extras.register_uuid()
 
         # Create a list of tuples from the dataframe values
         if table_name == self.table_scraped:
-            df = df.reset_index() # otherwise the index (uuid) is not added to the table
-        
+            df = (
+                df.reset_index()
+            )  # otherwise the index (uuid) is not added to the table
+
         tuples = [tuple(x) for x in df.to_numpy()]
 
         # Comma-separated dataframe columns
@@ -216,20 +319,19 @@ class Database:
 
         cursor.close()
 
-        # fix layover time
-        # TODO: improve this
+        # fix layover time manually
         if table_name == self.table_scraped:
-            cursor = self.conn.cursor()
-            query = f"""
-                UPDATE {self.table_scraped}
-                SET layover_time = CASE
-                WHEN layover_time = -1 THEN null ELSE layover_time END;
-
-                ALTER TABLE public.{self.table_scraped}
-                ALTER COLUMN layover_time TYPE smallint;
-            """
-            cursor.execute(query)
-            cursor.close()
+            try:
+                query = f"""
+                    UPDATE public.{self.table_scraped}
+                    SET layover_time = NULL
+                    WHERE layover_time = 0;"""
+                cursor = self.conn.cursor()
+                cursor.execute(query)
+                cursor.close()
+            except Exception as e:
+                logger.error(f"Error while updating layover_time: {e}")
+                self.conn.rollback()
 
     def dump_database_to_file(self):
         """
