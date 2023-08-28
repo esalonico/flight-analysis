@@ -189,27 +189,29 @@ if __name__ == "__main__":
     # drop airlines and layovers from flights dataframe
     scraped_flights = scraped_flights.drop(columns=["airlines", "layover_location"])
 
-    # connect to database
-    db = Database(
-        db_host=private.DB_HOST,
-        db_name=private.DB_NAME,
-        db_user=private.DB_USER,
-        db_pw=private.DB_PW,
-    )
-
-    # prepare database and tables
-    db.prepare_db_and_tables()
-
     # add results to database
     if not SKIP_SAVE_TO_DB:
+        # connect to database
+        db = Database(
+            db_host=private.DB_HOST,
+            db_name=private.DB_NAME,
+            db_user=private.DB_USER,
+            db_pw=private.DB_PW,
+        )
+
+        # prepare database and tables
+        db.prepare_db_and_tables()
+
+        # add dataframes to database
         db.add_pandas_df_to_db(scraped_flights, table_name=db.table_scraped)
         db.add_pandas_df_to_db(scraped_airlines, table_name=db.table_scraped_airlines)
         db.add_pandas_df_to_db(scraped_layovers, table_name=db.table_scraped_layovers)
 
     # if it's a monday, backup the database
-    if datetime.today().weekday() == 0:
-        # dump database to file
-        db.dump_database_to_file()
+    # TODO: reactivate
+    # if datetime.today().weekday() == 0:
+    #     # dump database to file
+    #     db.dump_database_to_file()
 
-        # handle database backup rotation
-        db.rotate_database_backups()
+    #     # handle database backup rotation
+    #     db.rotate_database_backups()

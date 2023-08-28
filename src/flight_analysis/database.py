@@ -8,6 +8,7 @@ from datetime import datetime
 import subprocess
 import pandas as pd
 import numpy as np
+import src.flight_analysis.apis.flightconnections as fc
 
 # logging
 logger_name = os.path.basename(__file__)
@@ -222,6 +223,35 @@ class Database:
         logger.info("Adding airports data to table [data_airports]...")
         self.add_pandas_df_to_db(airports_df, table_name="data_airports")
 
+    def create_data_connections_table(self):
+        # create empty table
+        query = """
+        CREATE TABLE IF NOT EXISTS public.data_connections
+            (
+                iata_from character(3) NOT NULL,
+                iata_from character(3) NOT NULL,
+                PRIMARY KEY (iata_to, iata_from)
+            )
+
+        TABLESPACE pg_default;
+
+        ALTER TABLE IF EXISTS public.data_connections
+            OWNER to postgres;
+        """
+
+        cursor = self.conn.cursor()
+        cursor.execute(query)
+        cursor.close()
+        logger.info("Table [data_connections] created.")
+
+        # download airports data
+        connections_df = self.download_data_connections()
+
+        # add airports data to table
+        logger.info("Adding connections data to table [data_connections]...")
+        self.add_pandas_df_to_db(connections_df, table_name="data_connections")
+        
+    
     def download_data_airports(self):
         AIRPORTS_DF_URL = "https://raw.githubusercontent.com/datasets/airport-codes/master/data/airport-codes.csv"
         df = pd.read_csv(AIRPORTS_DF_URL, encoding="utf-8")
@@ -268,6 +298,27 @@ class Database:
 
         return df.reset_index(drop=True)
 
+    def download_data_connections(self):
+        iata_codes = self.download_data_airports().iata.unique()
+        
+        # get all airport codes (numeric)
+        airport_codes_filepath = "src/flight_analysis/apis/flightconnections_airport_codes.csv"
+        if os.path.isfile(airport_codes_filepath):
+            airport_codes = pd.read_csv(airport_codes_filepath)
+        else:
+            logger.info("Retrieving airport codes from flightconnections.com... (might take a while)")
+            airport_codes = fc.make_df_of_all_airport_codes(iata_codes)
+        
+        # get all connections
+        airport_connections_filepath = "src/flight_analysis/apis/flightconnections_airport_connections.csv"
+        if os.path.isfile(airport_connections_filepath):
+            connections = pd.read_csv(airport_connections_filepath)
+        else:
+            logger.info("Retrieving connections from flightconnections.com... (might take a while)")
+            connections = fc.make_df_of_all_connections(airport_codes)
+        
+        return connections
+    
     def prepare_db_and_tables(self):
         """
         Creates the database and the table if they don't exist.
@@ -279,6 +330,10 @@ class Database:
         # create data_airports table
         if "data_airports" not in self.list_all_tables():
             self.create_data_airports_table()
+            
+        # create data_connections table
+        if "data_connections" not in self.list_all_tables():
+            self.create_data_connections_table()
 
         # create scraped table
         if self.table_scraped not in self.list_all_tables():
