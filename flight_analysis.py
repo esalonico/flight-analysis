@@ -208,10 +208,9 @@ if __name__ == "__main__":
         db.add_pandas_df_to_db(scraped_layovers, table_name=db.table_scraped_layovers)
 
     # if it's a monday, backup the database
-    # TODO: reactivate
-    # if datetime.today().weekday() == 0:
-    #     # dump database to file
-    #     db.dump_database_to_file()
+    if datetime.today().weekday() == 0:
+        # dump database to file
+        db.dump_database_to_file()
 
-    #     # handle database backup rotation
-    #     db.rotate_database_backups()
+        # handle database backup rotation
+        db.rotate_database_backups()

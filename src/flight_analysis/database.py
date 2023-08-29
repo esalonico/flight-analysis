@@ -229,8 +229,8 @@ class Database:
         CREATE TABLE IF NOT EXISTS public.data_connections
             (
                 iata_from character(3) NOT NULL,
-                iata_from character(3) NOT NULL,
-                PRIMARY KEY (iata_to, iata_from)
+                iata_to character(3) NOT NULL,
+                PRIMARY KEY (iata_from, iata_to)
             )
 
         TABLESPACE pg_default;
@@ -363,7 +363,7 @@ class Database:
 
         cursor = self.conn.cursor()
 
-        # SQL quert to execute
+        # SQL query to execute
         query = "INSERT INTO %s(%s) VALUES %%s" % (table_name, cols)
         try:
             extras.execute_values(cursor, query, tuples)
