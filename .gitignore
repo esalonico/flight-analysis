@@ -3,6 +3,7 @@ __pycache__/
 # NEW MODULES
 do_scrape.py
 route_optimizer.ipynb
+prova.py
 
 # Jupyter Notebook
 .ipynb_checkpoints

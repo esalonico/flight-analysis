@@ -181,7 +181,8 @@ if __name__ == "__main__":
 
     # scrape routes into a dataframe
     scraped_flights = get_routes_df(routes)
-
+    print(scraped_flights)
+    
     # generate airline and layovers dataframe
     scraped_airlines = generate_airlines_df_from_flights(scraped_flights)
     scraped_layovers = generate_layovers_df_from_flights(scraped_flights)

@@ -121,10 +121,7 @@ class Flight:
         return False
 
     def _is_arg_train_service(self, arg):
-        train_keywords = ["Train service", "Flight + Train"]
-        if arg in train_keywords:
-            return True
-        return False
+        return arg in ["Train service", "Flight + Train"]
 
     # ---------------------------------------------------------------
 
@@ -208,9 +205,8 @@ class Flight:
         return (arg[:3], arg[3:])
 
     def _parse_train_service(self, arg):
-        if "Train service" in arg:
-            self._has_train = True
-            return (self._queried_orig, self._queried_dest)
+        self._has_train = True
+        return (self._queried_orig, self._queried_dest)
 
     # ---------------------------------------------------------------
 

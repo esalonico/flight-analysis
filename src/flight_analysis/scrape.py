@@ -6,13 +6,14 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
+from selenium.webdriver.firefox.service import Service as FirefoxService
+from webdriver_manager.firefox import GeckoDriverManager
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import re
 import os
-import chromedriver_autoinstaller
 
 from src.flight_analysis.flight import Flight
 
@@ -52,29 +53,13 @@ class Scrape:
         self._data = self._scrape_data()
 
     # TODO: reactivate
-    # def _create_driver(self):
-    #     """
-    #     Creates a Chrome webdriver instance.
-    #     """
-    #     options = Options()
-    #     options.add_argument("--no-sandbox")
-    #     options.add_argument("--headless")
-    #     options.add_argument(
-    #         "--window-size=1920,1080"
-    #     )  # otherwise data such as layover location and emissions is not displayed
-
-    #     driver = webdriver.Chrome(
-    #         service=Service(ChromeDriverManager().install()), options=options
-    #     )
-
-    #     return driver
-
-    # TODO: delete
+    # TODO: implement this https://stackoverflow.com/a/77111183 when Chrome links are working!
+    # Chrome links: https://googlechromelabs.github.io/chrome-for-testing/#stable
+    # Example link that should be working: https://edgedl.me.gvt1.com/edgedl/chrome/chrome-for-testing/117.0.5938.92/mac-arm64/chrome-mac-arm64.zip
     def _create_driver(self):
         """
         Creates a Chrome webdriver instance.
         """
-        service = Service()
         options = Options()
         options.add_argument("--no-sandbox")
         options.add_argument("--headless")
@@ -82,9 +67,21 @@ class Scrape:
             "--window-size=1920,1080"
         )  # otherwise data such as layover location and emissions is not displayed
 
-        driver = webdriver.Chrome(service=service, options=options)
+        driver = webdriver.Chrome(
+            service=Service(ChromeDriverManager().install()), options=options
+        )
 
         return driver
+
+    # TODO: delete
+    # def _create_driver(self):
+    #     """
+    #     Creates a Chrome webdriver instance.
+    #     """
+
+    #     driver = webdriver.Firefox(service=FirefoxService(GeckoDriverManager().install()))
+
+    #     return driver
 
     def _scrape_data(self):
         """
@@ -151,7 +148,7 @@ class Scrape:
                 mid_start = res2.index("Other flights")
             except ValueError:
                 mid_start = None
-            
+
         mid_end = -1
 
         try:
@@ -161,7 +158,7 @@ class Scrape:
                 mid_end = res2.index("Other flights") + 1
             except ValueError:
                 # basically, identify the footer
-                last_index = [i for i, s in enumerate(res2) if 'Language' in s]
+                last_index = [i for i, s in enumerate(res2) if "Language" in s]
                 if len(last_index) > 0:
                     mid_end = last_index[-1]
                     footer_reached = True
@@ -174,7 +171,6 @@ class Scrape:
                 res3 = res2[start:mid_start] + res2[mid_end:end]
             else:
                 res3 = res2[start:end]
-                
 
         # Enumerate over the list 'res3'
         matches = []
@@ -191,11 +187,11 @@ class Scrape:
             # If the element doesn't end with '+' and is in time format, then add it to the matches list
             if element[-2] != "+" and is_time_format:
                 matches.append(index)
-            
+
         # special case: scrape has only one flight
         if len(matches) == 2:
             matches.append(len(res3))
-            
+
         # handles the identification of whole flights, instead of splitting every
         # time a time is found
         # TODO: document better
@@ -285,7 +281,7 @@ class Scrape:
             lambda d: len(Scrape._get_flight_elements(d)) > 50
         )
         results = Scrape._get_flight_elements(driver)
-        
+
         # special case: no flights found ("Sort by:" string is always displayed when there are flights)
         if "Sort by:" not in results:
             return None
