@@ -5,3 +5,6 @@ webdriver_manager
 pytest
 configparser
 psycopg2-binary
+networkx
+scipy
+openpyxl

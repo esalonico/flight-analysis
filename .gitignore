@@ -1,5 +1,9 @@
 __pycache__/
 
+# NEW MODULES
+do_scrape.py
+route_optimizer.ipynb
+
 # Jupyter Notebook
 .ipynb_checkpoints
 
@@ -15,6 +19,7 @@ private
 scrapes_csv
 test.py
 sql_queries
+emanuele
 
 # logging
 logs/

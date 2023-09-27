@@ -12,6 +12,7 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 import re
 import os
+import chromedriver_autoinstaller
 
 from src.flight_analysis.flight import Flight
 
@@ -50,10 +51,30 @@ class Scrape:
     def run_scrape(self):
         self._data = self._scrape_data()
 
+    # TODO: reactivate
+    # def _create_driver(self):
+    #     """
+    #     Creates a Chrome webdriver instance.
+    #     """
+    #     options = Options()
+    #     options.add_argument("--no-sandbox")
+    #     options.add_argument("--headless")
+    #     options.add_argument(
+    #         "--window-size=1920,1080"
+    #     )  # otherwise data such as layover location and emissions is not displayed
+
+    #     driver = webdriver.Chrome(
+    #         service=Service(ChromeDriverManager().install()), options=options
+    #     )
+
+    #     return driver
+
+    # TODO: delete
     def _create_driver(self):
         """
         Creates a Chrome webdriver instance.
         """
+        service = Service()
         options = Options()
         options.add_argument("--no-sandbox")
         options.add_argument("--headless")
@@ -61,9 +82,7 @@ class Scrape:
             "--window-size=1920,1080"
         )  # otherwise data such as layover location and emissions is not displayed
 
-        driver = webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=options
-        )
+        driver = webdriver.Chrome(service=service, options=options)
 
         return driver
 
@@ -102,9 +121,12 @@ class Scrape:
         results = None
         try:
             results = Scrape._make_url_request(self._url, driver)
+            if not results:
+                return None
+
         except TimeoutException:
             logger.error(
-                f"Scrape timeout reached. It could mean that no flights exist for the combination of airports and dates."
+                "Scrape timeout reached. It could mean that no flights exist for the combination of airports and dates."
             )
             return None
 
@@ -116,32 +138,49 @@ class Scrape:
         Cleans and organizes the raw text strings scraped from the Google Flights results page.
         """
         res2 = [x.encode("ascii", "ignore").decode().strip() for x in result]
-
         price_trend_dirty = [x for x in res2 if x.startswith("Prices are currently")]
         price_trend = Scrape.extract_price_trend(price_trend_dirty)
 
+        footer_reached = False
         start = res2.index("Sort by:") + 1
 
         try:
             mid_start = res2.index("Price insights")
         except ValueError:
-            mid_start = res2.index("Other flights")
+            try:
+                mid_start = res2.index("Other flights")
+            except ValueError:
+                mid_start = None
+            
         mid_end = -1
 
         try:
             mid_end = res2.index("Other departing flights") + 1
         except:
-            mid_end = res2.index("Other flights") + 1
+            try:
+                mid_end = res2.index("Other flights") + 1
+            except ValueError:
+                # basically, identify the footer
+                last_index = [i for i, s in enumerate(res2) if 'Language' in s]
+                if len(last_index) > 0:
+                    mid_end = last_index[-1]
+                    footer_reached = True
 
-        end = [i for i, x in enumerate(res2) if x.endswith("more flights")][0]
+        if footer_reached:
+            res3 = res2[start:mid_end]
+        else:
+            end = [i for i, x in enumerate(res2) if "more flight" in x][0]
+            if mid_start:
+                res3 = res2[start:mid_start] + res2[mid_end:end]
+            else:
+                res3 = res2[start:end]
+                
 
-        res3 = res2[start:mid_start] + res2[mid_end:end]
-
-        matches = []
         # Enumerate over the list 'res3'
+        matches = []
         for index, element in enumerate(res3):
             # Check if element is not an empty string
-            if len(element) <= 2:
+            if len(element) == 0:
                 continue
 
             # Check if the element ends with 'AM' or 'PM' (or AM+, PM+)
@@ -152,7 +191,11 @@ class Scrape:
             # If the element doesn't end with '+' and is in time format, then add it to the matches list
             if element[-2] != "+" and is_time_format:
                 matches.append(index)
-
+            
+        # special case: scrape has only one flight
+        if len(matches) == 2:
+            matches.append(len(res3))
+            
         # handles the identification of whole flights, instead of splitting every
         # time a time is found
         # TODO: document better
@@ -239,9 +282,13 @@ class Scrape:
 
         # wait for flight data to load and initial XPATH cleaning
         WebDriverWait(driver, timeout).until(
-            lambda d: len(Scrape._get_flight_elements(d)) > 100
+            lambda d: len(Scrape._get_flight_elements(d)) > 50
         )
         results = Scrape._get_flight_elements(driver)
+        
+        # special case: no flights found ("Sort by:" string is always displayed when there are flights)
+        if "Sort by:" not in results:
+            return None
 
         return results
 
