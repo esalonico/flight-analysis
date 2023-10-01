@@ -121,6 +121,8 @@ def get_routes_df(routes: list):
         final_df["uuid"] = [uuid.uuid4() for _ in range(final_df.shape[0])]
         final_df = final_df.set_index("uuid")
 
+        final_df.to_csv(f"{route}.csv")
+
     return final_df
 
 
@@ -182,7 +184,7 @@ if __name__ == "__main__":
     # scrape routes into a dataframe
     scraped_flights = get_routes_df(routes)
     print(scraped_flights)
-    
+
     # generate airline and layovers dataframe
     scraped_airlines = generate_airlines_df_from_flights(scraped_flights)
     scraped_layovers = generate_layovers_df_from_flights(scraped_flights)

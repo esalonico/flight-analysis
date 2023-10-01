@@ -19,7 +19,7 @@ class Flight:
         self._airline = None
         self._flight_time = None
         self._layover_n = None
-        self._layover_time = None
+        self._layover_time = timedelta()
         self._layover_location = None
         self._price = None
         self._price_trend = price_trend
@@ -154,7 +154,7 @@ class Flight:
         """
         From an argument (arg), returns the layover time and location as a tuple
         """
-        layover_time = None
+        layover_time = timedelta()
         layover_location = None
 
         # layover time
@@ -301,7 +301,7 @@ class Flight:
         5 hr 55 min --> 60*5 + 55 = 355
         """
         if s is None or not bool(re.search("hr|min", str(s))):
-            return None
+            return timedelta()
 
         h = 0
         m = 0
