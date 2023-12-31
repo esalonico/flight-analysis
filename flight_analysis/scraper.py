@@ -1,22 +1,24 @@
+import re
+
 from selenium import webdriver
-from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
-import re
 
+from flight_analysis import utils
 from flight_analysis.flight import Flight
+from flight_analysis.search_query import SearchQuery
 
 
 class Scrape:
-    def __init__(self, flight: Flight) -> None:
-        self.flight = flight
+    def __init__(self, search_query: SearchQuery) -> None:
+        self.search_query = search_query
         
         self.driver = self._create_driver()
-        self.url = self._build_url(flight)
+        self.url = self._build_url(search_query)
         
         
     def __repr__(self) -> str:
@@ -132,8 +134,7 @@ class Scrape:
         metadata["price_trend"] = price_trend
         
         return metadata
-    
-    
+     
     def _split_raw_results_into_flights(self, results_raw: list) -> list:
         """
         Splits the raw results into individual flights.
@@ -164,29 +165,54 @@ class DirectOneWayScraper(Scrape):
     def __init__(self, flight: Flight) -> None:
         super().__init__(flight)
 
-    def _build_url(self, flight: Flight) -> str:
+    def _build_url(self, search_query: SearchQuery) -> str:
         """
         Builds the URL to scrape.
         Returns: URL as string.
         """
         url = "https://www.google.com/travel/flights"
-        url += f"?q=Flights%20to%20{flight.airport_arr.iata}"
-        url += f"%20from%20{flight.airport_dep.iata}"
-        url += f"%20on%20{flight.desired_date}%20oneway%20direct&curr=EUR&gl=IT"
+        url += f"?q=Flights%20to%20{search_query.airport_arr.iata}"
+        url += f"%20from%20{search_query.airport_dep.iata}"
+        url += f"%20on%20{search_query.desired_date}%20oneway%20direct&curr=EUR&gl=IT"
 
         return url
 
-    def scrape(self) -> None:
+    def _clean_flight_details(self, flight_list: list, sq: SearchQuery) -> dict:
+        """
+        From a list of strings (representing a flight), return a dictionary of flights details after cleaning.
+        Returns: Dictionary of flights details.
+        """
+        flight_dict = dict()
+        
+        flight_dict["time_dep"] = flight_list[0]
+        flight_dict["datetime_dep"] = utils.convert_string_date_time_to_datetime(sq.desired_date, flight_list[0])
+        flight_dict["datetime_arr"] = utils.convert_string_date_time_to_datetime(sq.desired_date, flight_list[1])
+        flight_dict["airline"] = utils.format_airline_correctly(flight_list[2])
+        flight_dict["duration"] = utils.convert_string_to_duration(flight_list[3])
+        flight_dict["price"] = int(flight_list[-1].replace(",", ""))
+        
+        return flight_dict
+
+        
+    
+    def scrape(self) -> list:
+        print() # TODO: delete
+        
         results_raw = super()._get_raw_flight_results(self.driver, self.url)
         results_raw_filtered = super()._filter_raw_results(results_raw)
         
-        # print(results_raw)
-        
         flights = super()._split_raw_results_into_flights(results_raw_filtered)
         metadata = super()._get_flight_search_metadata(results_raw)
-        
-        for f in flights:
-            print(f)
-        print(len(flights))
-        
         print(metadata)
+        
+        flight_objects = []
+        for flight_list in flights:
+            flight_dict = self._clean_flight_details(flight_list, self.search_query)
+            flight_obj = Flight(self.search_query, flight_dict)
+            
+            flight_objects.append(flight_obj)
+            
+        # close the driver
+        self.driver.quit()
+            
+        return flight_objects

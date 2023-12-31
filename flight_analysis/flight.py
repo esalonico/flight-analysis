@@ -1,31 +1,44 @@
 """
 Only direct, one-way flights on a specific day.
-Example: FCO to MUC (direct) on 2024-02-25.
+Example: FCO to MUC (direct) on 2024-02-25 (IT6671).
 """
-from datetime import date, datetime
+import uuid
+from datetime import datetime
+
+from flight_analysis.search_query import SearchQuery
 
 from . import utils
-from .airport import Airport
 
 
 class Flight:
-    def __init__(self, airport_dep: Airport, airport_arr: Airport, desired_date: date) -> None:
+    def __init__(self, search_query: SearchQuery, flight_info: dict = dict()) -> None:
         # attributes to identify flight (input/immediately computable)
-        self.airport_dep = airport_dep
-        self.airport_arr = airport_arr
-        self.desired_date = utils.check_date_in_future(desired_date)
+        self.search_query = search_query
         self.datetime_access = datetime.now()
-        self.days_advance = utils.calculate_delta_days(self.datetime_access, self.desired_date)
-        self.scraped = False
+        self.days_advance = utils.calculate_delta_days(self.datetime_access, self.search_query.desired_date)
         
         # attributes to scrape
-        self.flight_number = None
-        self.datetime_dep = None
-        self.datetime_arr = None
-        self.price = None
-        self.airline = None
-        self.duration = None
+        self.flight_number = flight_info.get("flight_number", None)
+        self.datetime_dep = flight_info.get("datetime_dep", None)
+        self.datetime_arr = flight_info.get("datetime_arr", None)
+        self.price = flight_info.get("price", None)
+        self.airline = flight_info.get("airline", None)
+        self.duration = flight_info.get("duration", None)
+        
+        self._id = self._generate_id()
 
     def __repr__(self) -> str:
-        return f"Flight({self.flight_number}, {self.airport_dep}, {self.airport_arr}, {self.desired_date}, {self.days_advance}, {self.scraped})"
+        rep = f"Flight({str(self._id)[:8]}"
+        rep += f", {self.search_query.airport_dep}, {self.search_query.airport_arr}"
+        rep += f", {self.search_query.desired_date}"
+        rep += f", {self.datetime_dep.strftime('%H:%M')}"
+        rep += f", {self.price}€, {self.airline}, {self.days_advance}d)"
+        
+        return rep
 
+    def _generate_id(self) -> str:
+        """
+        Generates a unique ID for the flight.
+        Returns: Unique ID as string.
+        """
+        return uuid.uuid4()
