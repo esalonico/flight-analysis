@@ -9,8 +9,8 @@ from flight_analysis.sheets.download_sheets import download_all_sheets
 if __name__ == "__main__":
     download_all_sheets()
     
-    a1 = Airport("JFK")
-    a2 = Airport("LAX")
+    a1 = Airport("LGW")
+    a2 = Airport("FCO")
 
     datetime_dep = date(2024, 3, 25) # 25th March 2024
     f = Flight(a1, a2, datetime_dep)
