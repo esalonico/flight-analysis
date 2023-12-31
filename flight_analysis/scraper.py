@@ -16,6 +16,7 @@ from flight_analysis.search_query import SearchQuery
 class Scrape:
     def __init__(self, search_query: SearchQuery) -> None:
         self.search_query = search_query
+        self.flights = None
         
         self.driver = self._create_driver()
         self.url = self._build_url(search_query)
@@ -191,11 +192,13 @@ class DirectOneWayScraper(Scrape):
         flight_dict["duration"] = utils.convert_string_to_duration(flight_list[3])
         flight_dict["price"] = int(flight_list[-1].replace(",", ""))
         
-        return flight_dict
-
-        
+        return flight_dict      
     
-    def scrape(self) -> list:
+    def scrape(self) -> None:
+        """
+        Scrapes the flight results page.
+        Updates the flights attribute of the class.
+        """
         print() # TODO: delete
         
         results_raw = super()._get_raw_flight_results(self.driver, self.url)
@@ -214,5 +217,6 @@ class DirectOneWayScraper(Scrape):
             
         # close the driver
         self.driver.quit()
-            
-        return flight_objects
+        
+        # save flight objects to class
+        self.flights = flight_objects

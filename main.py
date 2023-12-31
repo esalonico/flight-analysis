@@ -18,8 +18,8 @@ if __name__ == "__main__":
     
     s = DirectOneWayScraper(sq)
     print(s)
-    flights = s.scrape()
     
+    s.scrape()
+    flights = s.flights
     for f in flights:
         print(f)
-        
