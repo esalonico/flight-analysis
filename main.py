@@ -9,8 +9,8 @@ from flight_analysis.sheets.download_sheets import download_all_sheets
 if __name__ == "__main__":
     download_all_sheets()
     
-    a1 = Airport("FCO")
-    a2 = Airport("MUC")
+    a1 = Airport("JFK")
+    a2 = Airport("LAX")
 
     datetime_dep = date(2024, 3, 25) # 25th March 2024
     f = Flight(a1, a2, datetime_dep)
@@ -21,4 +21,7 @@ if __name__ == "__main__":
     
     s = DirectOneWayScraper(f)
     print(s)
+    s.scrape()
+    
+    s.driver.quit()
     

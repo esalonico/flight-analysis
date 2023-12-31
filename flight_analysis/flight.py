@@ -1,3 +1,7 @@
+"""
+Only direct, one-way flights on a specific day.
+Example: FCO to MUC (direct) on 2024-02-25.
+"""
 from datetime import date, datetime
 
 from . import utils
