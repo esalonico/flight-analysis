@@ -1,6 +1,7 @@
 """
 Downloads sheets needed for the scraping process if they are not there already.
 """
+
 import os
 
 import pandas as pd
@@ -12,14 +13,14 @@ def _download_airports_sheet() -> None:
     """
     url = "https://datahub.io/core/airport-codes/r/airport-codes.csv"
     filename = "airports.csv"
-    filepath = os.path.join(os.path.dirname(__file__), filename)
-    
+    filepath = f"flight_analysis/data/sheets/{filename}"
+
     # if file already exists, do nothing
     if os.path.isfile(filepath):
         return
-    
+
     df = pd.read_csv(url)
-    
+
     # get only airports that have a IATA code
     df = df[(df["iata_code"].notnull()) & (df.iata_code.str.len() == 3)]
 
@@ -35,15 +36,16 @@ def _download_airports_sheet() -> None:
 
     # clean up "type" column
     df["type"] = df["type"].str.replace("_airport", "")
-    
+
     # fix encoding of airport name
-    df["name"] = df["name"].str.encode('latin1').str.decode('utf-8')
-    
+    df["name"] = df["name"].str.encode("latin1").str.decode("utf-8")
+
     # remove duplicates
     df = df[~df.index.duplicated(keep="first")]
-    
+
     # save file to csv
-    df.to_csv(filepath, encoding='utf-8')
+    df.to_csv(filepath, encoding="utf-8")
+    print(f"Downloaded file: {filepath}")
 
 
 def _download_countries_sheet() -> None:
@@ -52,28 +54,29 @@ def _download_countries_sheet() -> None:
     """
     url = "https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv"
     filename = "countries.csv"
-    filepath = os.path.join(os.path.dirname(__file__), filename)
-    
+    filepath = f"flight_analysis/data/sheets/{filename}"
+
     # if file already exists, do nothing
     if os.path.isfile(filepath):
         return
-    
+
     df = pd.read_csv(url)
-    
+
     # rename columns: change - to _
-    df.columns = df.columns.str.replace('-', '_')
+    df.columns = df.columns.str.replace("-", "_")
 
     # set correct index
-    df = df.set_index('alpha_2')
+    df = df.set_index("alpha_2")
 
     # take only needed columns
-    df = df[['name', 'region', 'sub_region']]
-    
+    df = df[["name", "region", "sub_region"]]
+
     # save file to csv
     df.to_csv(filepath)
-    
+    print(f"Downloaded file: {filepath}")
 
-def download_all_sheets() -> None:
+
+def download_all_sheets():
     """
     Downloads all sheets.
     """
