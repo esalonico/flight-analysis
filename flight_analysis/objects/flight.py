@@ -23,12 +23,15 @@ class Flight:
         self.airport_dep = flight_info.get("airport_dep", None)
         self.airport_arr = flight_info.get("airport_arr", None)
 
-        self.flight_number = flight_info.get("flight_number", None)
-
         self.datetime_dep = flight_info.get("datetime_dep", None)
         self.datetime_arr = flight_info.get("datetime_arr", None)
 
         self.price = flight_info.get("price", None)
+
+        self.n_stops = flight_info.get("n_stops", None)
+        self.stops = flight_info.get("stops", None)
+        self.stop_layover_time = flight_info.get("stop_layover_time", None)
+
         self.airline = flight_info.get("airline", None)
         self.duration = flight_info.get("duration", None)
         self.flight_combination = flight_info.get("flight_combination", None)

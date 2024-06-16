@@ -1,25 +1,24 @@
 import re
-from time import sleep
 
-import pandas as pd
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
-from flight_analysis.objects.flight import Flight
 from flight_analysis.scrapers.base_scraper import BaseScraper
 from flight_analysis.scrapers.search_query import SearchQuery
-from flight_analysis.utils import utils
 
 
-class DirectReturnScraper(BaseScraper):
-    def __init__(self, search_query: SearchQuery):
+class ReturnScraper(BaseScraper):
+    def __init__(self, search_query: SearchQuery, direct_only: bool):
         """
-        Initialize the DirectReturnScraper with a search query.
+        Initialize the ReturnScraper.
 
-        :param search_query: SearchQuery object containing the search parameters
+        :param search_query: SearchQuery object with the search parameters
+        :param direct_only: Whether to search for direct flights only (True) or not (False)
         """
         assert search_query.return_date, "Return date must be provided for a roundtrip flight."
+        self.direct_only = direct_only
+
         super().__init__(search_query)
 
     def _build_url(self) -> str:
@@ -32,7 +31,12 @@ class DirectReturnScraper(BaseScraper):
         url += f"?q=Flights%20to%20{self.search_query.airport_arr.iata}"
         url += f"%20from%20{self.search_query.airport_dep.iata}"
         url += f"%20on%20{self.search_query.departure_date}%20through%20{self.search_query.return_date}"
-        url += f"%20roundtrip%20direct&curr=EUR&gl=IT"
+
+        if self.direct_only:
+            url += f"%20roundtrip%20direct&curr=EUR&gl=IT"
+        else:
+            url += f"%20roundtrip&curr=EUR&gl=IT"
+
         return url
 
     def _wait_for_element(self, by: By, value: str, timeout: int = 15):
@@ -45,14 +49,15 @@ class DirectReturnScraper(BaseScraper):
         """
         WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((by, value)))
 
-    def _wait_for_text_on_page(self, text: str, timeout: int = 15):
+    def _wait_for_text_on_page(self, text: str, timeout: int = 15, lowercase: bool = False):
         """
         Wait for a given text to be present anywhere on the page.
 
         :param text: The text to wait for on the page
         :param timeout: Maximum time to wait for the text (default is 15 seconds)
         """
-        WebDriverWait(self.driver, timeout).until(lambda driver: text in driver.page_source)
+        source = self.driver.page_source.lower() if lowercase else self.driver.page_source
+        WebDriverWait(self.driver, timeout).until(lambda driver: text in source)
 
     def _get_flight_list(self):
         """
@@ -62,7 +67,12 @@ class DirectReturnScraper(BaseScraper):
         :raises ValueError: If no flight list is found
         """
         # self._wait_for_element(By.TAG_NAME, "ul") # TODO: old, maybe delete
-        self._wait_for_text_on_page("Currency")  # basically wait until the footer is loaded
+        try:
+            # basically wait until the footer is loaded
+            self._wait_for_text_on_page("Currency")
+        except Exception as e:
+            self._wait_for_element(By.TAG_NAME, "ul")
+
         ul_elements = self.driver.find_elements(By.TAG_NAME, "ul")
         ul_flights_list = [ul for ul in ul_elements if "€" in ul.get_attribute("outerHTML")]
         if not ul_flights_list:
@@ -110,7 +120,6 @@ class DirectReturnScraper(BaseScraper):
 
         # departing flights
         departing_flights = self.make_flight_objects_from_driver(url=self.driver.current_url)
-        self.driver.save_screenshot("departing.png")
         # add flight_combination to departing flights
         for i, flight in enumerate(departing_flights):
             flight.flight_combination = i + 1
@@ -128,13 +137,13 @@ class DirectReturnScraper(BaseScraper):
             element_to_click.click()
 
             # wait for the page to load
-            WebDriverWait(self.driver, 15).until(lambda s: "Returning flights" in s.page_source)
+            # TODO: maybe try/except with a different condition
+            self._wait_for_text_on_page("returning flights", lowercase=True)
 
             # returning flights
             returning_flights = self.make_flight_objects_from_driver(
                 flight_combination=flight_combination, url=self.driver.current_url
             )
-            self.driver.save_screenshot(f"returning_{i}.png")
             flights_objects.append(returning_flights)
 
         # unnest flights_data list

@@ -40,7 +40,7 @@ class DirectOneWayItinerary(BaseItinerary):
         return itinerary_df
 
 
-class DirectReturnItinerary(BaseItinerary):
+class ReturnItinerary(BaseItinerary):
     def __init__(self, scraper: BaseScraper):
         super().__init__(scraper)
 
@@ -56,7 +56,7 @@ class DirectReturnItinerary(BaseItinerary):
         # group by flight combination and sort by leg
         df = (
             df.groupby("flight_combination", group_keys=True)
-            .apply(lambda x: x.sort_values("leg", ascending=True))
+            .apply(lambda x: x.sort_values(["leg", "price", "duration"], ascending=[True, True, True]))
             .reset_index(drop=True)
         )
 
@@ -68,3 +68,19 @@ class DirectReturnItinerary(BaseItinerary):
         df = utils.move_pandas_column_to_front(df, "option")
 
         return df
+
+
+class LayoverOneWayItinerary(BaseItinerary):
+    def __init__(self, scraper: BaseScraper):
+        super().__init__(scraper)
+
+    def make_itinerary_df(self):
+        flights_df = self.scraper.make_flights_df()
+
+        itinerary_df = flights_df.copy()
+        itinerary_df["option"] = range(1, len(flights_df) + 1)
+
+        # move option column to the front
+        itinerary_df = utils.move_pandas_column_to_front(itinerary_df, "option")
+
+        return itinerary_df

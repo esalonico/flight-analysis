@@ -67,6 +67,7 @@ class BaseScraper:
         """
         Extracts the raw flight results from the page.
         """
+        WebDriverWait(self.driver, 5).until(lambda s: "€" in s.page_source)  # wait for the page to load
         return self.driver.find_element(by=By.XPATH, value='//body[@id = "yDmH0d"]').text.split("\n")
 
     def _search_has_no_flights(self, results_raw: list) -> bool:
@@ -99,6 +100,17 @@ class BaseScraper:
 
         # remove empty elements
         filtered = [x for x in filtered if x not in ["", " ", "  "]]
+
+        # remove duplicated track prices section
+        track_prices_str = [i for i, el in enumerate(filtered) if "Track prices" in el]
+        if len(track_prices_str) > 0:
+            idx_track_prices_str = track_prices_str[0]
+
+            # end of track prices section
+            idx_track_prices_end = [i for i, el in enumerate(filtered) if "Price graph" in el]
+            if len(idx_track_prices_end) > 0:
+                idx_track_prices_end = idx_track_prices_end[0]
+                filtered = filtered[:idx_track_prices_str] + filtered[idx_track_prices_end:]
 
         # remove some clutter words (supports regex)
         words_to_remove = [
@@ -158,9 +170,11 @@ class BaseScraper:
         clutter_strings = [
             "round trip",
             "Other departing flights",
+            "Other returning flights",
             "Separate tickets booked together",
             "Price graph",
             "Date grid",
+            "more flights",
         ]
 
         for clutter in clutter_strings:
@@ -195,6 +209,12 @@ class BaseScraper:
         flight_dict["airport_arr"] = self.get_airports_from_txt(flight_list[4])[1]
         flight_dict["time_dep"] = flight_list[0]
 
+        n_stops, stops, stop_layover_time = self.get_stops_information(flight_list)
+
+        flight_dict["n_stops"] = n_stops
+        flight_dict["stops"] = stops
+        flight_dict["stop_layover_time"] = stop_layover_time
+
         if self.is_flight_returning_flight(sq, flight_dict["airport_dep"]):
             flight_date = sq.return_date
         else:
@@ -208,6 +228,46 @@ class BaseScraper:
         flight_dict["price"] = int(flight_list[-1].replace(",", ""))
 
         return flight_dict
+
+    def get_stops_information(self, flight_list: list) -> tuple:
+        n_stops, stops, stop_layover_time = 0, None, None
+
+        # step 1: get number of stops
+        pattern = re.compile(r"\d stops?")
+        for element in flight_list:
+            if pattern.match(element.strip()):
+                n_stops = int(element.split(" ")[0])
+                break
+
+        # step 2.1: get stop layover time and location in case of 2+ stop
+        if n_stops > 1:
+            pattern = re.compile(r"\b(?:[A-Z]{3})(?:, [A-Z]{3})*\b")
+            for element in flight_list:
+                if "ITA" in element:  # manual case: ITA
+                    continue
+                if pattern.match(element.strip()):
+                    matches = pattern.findall(element.strip())
+                    stops = ", ".join([m for m in matches])
+                    break
+
+        # step 2.2: get stop layover time and location in case of 1 stop
+        elif n_stops == 1:
+            pattern = re.compile(r"\b\d{1,2} hr \d{1,2} min [A-Z]{3}\b|\b\d{1,2} min [A-Z]{3}\b|\b\d{1,2} hr [A-Z]{3}\b")
+            for element in flight_list:
+                if pattern.match(element.strip()):
+                    single_stop_data = element.strip().split(" ")
+                    stops = single_stop_data[-1]
+                    stop_time_tmp = " ".join([x for x in single_stop_data[:-1]])
+                    stop_layover_time = utils.convert_string_to_duration(stop_time_tmp)
+
+        # step 3: identify if there is a change of airport
+        for element in flight_list:
+            if "601" in element:
+                print("miani")
+            if "change of airport" in element.lower():
+                stops = "change of airport"
+
+        return n_stops, stops, stop_layover_time
 
     def is_flight_returning_flight(self, sq: SearchQuery, airport_dep: str) -> bool:
         """
@@ -231,6 +291,15 @@ class BaseScraper:
             return airport1, airport2
         return None, None
 
+    def check_if_flights_exist(self, results_raw: list) -> bool:
+        """
+        Check if flights are found in the search.
+        """
+        results_joined = " ".join(results_raw)
+        if "No results returned" in results_joined or "No options matching your search" in results_joined:
+            return False
+        return True
+
     def make_flight_objects_from_driver(self, flight_combination: int = None, url: str = None) -> list[Flight]:
         """
         Create Flight objects from a driver page.
@@ -238,6 +307,12 @@ class BaseScraper:
         :return: List of Flight objects
         """
         results_raw = self._get_raw_flight_results()
+
+        flights_exist = self.check_if_flights_exist(results_raw)
+        if not flights_exist:
+            print("No flights found for this search.")
+            return []
+
         results_raw_filtered = self._filter_raw_results(results_raw)
 
         self.metadata = self._get_flight_search_metadata(results_raw)
