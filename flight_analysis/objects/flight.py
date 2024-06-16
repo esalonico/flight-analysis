@@ -11,25 +11,32 @@ from flight_analysis.utils import utils
 
 
 class Flight:
-    def __init__(self, search_query: SearchQuery, flight_info: dict = dict()):
+    def __init__(self, search_query: SearchQuery, flight_info: dict = dict(), datetime_access: datetime = datetime.now()):
         self._id = uuid.uuid4()
         self._search_query = search_query
 
         # attributes to identify flight (input/immediately computable)
-        self.datetime_access = datetime.now()
+        self.datetime_access = datetime_access
         self.days_advance = utils.calculate_delta_days(self.datetime_access, self._search_query.departure_date)
 
         # attributes to scrape
+        self.airport_dep = flight_info.get("airport_dep", None)
+        self.airport_arr = flight_info.get("airport_arr", None)
+
         self.flight_number = flight_info.get("flight_number", None)
+
         self.datetime_dep = flight_info.get("datetime_dep", None)
         self.datetime_arr = flight_info.get("datetime_arr", None)
+
         self.price = flight_info.get("price", None)
         self.airline = flight_info.get("airline", None)
         self.duration = flight_info.get("duration", None)
+        self.flight_combination = flight_info.get("flight_combination", None)
+        self.url = flight_info.get("url", None)
 
     def __repr__(self) -> str:
         rep = f"Flight({str(self._id)[:8]}"
-        rep += f", {self._search_query.airport_dep}, {self.search_query.airport_arr}"
+        rep += f", {self.airport_dep}, {self.airport_arr}"
         rep += f", {self._search_query.departure_date}"
         rep += f", {self.datetime_dep.strftime('%H:%M')}"
         rep += f", {self.price}€, {self.airline}, {self.days_advance}d)"

@@ -12,16 +12,18 @@ from webdriver_manager.chrome import ChromeDriverManager
 from flight_analysis.objects.flight import Flight
 from flight_analysis.scrapers.search_query import SearchQuery
 from flight_analysis.utils import utils
+from datetime import datetime
 
 
 class BaseScraper:
-    def __init__(self, search_query: SearchQuery) -> None:
+    def __init__(self, search_query: SearchQuery, datetime_access: datetime = datetime.now()):
         self.search_query = search_query
+        self.datetime_access = datetime_access
         self.flights = None
         self.metadata = None  # metadata of the current scrape
 
         self.driver = self._create_driver()
-        self.url = self._build_url(search_query)
+        self.url = self._build_url()
 
     def __repr__(self) -> str:
         return f"Scrape({self.__class__.__name__}, {self.url})"
@@ -61,17 +63,11 @@ class BaseScraper:
             EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all')]"))
         ).click()
 
-    def _get_raw_flight_results(self, driver: webdriver.Chrome, url: str) -> list:
+    def _get_raw_flight_results(self) -> list:
         """
-        Reaches the flight results page. Also handles auto acceptance of Google's Terms & Conditions page.
+        Extracts the raw flight results from the page.
         """
-        timeout = 15
-        driver.get(url)
-
-        # deal with Google's term and conditions page
-        self._skip_google_terms_page(driver, timeout)
-
-        return driver.find_element(by=By.XPATH, value='//body[@id = "yDmH0d"]').text.split("\n")
+        return self.driver.find_element(by=By.XPATH, value='//body[@id = "yDmH0d"]').text.split("\n")
 
     def _search_has_no_flights(self, results_raw: list) -> bool:
         """
@@ -133,13 +129,19 @@ class BaseScraper:
 
         # get number of results returned
         n_flights_regex = re.compile(r"(\d+) result(s)? returned")
-        n_flights = int([x for x in results_raw if n_flights_regex.match(x)][0].split(" ")[0])
+        try:
+            n_flights = int([x for x in results_raw if n_flights_regex.match(x)][0].split(" ")[0])
+        except IndexError:
+            n_flights = "unknown"
         metadata["n_flights"] = n_flights
 
         # price trend
         price_trend_regex = re.compile(r"Prices are currently")
-        price_trend = [x for x in results_raw if price_trend_regex.match(x)][0]
-        metadata["price_trend"] = price_trend
+        price_trend = [x for x in results_raw if price_trend_regex.match(x)]
+        if len(price_trend) == 1:
+            metadata["price_trend"] = price_trend[0]
+        else:
+            metadata["price_trend"] = None
 
         return metadata
 
@@ -151,6 +153,18 @@ class BaseScraper:
         # case: no flights found for that search --> return empty list
         if not results_raw:
             return []
+
+        # remove clutter strings
+        clutter_strings = [
+            "round trip",
+            "Other departing flights",
+            "Separate tickets booked together",
+            "Price graph",
+            "Date grid",
+        ]
+
+        for clutter in clutter_strings:
+            results_raw = [x for x in results_raw if clutter.lower() not in x.lower()]
 
         time_pattern = re.compile(r"(1[0-2]|0?[1-9]):([0-5][0-9])([APap][Mm])")  # 12:30PM, 11:40AM etc...
 
@@ -168,6 +182,79 @@ class BaseScraper:
 
         return flights
 
+    def _clean_flight_details(self, flight_list: list, sq: SearchQuery) -> dict:
+        """
+        From a list of strings (representing a flight), return a dictionary of flights details after cleaning.
+        :param flight_list: List of strings representing a flight.
+        :param sq: SearchQuery object.
+        :return: Dictionary of flight details.
+        """
+        flight_dict = dict()
+
+        flight_dict["airport_dep"] = self.get_airports_from_txt(flight_list[4])[0]
+        flight_dict["airport_arr"] = self.get_airports_from_txt(flight_list[4])[1]
+        flight_dict["time_dep"] = flight_list[0]
+
+        if self.is_flight_returning_flight(sq, flight_dict["airport_dep"]):
+            flight_date = sq.return_date
+        else:
+            flight_date = sq.departure_date
+
+        flight_dict["datetime_dep"] = utils.convert_string_date_time_to_datetime(flight_date, flight_list[0])
+        flight_dict["datetime_arr"] = utils.convert_string_date_time_to_datetime(flight_date, flight_list[1])
+
+        flight_dict["airline"] = utils.format_airline_correctly(flight_list[2])
+        flight_dict["duration"] = utils.convert_string_to_duration(flight_list[3])
+        flight_dict["price"] = int(flight_list[-1].replace(",", ""))
+
+        return flight_dict
+
+    def is_flight_returning_flight(self, sq: SearchQuery, airport_dep: str) -> bool:
+        """
+        If the departure airport of the search query is equal to the departure airport scraped, then it is a departing flight, otherwise it is a returning flight.
+        """
+        if sq.airport_dep.iata == airport_dep:
+            return False
+        return True
+
+    def get_airports_from_txt(self, txt: str) -> tuple:
+        """
+        Extracts the departure and arrival airports from a string.
+        :param txt: String containing the 2 airports (ex. FCOMAD, MUCFCO).
+        :return: Tuple of airport codes.
+        """
+        pattern = re.compile(r"^[A-Z]{6}$")
+
+        if pattern.match(txt):
+            airport1 = txt[:3]
+            airport2 = txt[3:]
+            return airport1, airport2
+        return None, None
+
+    def make_flight_objects_from_driver(self, flight_combination: int = None, url: str = None) -> list[Flight]:
+        """
+        Create Flight objects from a driver page.
+
+        :return: List of Flight objects
+        """
+        results_raw = self._get_raw_flight_results()
+        results_raw_filtered = self._filter_raw_results(results_raw)
+
+        self.metadata = self._get_flight_search_metadata(results_raw)
+
+        flights = self._split_raw_results_into_flights(results_raw_filtered)
+
+        flight_objects = []
+        for flight_list in flights:
+            flight_dict = self._clean_flight_details(flight_list, self.search_query)
+            flight_dict["flight_combination"] = flight_combination
+            flight_dict["url"] = url
+            flight_obj = Flight(self.search_query, flight_dict, datetime_access=self.datetime_access)
+
+            flight_objects.append(flight_obj)
+
+        return flight_objects
+
     def make_flights_df(self) -> pd.DataFrame:
         """
         Returns a DataFrame of the flights.
@@ -178,5 +265,6 @@ class BaseScraper:
         # make dataframe from list of dictionaries
         flights_data = [f.to_dict() for f in self.flights]
         flights_df = pd.DataFrame(flights_data)
+        flights_df = flights_df.drop_duplicates()
 
         return flights_df.reset_index(drop=True)

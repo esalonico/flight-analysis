@@ -1,6 +1,8 @@
 import re
 from datetime import date, datetime, timedelta
 
+import pandas as pd
+
 
 def is_date_in_future(input_date: date) -> bool:
     """
@@ -79,6 +81,7 @@ def convert_string_to_duration(duration_str: str) -> timedelta:
         minutes = duration_str.split("min")[0].strip()
 
     else:
+        print(duration_str)
         raise ValueError("Invalid duration string.")
 
     return timedelta(hours=int(hours), minutes=int(minutes))
@@ -103,3 +106,13 @@ def format_airline_correctly(airline: str) -> str:
         return case_camel.group(1) + (case_camel.group(2) or "")  # For example: Air DolomitiLufthansa --> Air Dolomiti
 
     return airline
+
+
+def move_pandas_column_to_front(df: pd.DataFrame, column_name: str) -> pd.DataFrame:
+    """
+    Moves a column in a pandas DataFrame to the front.
+    Returns: DataFrame with the column moved to the front.
+    """
+    cols = df.columns.tolist()
+    cols.insert(0, cols.pop(cols.index(column_name)))
+    return df[cols]
