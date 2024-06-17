@@ -1,11 +1,9 @@
 from datetime import date, datetime
 
-from flight_analysis.itineraries.itinerary import DirectOneWayItinerary, ReturnItinerary, LayoverOneWayItinerary
-# TODO: adapt onewayitinerary e scraper into one class
+from flight_analysis.itineraries.itinerary import OneWayItinerary, RoundTripItinerary
 from flight_analysis.objects.airport import Airport
-from flight_analysis.scrapers.direct_one_way_scraper import DirectOneWayScraper
-from flight_analysis.scrapers.layover_one_way_scraper import LayoverOneWayScaper
-from flight_analysis.scrapers.return_scraper import ReturnScraper
+from flight_analysis.scrapers.one_way_scraper import OneWayScraper
+from flight_analysis.scrapers.round_trip_scraper import RoundTripScraper
 from flight_analysis.scrapers.search_query import SearchQuery
 from flight_analysis.utils.sheets_downloader import download_all_sheets
 
@@ -24,35 +22,30 @@ if __name__ == "__main__":
     search_query = SearchQuery(airport_from, airport_to, datetime_dep, return_date=datetime_ret)
     print(search_query)
 
-    # direct_one_way_scraper = DirectOneWayScraper(search_query)
-    # print(direct_one_way_scraper)
+    # Case 1: Direct one-way
+    # direct_one_way_scraper = OneWayScraper(search_query, direct_only=True)
     # direct_one_way_scraper.scrape()
-    # itinerary = DirectOneWayItinerary(direct_one_way_scraper)
-    # itinerary_df = itinerary.make_itinerary_df()
-    # print(itinerary_df)
+    # direct_one_way_itinerary = OneWayItinerary(direct_one_way_scraper)
+    # direct_one_way_itinerary_df = direct_one_way_itinerary.make_itinerary_df(export_to="export/direct_one_way_itinerary.csv")
+    # print(direct_one_way_itinerary_df)
 
-    # TODO: adapt
-    # direct_return_scraper = ReturnScraper(search_query)
-    # direct_return_scraper.scrape()
-    # itinerary = ReturnItinerary(direct_return_scraper)
-    # itinerary_df = itinerary.make_itinerary_df()
-    # if itinerary_df:
-    #     itinerary_df.to_csv("itinerary.csv", index=False)
-    # print(itinerary_df)
-
-    # layover_one_way_scraper = LayoverOneWayScaper(search_query)
-    # print(layover_one_way_scraper)
+    # Case 2: Layover one-way
+    # layover_one_way_scraper = OneWayScraper(search_query, direct_only=False)
     # layover_one_way_scraper.scrape()
-    # itinerary = LayoverOneWayItinerary(layover_one_way_scraper)
-    # itinerary_df = itinerary.make_itinerary_df()
-    # itinerary_df.to_csv("itinerary.csv", index=False)
-    # print(itinerary_df)
+    # layover_one_way_itinerary = OneWayItinerary(layover_one_way_scraper)
+    # layover_one_way_itinerary_df = layover_one_way_itinerary.make_itinerary_df(export_to="export/layover_one_way_itinerary.csv")
+    # print(layover_one_way_itinerary_df)
 
-    layover_return_scraper = ReturnScraper(search_query, direct_only=False)
-    print(layover_return_scraper.url)
+    # Case 3: Direct round-trip
+    # direct_round_trip_scraper = RoundTripScraper(search_query, direct_only=True)
+    # direct_round_trip_scraper.scrape()
+    # direct_round_trip_itinerary = RoundTripItinerary(direct_round_trip_scraper)
+    # direct_round_trip_itinerary_df = direct_round_trip_itinerary.make_itinerary_df(export_to="export/direct_round_trip_itinerary.csv")
+    # print(direct_round_trip_itinerary_df)
 
-    layover_return_scraper.scrape()
-    itinerary = ReturnItinerary(layover_return_scraper)
-    itinerary_df = itinerary.make_itinerary_df()
-    itinerary_df.to_csv("itinerary.csv", index=False)
-    print(itinerary_df)
+    # Case 4: Layover round-trip
+    # layover_round_trip_scraper = RoundTripScraper(search_query, direct_only=False)
+    # layover_round_trip_scraper.scrape()
+    # layover_round_trip_itinerary = RoundTripItinerary(layover_round_trip_scraper)
+    # layover_round_trip_itinerary_df = layover_round_trip_itinerary.make_itinerary_df(export_to="export/layover_round_trip_itinerary.csv")
+    # print(layover_round_trip_itinerary_df)

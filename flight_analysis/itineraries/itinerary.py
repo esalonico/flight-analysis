@@ -12,9 +12,54 @@ class BaseItinerary:
     def make_itinerary_df(self):
         raise NotImplementedError("This method must be implemented in a subclass.")
 
+
+class OneWayItinerary(BaseItinerary):
+    def __init__(self, scraper: BaseScraper):
+        super().__init__(scraper)
+
+    def make_itinerary_df(self, export_to: str = None) -> pd.DataFrame:
+        """
+        Create a DataFrame with the flights information.
+
+        :param export_to: Optional string with the filename to export the DataFrame to a CSV file.
+
+        :return: DataFrame with the flights information.
+        """
+        if not self.scraper.flights or len(self.scraper.flights) == 0:
+            return
+
+        flights_df = self.scraper.make_flights_df()
+        itinerary_df = flights_df.copy()
+
+        # sort by number of stops and price
+        itinerary_df = itinerary_df.sort_values(["price", "n_stops", "duration"], ascending=[True, True, True])
+
+        # create option column
+        itinerary_df["option"] = range(1, len(flights_df) + 1)
+        itinerary_df = utils.move_pandas_column_to_front(itinerary_df, "option")
+
+        # reset index
+        itinerary_df = itinerary_df.reset_index(drop=True)
+
+        # export to CSV if requested
+        if export_to:
+            itinerary_df.to_csv(export_to, index=False)
+
+        return itinerary_df
+
+
+class RoundTripItinerary(BaseItinerary):
+    def __init__(self, scraper: BaseScraper):
+        super().__init__(scraper)
+
     def compute_flight_leg_within_itinerary(self, sq: SearchQuery, flight: pd.Series) -> str:
         """
-        In a given itinerary, compute the flight leg (either departing or returning) that a given flight belongs to.
+        In a given roundtrip itinerary, compute the flight leg (either departing or returning) that a given flight belongs to.
+
+        :param sq: SearchQuery object with the search parameters
+        :param flight: pd.Series representing a flight
+
+        :return: String with the leg of the flight within the itinerary.
         """
         if flight["airport_dep"] == sq.airport_dep.iata:
             return "departing"
@@ -23,28 +68,7 @@ class BaseItinerary:
         else:
             return "unknown"
 
-
-class DirectOneWayItinerary(BaseItinerary):
-    def __init__(self, scraper: BaseScraper):
-        super().__init__(scraper)
-
-    def make_itinerary_df(self):
-        flights_df = self.scraper.make_flights_df()
-
-        itinerary_df = flights_df.copy()
-        itinerary_df["option"] = range(1, len(flights_df) + 1)
-
-        # move option column to the front
-        itinerary_df = utils.move_pandas_column_to_front(itinerary_df, "option")
-
-        return itinerary_df
-
-
-class ReturnItinerary(BaseItinerary):
-    def __init__(self, scraper: BaseScraper):
-        super().__init__(scraper)
-
-    def make_itinerary_df(self) -> pd.DataFrame:
+    def make_itinerary_df(self, export_to: str = None) -> pd.DataFrame:
         if not self.scraper.flights or len(self.scraper.flights) == 0:
             return
 
@@ -67,20 +91,8 @@ class ReturnItinerary(BaseItinerary):
         df = utils.move_pandas_column_to_front(df, "leg")
         df = utils.move_pandas_column_to_front(df, "option")
 
+        # export to CSV if requested
+        if export_to:
+            df.to_csv(export_to, index=False)
+
         return df
-
-
-class LayoverOneWayItinerary(BaseItinerary):
-    def __init__(self, scraper: BaseScraper):
-        super().__init__(scraper)
-
-    def make_itinerary_df(self):
-        flights_df = self.scraper.make_flights_df()
-
-        itinerary_df = flights_df.copy()
-        itinerary_df["option"] = range(1, len(flights_df) + 1)
-
-        # move option column to the front
-        itinerary_df = utils.move_pandas_column_to_front(itinerary_df, "option")
-
-        return itinerary_df

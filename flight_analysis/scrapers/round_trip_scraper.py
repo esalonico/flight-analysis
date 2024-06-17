@@ -1,22 +1,25 @@
 import re
 
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from tqdm import tqdm
 
 from flight_analysis.scrapers.base_scraper import BaseScraper
 from flight_analysis.scrapers.search_query import SearchQuery
 
 
-class ReturnScraper(BaseScraper):
+class RoundTripScraper(BaseScraper):
     def __init__(self, search_query: SearchQuery, direct_only: bool):
         """
-        Initialize the ReturnScraper.
+        Initialize the RoundTripScraper.
 
         :param search_query: SearchQuery object with the search parameters
         :param direct_only: Whether to search for direct flights only (True) or not (False)
         """
         assert search_query.return_date, "Return date must be provided for a roundtrip flight."
+
         self.direct_only = direct_only
 
         super().__init__(search_query)
@@ -39,45 +42,39 @@ class ReturnScraper(BaseScraper):
 
         return url
 
-    def _wait_for_element(self, by: By, value: str, timeout: int = 15):
-        """
-        Wait for an element to be present on the page.
-
-        :param by: Locator strategy (By.TAG_NAME, By.CSS_SELECTOR, etc.)
-        :param value: Locator value for the element
-        :param timeout: Maximum time to wait for the element (default is 15 seconds)
-        """
-        WebDriverWait(self.driver, timeout).until(EC.presence_of_element_located((by, value)))
-
-    def _wait_for_text_on_page(self, text: str, timeout: int = 15, lowercase: bool = False):
+    def _wait_for_text_on_page(self, text: str, timeout: int = 15):
         """
         Wait for a given text to be present anywhere on the page.
 
         :param text: The text to wait for on the page
         :param timeout: Maximum time to wait for the text (default is 15 seconds)
         """
-        source = self.driver.page_source.lower() if lowercase else self.driver.page_source
-        WebDriverWait(self.driver, timeout).until(lambda driver: text in source)
+        WebDriverWait(self.driver, timeout).until(lambda driver: text in self.driver.page_source)
 
-    def _get_flight_list(self):
+    def _get_flight_lists(self):
         """
-        Get the <ul> element that contains the list of flights.
+        Get the <ul> elements that contains the list of flights.
+
+        Example of the <ul> element:
+        - Element with title "Best departing flights"
+        - Element with title "Other departing flights"
 
         :return: WebElement representing the <ul> with the flight list
         :raises ValueError: If no flight list is found
         """
-        # self._wait_for_element(By.TAG_NAME, "ul") # TODO: old, maybe delete
         try:
             # basically wait until the footer is loaded
             self._wait_for_text_on_page("Currency")
         except Exception as e:
-            self._wait_for_element(By.TAG_NAME, "ul")
+            WebDriverWait(self.driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "ul")))
 
         ul_elements = self.driver.find_elements(By.TAG_NAME, "ul")
         ul_flights_list = [ul for ul in ul_elements if "€" in ul.get_attribute("outerHTML")]
+
         if not ul_flights_list:
             raise ValueError("No flights found.")
-        return ul_flights_list[0]
+
+        return ul_flights_list
 
     def _get_jsaction_element(self, parent_element) -> str:
         """
@@ -106,39 +103,55 @@ class ReturnScraper(BaseScraper):
 
         # get list of departing flights
         try:
-            ul_flights_list = self._get_flight_list()
+            ul_sections_containig_flights = self._get_flight_lists()
         except ValueError:
             print("No flights found.")
             self.driver.quit()
             return
 
         # Within the ul element, get all the li elements
-        li_flights_initial = ul_flights_list.find_elements(By.TAG_NAME, "li")
-        print(f"{len(li_flights_initial)} departing flights found")
+        departing_flight_elements_li = []
+        for section in ul_sections_containig_flights:
+            flights_li_within_section = section.find_elements(By.TAG_NAME, "li")
+            departing_flight_elements_li.extend(flights_li_within_section)
+
+        n_departing_flights = len(departing_flight_elements_li)
+        print(f"{n_departing_flights} departing flights found")
 
         flights_objects = []
 
         # departing flights
         departing_flights = self.make_flight_objects_from_driver(url=self.driver.current_url)
+
         # add flight_combination to departing flights
         for i, flight in enumerate(departing_flights):
             flight.flight_combination = i + 1
         flights_objects.append(departing_flights)
 
-        for i in range(len(li_flights_initial)):
+        for i in tqdm(range(n_departing_flights)):
             # flight combination: number of the flight combination (1, 2, 3, ...) that are proposed on the page
             flight_combination = i + 1
 
             self.driver.get(url)
-            ul_flights_list = self._get_flight_list()
-            li_flights = ul_flights_list.find_elements(By.TAG_NAME, "li")
 
-            element_to_click = self._get_jsaction_element(li_flights[i])
+            # get list of departing flights (again, to avioid StaleElementReferenceException)
+            loop_ul_sections_containig_flights = self._get_flight_lists()
+            loop_departing_flight_elements_li = []
+            for loop_section in loop_ul_sections_containig_flights:
+                loop_flights_li_within_section = loop_section.find_elements(By.TAG_NAME, "li")
+                loop_departing_flight_elements_li.extend(loop_flights_li_within_section)
+
+            element_to_click = self._get_jsaction_element(loop_departing_flight_elements_li[i])
             element_to_click.click()
 
             # wait for the page to load
-            # TODO: maybe try/except with a different condition
-            self._wait_for_text_on_page("returning flights", lowercase=True)
+            try:
+                # eturning flights instead of returning flights to handle both cases
+                self._wait_for_text_on_page("eturning flights")
+            except TimeoutException as e:
+                self.driver.save_screenshot(f"TimeoutException_{i}.png")
+                print("TimeoutException:", e)
+                continue
 
             # returning flights
             returning_flights = self.make_flight_objects_from_driver(
