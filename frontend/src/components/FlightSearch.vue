@@ -8,7 +8,7 @@
           <label for="flightDates">Flight date(s)</label>
           <VueDatePicker v-model="flightDates" id="flightDates" :partial-range="true" :min-date="new Date()"
             prevent-min-max-navigation ignore-time-validation :enable-time-picker="false"
-            :range="{ noDisabledRange: true }" :disabled-dates="disabledDates" />
+            :range="{ noDisabledRange: true }" />
         </div>
 
         <div class="checkbox">
@@ -24,7 +24,8 @@
       <div class="recap-item">
         <h4>Flight dates</h4>
         <p v-if="flightDates">{{ formatDates(flightDates) }} </p>
-        <p v-if="flightDates && flightDates[1] !== null">{{ computeNDays(flightDates) }} / {{ computeNNights(flightDates) }}</p>
+        <p v-if="flightDates && flightDates[1] !== null">{{ computeNDays(flightDates) }} / {{
+          computeNNights(flightDates) }}</p>
       </div>
       <div class="recap-item">
         <h4>Direct flight only?</h4>
