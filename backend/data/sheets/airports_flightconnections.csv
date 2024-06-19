@@ -1,0 +1,3888 @@
+iata_code,name,code
+AAA,Anaa (AAA),524
+AAE,Annaba (AAE),527
+AAK,Aranuka (AAK),533
+AAL,Aalborg (AAL),1
+AAM,Mala Mala (AAM),534
+AAN,Al Ain (AAN),535
+AAP,Samarinda (AAP),8661
+AAR,Aarhus (AAR),2
+AAT,Altay (AAT),540
+AAX,Araxá (AAX),545
+AAY,Al Ghaydah (AAY),546
+AAZ,Quetzaltenango (AAZ),547
+ABA,Abakan (ABA),548
+ABB,Asaba (ABB),8094
+ABD,Abadan (ABD),550
+ABE,Allentown (ABE),551
+ABF,Abaiang (ABF),552
+ABI,Abilene (ABI),555
+ABJ,Abidjan (ABJ),556
+ABK,Kebri Dehar (ABK),557
+ABL,Ambler (ABL),558
+ABM,Bamaga (ABM),559
+ABQ,Albuquerque (ABQ),563
+ABR,Aberdeen (ABR),564
+ABS,Abu Simbel (ABS),565
+ABT,Al-Baha (ABT),566
+ABU,Atambua (ABU),567
+ABV,Abuja (ABV),568
+ABX,Albury (ABX),570
+ABY,Albany (ABY),571
+ABZ,Aberdeen (ABZ),3
+ACA,Acapulco (ACA),572
+ACC,Accra (ACC),574
+ACE,Lanzarote (Arrecife) (ACE),20
+ACF,Alaer (ACF),8908
+ACH,St Gallen Altenrhein (ACH),398
+ACI,Alderney (ACI),576
+ACK,Nantucket (ACK),577
+ACP,Bonab (ACP),7683
+ACT,Waco (ACT),584
+ACV,Arcata / Eureka (ACV),586
+ACX,"Xingyi, Guizhou (ACX)",7684
+ACY,Atlantic City (ACY),587
+ACZ,Zabol (ACZ),588
+ADA,Adana (ADA),380
+ADB,Izmir (ADB),133
+ADD,Addis Ababa (ADD),590
+ADE,Aden (ADE),591
+ADF,Adıyaman (ADF),592
+ADK,Adak Island (ADK),596
+ADL,Adelaide (ADL),597
+ADQ,Kodiak (ADQ),602
+ADU,Ardabil (ADU),606
+ADZ,San Andrés (ADZ),611
+AEA,Abemama Atoll (AEA),612
+AEB,Baise (AEB),613
+AEM,Amgu (AEM),8520
+AEP,Buenos Aires (AEP),620
+AER,Sochi (AER),459
+AES,Ålesund (AES),409
+AET,Allakaket (AET),621
+AEU,Abu Musa (AEU),7686
+AEX,Alexandria (AEX),622
+AEY,Akureyri (AEY),6
+AFA,San Rafael (AFA),623
+AFL,Alta Floresta (AFL),627
+AGA,Agadir (AGA),4
+AGH,Ängelholm (AGH),446
+AGM,Tasiilaq (AGM),644
+AGN,Angoon (AGN),645
+AGP,Málaga (AGP),188
+AGR,Agra (AGR),648
+AGS,Augusta (AGS),649
+AGT,Ciudad del Este (AGT),650
+AGU,Aguascalientes (AGU),651
+AGX,Agatti Island (AGX),654
+AHB,Abha (AHB),657
+AHE,Ahe (AHE),660
+AHJ,Hongyuan (AHJ),8282
+AHO,Alghero (Sardinia) (AHO),8
+AHU,Al Hoceima (AHU),7
+AIA,Alliance (AIA),669
+AIC,Airok (AIC),670
+AIM,Ailuk (AIM),679
+AIN,Wainwright (AIN),680
+AIP,Adampur (AIP),8654
+AIR,Aripuanã (AIR),8462
+AIS,Arorae Island (AIS),684
+AIT,Aitutaki (AIT),685
+AJA,Ajaccio (Corsica) (AJA),5
+AJF,Al-Jawf (AJF),692
+AJI,Ağrı (AJI),693
+AJL,Aizawl (AJL),695
+AJN,Anjouan (AJN),696
+AJR,Arvidsjaur (AJR),411
+AJU,Aracaju (AJU),699
+AJY,Agadez (AJY),700
+AKA,Ankang (AKA),701
+AKI,Akiak (AKI),708
+AKJ,Asahikawa (AKJ),709
+AKK,Akhiok (AKK),710
+AKL,Auckland (AKL),8655
+AKN,King Salmon (AKN),713
+AKP,Anaktuvuk Pass (AKP),715
+AKR,Akure (AKR),717
+AKS,Auki (AKS),718
+AKU,Aksu (AKU),720
+AKV,Akulivik (AKV),721
+AKX,Aktobe (Aktyubinsk) (AKX),722
+AKY,Sittwe (AKY),723
+ALA,Almaty (ALA),724
+ALB,Albany (ALB),725
+ALC,Alicante (ALC),9
+ALF,Alta (ALF),11
+ALG,Algiers (ALG),395
+ALH,Albany (ALH),728
+ALO,Waterloo (ALO),734
+ALP,Aleppo (ALP),735
+ALQ,Alegrete (ALQ),8784
+ALS,Alamosa (ALS),738
+ALW,Walla Walla (ALW),742
+ALZ,Lazy Bay (ALZ),745
+AMA,Amarillo (AMA),746
+AMD,Ahmedabad (AMD),749
+AMH,Arba Minch (AMH),753
+AMM,Amman (AMM),397
+AMQ,"Ambon, Maluku (AMQ)",761
+AMS,Amsterdam (AMS),12
+ANA,Maasai Mara (Angama) (ANA),8613
+ANC,Anchorage (ANC),771
+ANF,Antofagasta (ANF),773
+ANI,Aniak (ANI),775
+ANR,Antwerp (ANR),17
+ANU,"St. John's, Antigua (ANU)",786
+ANV,Anvik (ANV),787
+ANX,Andenes (ANX),410
+AOE,Eskişehir (AOE),794
+AOG,Anshan (AOG),795
+AOI,Ancona (AOI),13
+AOJ,Aomori (AOJ),797
+AOK,Karpathos (AOK),355
+AOO,Altoona (AOO),800
+AOQ,Aappilattoq (AOQ),8140
+AOR,"Alor Setar, Kedah (AOR)",801
+AOS,Amook Bay (AOS),802
+APK,Apataki (APK),813
+APL,Nampula (APL),814
+APN,Alpena (APN),815
+APO,Apartadó (APO),816
+APW,Apia (APW),824
+AQA,Araraquara (AQA),828
+AQG,Anqing (AQG),830
+AQI,Al Qaisumah / Hafr Al-Batin (AQI),831
+AQJ,Aqaba (AQJ),449
+AQP,Arequipa (AQP),833
+ARC,Arctic Village (ARC),837
+ARD,Alor Island (ARD),838
+ARH,Arkhangelsk (ARH),842
+ARI,Arica (ARI),843
+ARK,Arusha (ARK),845
+ARM,Armidale (ARM),847
+ARN,Stockholm (Arlanda) (ARN),286
+ART,Watertown (ART),853
+ARU,Araçatuba (ARU),854
+ARX,Aracati (ARX),8586
+ASB,Ashgabat (ASB),860
+ASE,Aspen (ASE),863
+ASF,Astrakhan (ASF),864
+ASJ,Amami Island (ASJ),868
+ASM,Asmara (ASM),871
+ASO,Asosa (ASO),873
+ASP,Alice Springs (ASP),874
+ASR,Kayseri (ASR),381
+ASU,Asunción (ASU),877
+ASV,Amboseli National Park (ASV),878
+ASW,Aswan (ASW),879
+ATA,Huaraz (ATA),883
+ATD,Atoifi (ATD),886
+ATH,Athens (ATH),21
+ATK,Atqasuk (ATK),892
+ATL,Atlanta (ATL),893
+ATM,Altamira (ATM),894
+ATQ,"Amritsar, Punjab (ATQ)",898
+ATT,Atmautluak (ATT),901
+ATW,Appleton (ATW),904
+ATY,Watertown (ATY),906
+ATZ,Asyut (ATZ),907
+AUA,Aruba (AUA),908
+AUC,Arauca (AUC),910
+AUG,Augusta (AUG),914
+AUH,Abu Dhabi (AUH),915
+AUK,Alakanuk (AUK),918
+AUL,Aur Atoll (AUL),919
+AUQ,Atuona (AUQ),924
+AUR,Aurillac (AUR),925
+AUS,Austin (AUS),926
+AUU,Aurukun (AUU),928
+AUX,Araguaína (AUX),931
+AUY,Anatom (Aneityum) (AUY),932
+AVA,Anshun (AVA),7688
+AVL,Asheville (AVL),939
+AVP,Wilkes-Barre (AVP),941
+AVV,Melbourne (AVV),943
+AWA,Awasa (AWA),945
+AWD,Aniwa Island (AWD),947
+AWZ,Ahwaz (AWZ),955
+AXA,The Valley (AXA),956
+AXD,Alexandroupolis (AXD),388
+AXF,"Alxa Left Banner, Bayanhot (AXF)",8242
+AXJ,Amakusa (AXJ),8370
+AXM,Armenia (AXM),963
+AXP,Spring Point (AXP),965
+AXR,Arutua (AXR),966
+AXT,Akita (AXT),968
+AXU,Axum (AXU),969
+AYJ,Ayodhya (AYJ),8910
+AYP,Ayacucho (AYP),983
+AYQ,Yulara (AYQ),984
+AYT,Antalya (AYT),16
+AZA,Phoenix (AZA),989
+AZD,Yazd (AZD),991
+AZO,Kalamazoo / Battle Creek (AZO),995
+AZR,Adrar (AZR),997
+AZS,Samana (AZS),998
+BAG,Baguio City (BAG),1007
+BAH,Bahrain Island (BAH),1008
+BAL,Batman (BAL),1012
+BAQ,Barranquilla (BAQ),1017
+BAR,Qionghai (BAR),8438
+BAS,Balalae Island (BAS),1019
+BAV,Baotou (BAV),1022
+BAX,Barnaul (BAX),1024
+BAY,Baia Mare (BAY),460
+BAZ,Barcelos (BAZ),1025
+BBA,Balmaceda (BBA),1026
+BBG,Butaritari Atoll (BBG),1031
+BBI,Bhubaneswar (BBI),1033
+BBK,Kasane (BBK),1035
+BBN,Bario (BBN),1038
+BBU,Bucharest (BBU),59
+BCD,Bacolod City (BCD),1053
+BCI,Barcaldine (BCI),1058
+BCM,Bacău (BCM),378
+BCN,Barcelona (BCN),23
+BCO,Jinka (BCO),1061
+BCU,Bauchi (BCU),8439
+BDA,Bermuda (BDA),1073
+BDB,Bundaberg (BDB),1074
+BDD,Badu Island (BDD),1076
+BDH,Bandar Lengeh (BDH),1080
+BDJ,Banjarmasin (BDJ),1082
+BDL,Hartford (BDL),1084
+BDO,Bandung (BDO),1087
+BDP,Bhadrapur / Chandragadhi (BDP),1088
+BDQ,Vadodara (BDQ),1089
+BDS,Brindisi (BDS),54
+BDU,Bardufoss (BDU),466
+BEB,Benbecula (BEB),491
+BEF,Bluefields (BEF),1100
+BEG,Belgrade (BEG),31
+BEJ,Tanjung Redeb (BEJ),1103
+BEK,Bareilly (BEK),8565
+BEL,Belém (BEL),1105
+BEM,Beni Mellal (BEM),8918
+BEN,Benghazi (BEN),1107
+BER,Berlin (BER),1111
+BES,Brest (BES),53
+BET,Bethel (BET),1112
+BEU,Bedourie (BEU),1113
+BEW,Beira (BEW),1115
+BEY,Beirut (BEY),372
+BEZ,Beru Island (BEZ),1117
+BFD,Bradford (BFD),1119
+BFF,Scottsbluff (BFF),1121
+BFI,Seattle (BFI),1124
+BFJ,Bijie (BFJ),8211
+BFL,Bakersfield (BFL),1126
+BFM,Mobile (BFM),1127
+BFN,Bloemfontein (BFN),1128
+BFS,Belfast International (BFS),30
+BFV,Buriram (Buri Ram) (BFV),1135
+BFX,Bafoussam (BFX),1136
+BGA,Bucaramanga (BGA),1137
+BGC,Bragança (BGC),1139
+BGF,Bangui (BGF),1142
+BGG,Bingöl (BGG),8218
+BGI,Bridgetown (BGI),1145
+BGM,Binghamton (BGM),1149
+BGN,"Belaya Gora, Sakha Republic (BGN)",8254
+BGO,Bergen (BGO),32
+BGR,Bangor (BGR),1153
+BGS,Boguchany (BGS),8904
+BGW,Baghdad (BGW),1158
+BGX,Bagé (BGX),1159
+BGY,Milan (Bergamo) (BGY),196
+BHB,Bar Harbor (BHB),1162
+BHD,Belfast City (BHD),29
+BHE,Blenheim (BHE),1164
+BHH,Bisha (BHH),1167
+BHI,Bahía Blanca (BHI),1168
+BHJ,Bhuj (BHJ),1169
+BHK,Bukhara (BHK),1170
+BHM,Birmingham (BHM),1172
+BHO,Bhopal (BHO),1174
+BHP,Bhojpur (BHP),1175
+BHQ,Broken Hill (BHQ),1176
+BHR,Bharatpur (BHR),1177
+BHU,Bhavnagar (BHU),1180
+BHX,Birmingham (BHX),41
+BHY,Beihai (BHY),1183
+BIA,Bastia (Corsica) (BIA),28
+BIC,Belle Ile (BIC),8800
+BIH,Bishop (BIH),1190
+BIK,Biak (BIK),1193
+BIL,Billings (BIL),1194
+BIM,Bimini (BIM),1195
+BIO,Bilbao (BIO),39
+BIQ,Biarritz (BIQ),38
+BIR,Biratnagar (BIR),1198
+BIS,Bismarck (BIS),1199
+BIU,Bíldudalur (BIU),1201
+BJA,Béjaïa (BJA),1207
+BJB,Bojnord (BJB),1208
+BJC,Denver (BJC),1209
+BJF,Båtsfjord (BJF),412
+BJI,Bemidji (BJI),1213
+BJL,Banjul (BJL),1216
+BJM,Bujumbura (BJM),1217
+BJR,Bahir Dar (BJR),1220
+BJU,Bajura (BJU),1222
+BJV,Bodrum (BJV),44
+BJW,Bajawa (BJW),1223
+BJX,León (BJX),1224
+BJZ,Badajoz (BJZ),472
+BKA,Moscow (BKA),1226
+BKB,Bikaner (BKB),8495
+BKC,Buckland (BKC),1228
+BKG,Branson (BKG),1232
+BKI,Kota Kinabalu (BKI),1234
+BKK,Bangkok (BKK),1236
+BKM,Bakelalan (BKM),1238
+BKO,Bamako (BKO),1240
+BKQ,Blackall (BKQ),1242
+BKS,Bengkulu (BKS),1244
+BKW,Beckley (BKW),1247
+BKZ,Bukoba (BKZ),1250
+BLA,Barcelona (BLA),1251
+BLB,"Balboa, Panama City (BLB)",1252
+BLD,"Boulder City, Las Vegas (BLD)",1254
+BLI,Bellingham (BLI),1259
+BLJ,Batna (BLJ),1260
+BLL,Billund (BLL),40
+BLQ,Bologna (BLQ),46
+BLR,Bengaluru (BLR),1265
+BLV,Belleville (BLV),1269
+BLZ,Blantyre (BLZ),1272
+BMA,Stockholm (Bromma) (BMA),359
+BME,Broome (BME),1276
+BMI,Bloomington (BMI),1280
+BMO,Bhamo (Banmaw) (BMO),1286
+BMU,Bima (BMU),1292
+BMV,Buon Ma Thuot (BMV),1293
+BMW,Bordj Badji Mokhtar (BMW),1294
+BMY,"Art Island, Waala (BMY)",1296
+BNA,Nashville (BNA),1298
+BND,Bandar Abbas (BND),1301
+BNE,Brisbane (BNE),1302
+BNI,Benin (BNI),1305
+BNK,Ballina (BNK),1306
+BNN,Brønnøysund (BNN),414
+BNS,Barinas (BNS),1313
+BNX,Banja Luka (BNX),1318
+BNY,"Bellona Island, Anua (BNY)",1319
+BOB,Bora Bora (BOB),1322
+BOC,Bocas del Toro (BOC),1323
+BOD,Bordeaux (BOD),48
+BOG,Bogotá (BOG),1326
+BOH,Bournemouth (BOH),49
+BOI,Boise (BOI),1327
+BOJ,Burgas (BOJ),61
+BOM,Mumbai (BOM),1330
+BON,Bonaire (BON),1331
+BOO,Bodø (BOO),43
+BOS,Boston (BOS),1335
+BOY,Bobo-Dioulasso (BOY),1341
+BPA,Borongan (BPA),8859
+BPE,Qinhuangdao (BPE),8296
+BPG,Barra do Garças (BPG),1348
+BPL,Bole (BPL),1352
+BPN,Balikpapan (BPN),1353
+BPS,Porto Seguro (BPS),1355
+BPT,Beaumont / Port Arthur (BPT),1356
+BPX,Qamdo (Changdu) (BPX),1358
+BQB,Busselton (BQB),1361
+BQJ,Batagay (BQJ),8198
+BQK,Brunswick (BQK),1365
+BQL,Boulia (BQL),1366
+BQN,Aguadilla (BQN),1367
+BQS,Blagoveshchensk (BQS),1370
+BQT,Brest (BQT),1371
+BQW,Balgo (BQW),8725
+BRA,Barreiras (BRA),1375
+BRB,Barreirinhas (BRB),8821
+BRC,San Carlos de Bariloche (BRC),1377
+BRD,Brainerd (BRD),1378
+BRE,Bremen (BRE),52
+BRI,Bari (BRI),26
+BRK,Bourke (BRK),1381
+BRL,Burlington (BRL),1382
+BRM,Barquisimeto (BRM),1383
+BRN,Bern (BRN),37
+BRO,Brownsville (BRO),1384
+BRQ,Brno (BRQ),56
+BRR,Barra (BRR),490
+BRS,Bristol (BRS),55
+BRU,Brussels (BRU),57
+BRW,Barrow (BRW),1388
+BSA,Bosaso (BSA),1392
+BSB,Brasília (BSB),1393
+BSC,Bahía Solano (BSC),1394
+BSD,"Baoshan, Yunnan (BSD)",1395
+BSG,Bata (BSG),1398
+BSK,Biskra (BSK),1400
+BSL,Basel Mulhouse Freiburg (BSL),27
+BSO,Basco (BSO),1402
+BSR,Basra (BSR),1405
+BTC,Batticaloa (BTC),1414
+BTH,Batam (BTH),1419
+BTI,Barter Island (BTI),1420
+BTJ,Banda Aceh (BTJ),1421
+BTK,Bratsk (BTK),1422
+BTM,Butte (BTM),1424
+BTR,Baton Rouge (BTR),1429
+BTS,Bratislava (BTS),51
+BTT,Bettles (BTT),1430
+BTU,Bintulu Division (BTU),1431
+BTV,Burlington (BTV),1432
+BTW,Batulicin (BTW),1433
+BUA,Buka Island (BUA),1437
+BUC,Burketown (BUC),1439
+BUD,Budapest (BUD),45
+BUF,Buffalo (BUF),8653
+BUN,Buenaventura (BUN),1449
+BUP,Bathinda (BUP),8435
+BUQ,Bulawayo (BUQ),1452
+BUR,Burbank (BUR),1453
+BUS,Batumi (BUS),1454
+BUT,Jakar (BUT),8214
+BUU,Muara Bungo (BUU),8588
+BUW,Bau-Bau (BUW),1458
+BUZ,Bushehr (BUZ),1461
+BVA,Paris (Beauvais) (BVA),234
+BVB,Boa Vista (BVB),1462
+BVC,Boa Vista (BVC),1463
+BVE,Brive-la-Gaillarde (BVE),496
+BVG,Berlevåg (BVG),413
+BVH,Vilhena (BVH),1465
+BVI,Birdsville (BVI),1466
+BVS,Breves (BVS),8697
+BWA,"Bhairawa, Siddharthanagar (BWA)",1479
+BWE,Braunschweig (BWE),387
+BWI,Baltimore-Washington (BWI),1486
+BWK,Brač (BWK),50
+BWN,Brunei and Muara (BWN),1490
+BWT,Burnie (BWT),1495
+BWW,Cayo Santa María (BWW),8943
+BWX,Banyuwangi (BWX),8264
+BXB,Babo (BXB),1498
+BXG,Bendigo (BXG),1501
+BXR,Bam (BXR),1510
+BXU,Butuan City (BXU),1513
+BYC,Yacuíba (BYC),1519
+BYK,Bouaké (BYK),1525
+BYN,Bayankhongor (BYN),1528
+BYO,Bonito (BYO),7985
+BYR,Læsø (BYR),1531
+BZA,Bonanza (BZA),1537
+BZE,Belize City (BZE),1541
+BZG,Bydgoszcz (BZG),62
+BZL,Barisal (BZL),1544
+BZN,Bozeman (BZN),1545
+BZO,Bolzano (BZO),463
+BZR,Béziers (BZR),407
+BZV,Brazzaville (BZV),1548
+BZX,Enyang (BZX),8576
+CAB,Cabinda (CAB),1552
+CAC,Cascavel (CAC),1553
+CAE,Columbia (CAE),1555
+CAG,Cagliari (Sardinia) (CAG),63
+CAH,Ca Mau (CAH),1557
+CAI,Cairo (CAI),64
+CAJ,Canaima National Park (CAJ),1558
+CAK,Akron (CAK),1559
+CAL,Campbeltown (CAL),1560
+CAN,Guangzhou (CAN),1562
+CAP,Cap-Haïtien (CAP),1564
+CAT,Cascais (CAT),1568
+CAU,Caruaru (CAU),8742
+CAW,Campos dos Goytacazes (CAW),1571
+CAY,Cayenne (CAY),1573
+CAZ,Cobar (CAZ),1574
+CBB,Cochabamba (CBB),1575
+CBG,Cambridge (CBG),1580
+CBH,Béchar (CBH),1581
+CBL,Ciudad Bolívar (CBL),1585
+CBO,Cotabato City (CBO),1588
+CBQ,Calabar (CBQ),1590
+CBR,Canberra (CBR),1591
+CBT,Catumbela (CBT),1593
+CCC,Cayo Coco (CCC),1600
+CCF,Carcassonne (CCF),66
+CCJ,Kozhikode (CCJ),1606
+CCK,Cocos (Keeling) Islands (CCK),1607
+CCP,Concepción (CCP),1612
+CCR,Concord (CCR),1614
+CCS,Caracas (CCS),1615
+CCU,Kolkata (CCU),1617
+CCV,Craig Cove (CCV),1618
+CDB,Cold Bay (CDB),1624
+CDC,Cedar City (CDC),1625
+CDE,Chengde (CDE),8465
+CDG,Paris (CDG),235
+CDP,Cuddapah (CDP),1636
+CDR,Chadron (CDR),1638
+CDT,Castellón de la Plana (CDT),8362
+CDV,Cordova (CDV),1642
+CEB,Cebu (CEB),1646
+CEC,Crescent City (CEC),1647
+CED,Ceduna (CED),1648
+CEE,Cherepovets (CEE),1649
+CEI,Chiang Rai (CEI),1653
+CEK,Chelyabinsk (CEK),1655
+CEL,Canela (CEL),8833
+CEN,Ciudad Obregón (CEN),1658
+CEZ,Cortez (CEZ),1670
+CFB,Cabo Frio (CFB),1671
+CFE,Clermont-Ferrand (CFE),384
+CFG,Cienfuegos (CFG),1674
+CFK,Chlef (CFK),7691
+CFN,Donegal (CFN),85
+CFR,Caen (CFR),371
+CFS,Coffs Harbour (CFS),1679
+CFU,Corfu (Kerkyra) (CFU),76
+CGA,Craig (CGA),1682
+CGB,Cuiabá (CGB),1683
+CGD,Changde (CGD),1685
+CGH,São Paulo (CGH),1689
+CGI,Cape Girardeau (CGI),1690
+CGK,Jakarta (CGK),1692
+CGM,"Camiguin, Mambajao (CGM)",1693
+CGN,Cologne-Bonn (CGN),74
+CGO,Zhengzhou (CGO),1694
+CGP,Chittagong (CGP),1695
+CGQ,Changchun and Jilin City (CGQ),1696
+CGR,Campo Grande (CGR),1697
+CGY,Cagayan de Oro City (CGY),1702
+CHA,Chattanooga (CHA),1704
+CHC,Christchurch (CHC),1706
+CHG,"Chaoyang, Liaoning (CHG)",1709
+CHH,Chachapoyas (CHH),1710
+CHO,Charlottesville (CHO),1717
+CHQ,Chania (Crete) (CHQ),71
+CHS,Charleston (CHS),1720
+CHT,Waitangi (CHT),1721
+CHU,Chuathbaluk (CHU),1722
+CHX,Changuinola (CHX),1724
+CHY,Choiseul Bay (CHY),1725
+CIA,Rome (Ciampino) (CIA),261
+CID,Cedar Rapids (CID),1729
+CIF,Chifeng (CIF),1731
+CIH,Changzhi (CIH),1733
+CIJ,Cobija (CIJ),1734
+CIK,Chalkyitsik (CIK),1735
+CIT,Shymkent (CIT),1744
+CIU,Sault Sainte Marie (CIU),1745
+CIX,Chiclayo (CIX),1747
+CIY,Comiso (CIY),1748
+CIZ,Coari (CIZ),1749
+CJA,Cajamarca (CJA),1750
+CJB,Coimbatore (CJB),1751
+CJC,Calama (CJC),1752
+CJJ,Cheongju & Daejeon (CJJ),1755
+CJL,Chitral (CJL),1756
+CJM,Chumphon Province (CJM),1757
+CJN,Pangandaran (CJN),8921
+CJS,Ciudad Juárez (CJS),1758
+CJU,Jeju City (CJU),1760
+CJZ,Cajazeiras (CJZ),8875
+CKB,Clarksburg (CKB),1762
+CKD,Crooked Creek (CKD),1764
+CKG,Chongqing (CKG),1767
+CKH,Chokurdakh (CKH),1768
+CKS,Parauapebas (Carajás) (CKS),1774
+CKX,Chicken (CKX),1778
+CKY,Conakry (CKY),1779
+CKZ,Canakkale (CKZ),1780
+CLD,"Carlsbad, San Diego (CLD)",1783
+CLE,Cleveland (CLE),1784
+CLJ,Cluj-Napoca (CLJ),348
+CLL,College Station (CLL),1790
+CLO,Cali (CLO),1793
+CLQ,Colima (CLQ),1795
+CLT,Charlotte (CLT),1798
+CLV,Caldas Novas (CLV),1800
+CLY,Calvi (Corsica) (CLY),65
+CMA,Cunnamulla (CMA),1804
+CMB,Colombo (CMB),1805
+CME,Ciudad del Carmen (CME),1808
+CMF,Chambéry (CMF),70
+CMG,Corumbá (CMG),1809
+CMH,Columbus (CMH),1810
+CMI,Champaign-Urbana (CMI),1811
+CMN,Casablanca (CMN),68
+CMW,Camagüey (CMW),1824
+CMX,Houghton (CMX),1825
+CNC,Coconut Island (CNC),1829
+CND,Constanța (CND),75
+CNF,Belo Horizonte (CNF),1831
+CNJ,Cloncurry (CNJ),1835
+CNM,Carlsbad (CNM),1838
+CNN,Kannur (CNN),8656
+CNP,Ittoqqortoormiit (CNP),1841
+CNQ,Corrientes (CNQ),1842
+CNS,Cairns (CNS),1844
+CNX,Chiang Mai (CNX),1849
+CNY,Moab (CNY),1850
+COD,Cody (COD),1855
+COH,Cooch Behar (COH),1859
+COK,Kochi (COK),1862
+COL,Coll Island (COL),1863
+COO,Cotonou (COO),1866
+COR,Córdoba (COR),1869
+COS,Colorado Springs (COS),1870
+COU,Columbia (COU),1872
+CPC,San Martín de los Andes (CPC),1880
+CPD,Coober Pedy (CPD),1881
+CPE,Campeche (CPE),1882
+CPH,Copenhagen (CPH),147
+CPO,Copiapó (CPO),1888
+CPR,Casper (CPR),1891
+CPT,Cape Town (CPT),1893
+CPV,Campina Grande (CPV),1895
+CPX,Culebra (CPX),1896
+CQD,Shahre-Kord (CQD),1898
+CQW,Wulong (CQW),8773
+CRA,Craiova (CRA),1903
+CRD,Comodoro Rivadavia (CRD),1906
+CRI,"Colonel Hill, Crooked Island (CRI)",1911
+CRK,Angeles City (CRK),1913
+CRL,Brussels Charleroi (CRL),58
+CRM,"Catarman, Northern Samar (CRM)",1914
+CRP,Corpus Christi (CRP),1917
+CRV,Crotone (CRV),356
+CRW,Charleston (CRW),1923
+CRZ,Türkmenabat (CRZ),1926
+CSA,Colonsay (CSA),1927
+CSG,Columbus (CSG),1933
+CSK,Cap Skirring (CSK),1937
+CSU,Santa Cruz do Sul (CSU),8781
+CSX,Changsha (CSX),1949
+CSY,Cheboksary (CSY),1950
+CTA,Catania (CTA),69
+CTC,San Fernando del Valle de Catama (CTC),1953
+CTD,Chitré (CTD),8414
+CTG,Cartagena (CTG),1957
+CTL,Charleville (CTL),1961
+CTM,Chetumal (CTM),1962
+CTN,Cooktown (CTN),1963
+CTS,Sapporo (CTS),1968
+CTU,Chengdu (CTU),1970
+CUC,Cúcuta (CUC),1977
+CUE,Cuenca (CUE),1979
+CUF,Cuneo (CUF),374
+CUK,Caye Caulker (CUK),1984
+CUL,Culiacán (CUL),1985
+CUM,Cumaná (CUM),1986
+CUN,Cancún (CUN),1987
+CUQ,Coen (CUQ),1990
+CUR,"Willemstad, Curaçao (CUR)",1991
+CUU,Chihuahua (CUU),1994
+CUZ,Cusco (CUZ),1998
+CVG,Cincinnati (CVG),2003
+CVN,Clovis (CVN),2009
+CVQ,Carnarvon (CVQ),2011
+CVU,"Vila do Corvo, Corvo Island (CVU)",2013
+CWA,Wausau (CWA),2014
+CWB,Curitiba (CWB),2015
+CWJ,Cangyuan (CWJ),8423
+CWL,Cardiff (CWL),67
+CXB,Cox's Bazar (CXB),2025
+CXH,Vancouver (CXH),2028
+CXI,Kiritimati (CXI),2029
+CXJ,Caxias do Sul (CXJ),2030
+CXR,Nha Trang (CXR),2037
+CXY,North Cat Cay (CXY),8743
+CYA,Les Cayes (CYA),2040
+CYB,Cayman Brac (CYB),2041
+CYC,Caye Chapel (CYC),2042
+CYF,Chefornak (CYF),2043
+CYI,Chiayi (CYI),2045
+CYO,Cayo Largo del Sur (CYO),2048
+CYP,Calbayog City (CYP),2049
+CYS,Cheyenne (CYS),2051
+CYX,Chersky (CYX),2055
+CYZ,"Cauayan, Isabela (CYZ)",2056
+CZA,Chichen Itza (CZA),8929
+CZH,Corozal Town (CZH),2062
+CZL,Constantine (CZL),2065
+CZM,Cozumel (CZM),2066
+CZN,Chisana (CZN),2067
+CZR,Chara (CZR),8938
+CZS,Cruzeiro do Sul (CZS),2070
+CZU,"Corozal, Sucre (CZU)",2072
+CZX,Changzhou (CZX),2074
+DAB,Daytona Beach (DAB),2077
+DAC,Dhaka (DAC),2078
+DAD,Da Nang (DAD),2079
+DAL,Dallas (DAL),2086
+DAM,Damascus (DAM),396
+DAR,Dar es Salaam (DAR),2089
+DAT,Datong (DAT),2090
+DAU,Daru (DAU),2091
+DAV,"David, Chiriquí (DAV)",2092
+DAY,Dayton (DAY),2094
+DBB,El Alamein (DBB),8710
+DBC,Baicheng (DBC),8446
+DBO,Dubbo (DBO),2100
+DBR,Darbhanga (DBR),8745
+DBV,Dubrovnik (DBV),89
+DCA,Washington (DCA),2106
+DCM,Castres / Mazamet (DCM),2110
+DCY,Daocheng (DCY),8095
+DDC,Dodge City (DDC),2114
+DDD,Dhaalu (DDD),8452
+DDG,Dandong (DDG),2115
+DDR,Shigatse (DDR),8857
+DEB,Debrecen (DEB),2122
+DEC,Decatur (DEC),2123
+DED,Dehradun (DED),2124
+DEE,Yuzhno-Kurilsk (DEE),7693
+DEF,Dezful (DEF),2125
+DEL,New Delhi (DEL),2128
+DEM,Dembidolo (DEM),2129
+DEN,Denver (DEN),2130
+DEX,Yahukimo (DEX),8403
+DFW,Dallas-Fort Worth (DFW),2138
+DGA,Dangriga (DGA),2139
+DGE,Mudgee (DGE),2141
+DGH,Deoghar (DGH),8823
+DGO,Durango (DGO),2144
+DGT,Dumaguete (DGT),2147
+DHG,Dalnegorsk (DHG),8521
+DHI,Dhangadhi (DHI),2154
+DHM,"Kangra, Dharamshala (DHM)",2156
+DHN,Dothan (DHN),2157
+DHX,Kediri (DHX),8939
+DIB,Dibrugarh (DIB),2160
+DIE,Antsiranana (DIE),2162
+DIG,Diqing (DIG),2163
+DIK,Dickinson (DIK),2165
+DIL,Dili (DIL),2166
+DIN,Dien Bien Phu (DIN),2168
+DIQ,Divinópolis (DIQ),8359
+DIR,Dire Dawa (DIR),2172
+DIU,Diu (DIU),2174
+DIY,Diyarbakır (DIY),2176
+DJB,Jambi City (DJB),2178
+DJE,Djerba (DJE),82
+DJG,Djanet (DJG),2179
+DJJ,Jayapura (DJJ),2180
+DJN,Delta Junction (DJN),2182
+DKA,Katsina (DKA),7694
+DKR,Dakar (DKR),2188
+DKS,Dikson (DKS),2189
+DLA,Douala (DLA),2191
+DLC,Dalian (DLC),2193
+DLE,Dole (DLE),2195
+DLG,Dillingham (DLG),2197
+DLH,Duluth (DLH),2198
+DLI,Da Lat (DLI),2199
+DLM,Dalaman (DLM),79
+DLU,Dali (DLU),2205
+DLY,Dillons Bay (DLY),2207
+DLZ,Dalanzadgad (DLZ),2208
+DMB,Taraz (DMB),2210
+DMD,Doomadgee (DMD),2211
+DME,Moscow Domodedovo (DME),202
+DMK,Bangkok (Don Muang) (DMK),2212
+DMM,Dammam (DMM),2213
+DMU,Dimapur (DMU),2218
+DND,Dundee (DND),464
+DNH,Dunhuang (DNH),2223
+DNP,Dang (DNP),8924
+DNZ,Denizli (DNZ),2235
+DOB,Dobo (DOB),2237
+DOD,Dodoma (DOD),2239
+DOH,Doha (DOH),2242
+DOL,Deauville (DOL),80
+DOM,Dominica (DOM),2244
+DOP,Dolpa (DOP),2247
+DOY,Dongying (DOY),7695
+DPL,Dipolog City (DPL),2257
+DPO,Devonport (DPO),2258
+DPS,Denpasar (DPS),2259
+DPT,Deputatsky (DPT),8181
+DQA,Daqing (DQA),7696
+DQM,Duqm (DQM),8532
+DRB,Derby (DRB),2263
+DRG,Deering (DRG),2267
+DRJ,Drietabbetje (DRJ),2270
+DRK,Drake Bay (DRK),2271
+DRO,Durango (DRO),2274
+DRP,Bicol (DRP),8860
+DRS,Dresden (DRS),87
+DRV,Dharavandhoo (DRV),8051
+DRW,Darwin (DRW),2278
+DSE,Dessie / Kombolcha (DSE),2281
+DSI,Destin (DSI),2283
+DSM,Des Moines (DSM),2286
+DSN,Ordos City (DSN),2287
+DSS,Dakar (DSS),8515
+DTB,Siborong-Borong (DTB),8382
+DTM,Dortmund (DTM),86
+DTU,Wudalianchi (DTU),8519
+DTW,Detroit (DTW),2296
+DUB,Dublin (DUB),88
+DUD,Dunedin (DUD),2299
+DUE,Dundo (DUE),2300
+DUJ,DuBois (DUJ),2303
+DUR,Durban (DUR),2308
+DUS,Düsseldorf (DUS),91
+DUT,Unalaska (DUT),2309
+DVL,Devils Lake (DVL),2311
+DVO,Davao City (DVO),2313
+DWC,Dubai (Jebel Ali) (DWC),2319
+DWD,Dawadmi (DWD),2320
+DWO,Sri Jayawardenepura Kotte (DWO),8605
+DXB,Dubai (DXB),2324
+DXJ,Xiangxi Biancheng (DXJ),8884
+DYG,Zhangjiajie (DYG),2328
+DYR,Anadyr (DYR),2331
+DYU,Dushanbe (DYU),2333
+DZA,Dzaoudzi (DZA),2335
+DZH,Dazhou (DZH),8811
+DZN,Jezkazgan (DZN),2337
+EAL,Elenak (EAL),2343
+EAM,Najran (Nejran) (EAM),2344
+EAR,Kearney (EAR),2346
+EAS,San Sebastián (EAS),271
+EAT,Wenatchee (EAT),2347
+EAU,Eau Claire (EAU),2348
+EBB,Entebbe (EBB),2349
+EBH,El Bayadh (EBH),8073
+EBJ,Esbjerg (EBJ),96
+EBL,Erbil (EBL),406
+EBO,Ebon Atoll (EBO),2354
+ECN,"Ercan, Northern Cyprus (ECN)",7697
+ECP,Panama City (ECP),2361
+EDA,Edna Bay (EDA),2364
+EDI,Edinburgh (EDI),92
+EDL,Eldoret (EDL),2372
+EDN,Yedinka (EDN),8523
+EDO,Edremit / Balıkesir (EDO),2374
+EDR,Pormpuraaw (EDR),2376
+EEA,Correia (EEA),8798
+EEK,Eek (EEK),2379
+EFL,Kefalonia (EFL),358
+EGC,"Bergerac, Dordogne (EGC)",33
+EGE,Vail / Eagle (EGE),2386
+EGM,Seghe (EGM),2389
+EGO,Belgorod (EGO),2391
+EGS,Egilsstaðir (EGS),349
+EHU,Ezhou (EHU),8825
+EIN,Eindhoven (EIN),93
+EIS,Tortola (EIS),2402
+EJA,Barrancabermeja (EJA),2404
+EJT,Enejit (EJT),2406
+EKO,Elko (EKO),2413
+EKS,Shakhtyorsk (EKS),7698
+ELC,Elcho Island (ELC),2418
+ELD,El Dorado (ELD),2419
+ELG,El Golea (ELG),2422
+ELH,North Eleuthera (ELH),2423
+ELI,Elim (ELI),2424
+ELM,Elmira / Corning (ELM),2428
+ELP,El Paso (ELP),2431
+ELQ,Gassim (ELQ),2432
+ELS,East London (ELS),2434
+ELU,El Oued (ELU),2436
+ELV,Elfin Cove (ELV),2437
+EMA,Nottingham (EMA),218
+EMD,Emerald (EMD),2441
+EMK,Emmonak (EMK),2445
+EMN,Néma (EMN),2447
+ENA,Kenai (ENA),2454
+ENE,Ende (ENE),2458
+ENH,Enshi City (ENH),2460
+ENI,El Nido (ENI),2461
+ENU,Enugu (ENU),2469
+ENY,Yan'an (ENY),2472
+EOH,Medellín (EOH),2473
+EPR,Esperance (EPR),2485
+EQS,Esquel (EQS),2489
+ERC,Erzincan (ERC),2492
+ERF,Erfurt (Weimar) (ERF),95
+ERG,Erbogachen (ERG),8070
+ERH,Er-Rachidia (Errachidia) (ERH),2496
+ERI,Erie (ERI),2497
+ERL,Erenhot (ERL),2498
+ERN,Eirunepé (ERN),2500
+ERS,Windhoek (ERS),2502
+ERZ,Erzurum (ERZ),2506
+ESB,Ankara (ESB),15
+ESC,Escanaba (ESC),2508
+ESD,Eastsound (ESD),2509
+ESL,Elista (ESL),2516
+ESM,Esmeraldas (ESM),2517
+ESU,Essaouira (ESU),391
+ETL,Svetlaya (ETL),8524
+ETM,Eilat (ETM),8570
+ETR,Santa Rosa (ETR),8066
+ETZ,Metz / Nancy (ETZ),344
+EUA,Eua (EUA),8466
+EUG,Eugene (EUG),2535
+EUN,Laayoune (EUN),2537
+EUQ,"San Jose, Mindoro (EUQ)",2538
+EUX,Sint Eustatius (EUX),2539
+EVE,Harstad-Narvik (EVE),121
+EVG,Sveg (EVG),2542
+EVN,Yerevan (EVN),405
+EVV,Evansville (EVV),2545
+EWB,New Bedford (EWB),2548
+EWE,Ewer (EWE),8789
+EWN,New Bern (EWN),2552
+EWR,New York (EWR),2554
+EXT,Exeter (EXT),97
+EYA,Zeya (EYA),8906
+EYK,Beloyarsky (EYK),7699
+EYP,Yopal (EYP),2558
+EYW,Key West (EYW),2560
+EZE,Buenos Aires (EZE),2561
+EZS,Elazığ (EZS),2562
+EZV,Beryozovo (EZV),7700
+FAC,Faaite (FAC),2565
+FAE,Sørvágur (FAE),2566
+FAI,Fairbanks (FAI),2570
+FAO,Faro (FAO),98
+FAR,Fargo (FAR),2576
+FAT,Fresno (FAT),2578
+FAV,Fakarava (FAV),2579
+FAY,Fayetteville (FAY),2580
+FBM,Lubumbashi (FBM),2586
+FCA,Kalispell (FCA),2591
+FCO,Rome (Fiumicino) (FCO),262
+FDE,Førde (FDE),415
+FDF,Fort-de-France (FDF),2600
+FDH,Friedrichshafen (FDH),103
+FEC,Feira de Santana (FEC),8327
+FEG,Fergana (FEG),2609
+FEN,Fernando de Noronha (FEN),2613
+FEZ,Fes (FEZ),99
+FGU,Fangatau (FGU),8644
+FHZ,Fakahina (FHZ),8647
+FIE,Fair Isle (FIE),2645
+FIH,Kinshasa (FIH),2650
+FIZ,Fitzroy Crossing (FIZ),2659
+FJR,Fujairah (FJR),2661
+FKB,Karlsruhe / Baden-Baden (FKB),137
+FKI,Kisangani (FKI),2663
+FKQ,Fakfak (FKQ),2671
+FKS,Fukushima (Sukagawa) (FKS),2673
+FLA,Florencia (FLA),2677
+FLG,Flagstaff (FLG),2689
+FLL,Fort Lauderdale (FLL),2694
+FLN,Florianópolis (FLN),2697
+FLO,Florence (FLO),2699
+FLR,Florence (FLR),100
+FLS,Flinders Island (FLS),2704
+FLW,Flores Island (FLW),2711
+FLZ,Sibolga (FLZ),8286
+FMA,Formosa (FMA),2717
+FMI,Kalemie (FMI),2727
+FMM,Memmingen (FMM),357
+FMO,Münster / Osnabrück (FMO),206
+FMT,Faresmathoda (FMT),8856
+FNA,Freetown (FNA),2732
+FNC,Funchal (Madeira) (FNC),105
+FND,Funadhoo (FND),8723
+FNI,Nîmes (FNI),216
+FNJ,Pyongyang (FNJ),2737
+FNT,Flint (FNT),2740
+FOA,Foula (FOA),8360
+FOC,Fuzhou (FOC),2743
+FOD,Fort Dodge (FOD),2744
+FOG,Foggia (FOG),2746
+FON,"La Fortuna, San Carlos (FON)",2749
+FOR,Fortaleza (FOR),2751
+FPO,Freeport (FPO),2756
+FRA,Frankfurt (FRA),101
+FRD,Friday Harbor (FRD),2761
+FRE,Fera Island (FRE),2762
+FRL,Bologna Forlì (FRL),47
+FRO,Florø (FRO),2771
+FRS,Flores (FRS),2774
+FRU,Bishkek (FRU),2776
+FRW,Francistown (FRW),2777
+FSC,Figari (FSC),361
+FSD,Sioux Falls (FSD),2780
+FSM,Fort Smith (FSM),2784
+FSP,Saint-Pierre (FSP),2785
+FSZ,Shizuoka (FSZ),2789
+FTA,Futuna Island (FTA),2790
+FTE,El Calafate (FTE),2791
+FTU,Tôlanaro (FTU),2794
+FUE,Fuerteventura (FUE),104
+FUG,Fuyang (FUG),2799
+FUJ,"Gotō, Fukue Island (FUJ)",2800
+FUK,Fukuoka (FUK),2801
+FUN,Funafuti (FUN),2803
+FUO,Foshan (FUO),7701
+FUT,Futuna Island (FUT),2804
+FVM,Fuvahmulah (FVM),2805
+FWA,Fort Wayne (FWA),2806
+FYJ,"Fuyuan, Heilongjiang (FYJ)",8283
+FYN,Fuyun County (FYN),8418
+FYU,Fort Yukon (FYU),2816
+FZL,Fuzuli (FZL),8942
+GAJ,Yamagata (GAJ),2828
+GAL,Galena (GAL),2829
+GAM,Gambell (GAM),2830
+GAN,Gan Island (GAN),2831
+GAQ,Gao (GAQ),2834
+GAU,Guwahati (GAU),2838
+GAX,Gamba (GAX),2841
+GAY,Gaya (GAY),2842
+GBE,Gaborone (GBE),2848
+GBI,Kalaburagi (GBI),8698
+GBT,Gorgan (GBT),7702
+GCC,Gillette (GCC),2862
+GCH,Gachsaran (GCH),8134
+GCI,Guernsey (GCI),118
+GCK,Garden City (GCK),2864
+GCM,Grand Cayman (GCM),2865
+GCN,Grand Canyon (GCN),2866
+GCW,Grand Canyon West (GCW),7703
+GDB,Gondia (GDB),8817
+GDE,Gode (GDE),2871
+GDL,Guadalajara (GDL),2876
+GDN,Gdańsk (GDN),107
+GDQ,Gondar (GDQ),2880
+GDT,Grand Turk Island (GDT),2881
+GDV,Glendive (GDV),2882
+GDX,Magadan (GDX),2884
+GEA,Nouméa (GEA),2886
+GEG,Spokane (GEG),2892
+GEL,Santo Ângelo (GEL),2895
+GEM,Mongomo (Mongomeyen) (GEM),8574
+GEO,Georgetown (GEO),2897
+GES,General Santos City (GES),2899
+GET,Geraldton (GET),2900
+GEV,Gällivare (GEV),2901
+GFF,Griffith (GFF),2907
+GFK,Grand Forks (GFK),2908
+GGG,Longview (GGG),2917
+GGJ,Guaíra (GGJ),8706
+GGM,Kakamega (GGM),8281
+GGR,Garowe (GGR),8357
+GGT,Great Exuma (GGT),2922
+GGW,Glasgow (GGW),2923
+GHA,Ghardaïa (GHA),2924
+GHB,Governor's Harbour (GHB),2925
+GHC,Great Harbour Cay (GHC),2926
+GHS,Melak (GHS),8585
+GHV,Brașov (GHV),8876
+GIB,Gibraltar (GIB),110
+GIC,Boigu Island (GIC),2935
+GIG,Rio de Janeiro (GIG),2938
+GIL,Gilgit (GIL),2940
+GIS,Gisborne (GIS),2943
+GIT,Geita (GIT),8758
+GIU,Sigiriya (GIU),8245
+GIZ,Jizan (GIZ),8023
+GJA,Guanaja (GJA),2947
+GJL,Jijel (GJL),2948
+GJT,Grand Junction (GJT),2951
+GKA,Goroka (GKA),2952
+GKK,Huvadhu Atoll (GKK),8057
+GLA,Glasgow (GLA),111
+GLF,Golfito (GLF),2963
+GLH,Greenville (GLH),2965
+GLK,Galkayo (GLK),2967
+GLN,Guelmim (GLN),2970
+GLT,Gladstone (GLT),2974
+GLU,Gelephu (GLU),8407
+GLV,Golovin (GLV),2975
+GMA,Gemena (GMA),2980
+GMB,Gambela (GMB),2981
+GME,Gomel (GME),416
+GMO,Gombe (GMO),7704
+GMP,Seoul (GMP),2988
+GMQ,Golog (GMQ),8425
+GMR,Totegegie (Gambier Islands) (GMR),2989
+GMZ,San Sebastián (La Gomera) (GMZ),2994
+GNB,Grenoble / Lyon (GNB),117
+GND,Grenada (GND),2996
+GNJ,Ganja (GNJ),8797
+GNM,Guanambi (GNM),3000
+GNS,Gunungsitoli (GNS),3003
+GNU,Goodnews Bay (GNU),3005
+GNV,Gainesville (GNV),3006
+GNY,Şanlıurfa (GNY),3007
+GOA,Genoa (GOA),109
+GOB,Goba (GOB),3009
+GOH,Nuuk (GOH),3014
+GOI,Goa (GOI),3015
+GOJ,Nizhny Novgorod (GOJ),455
+GOM,Goma (GOM),3018
+GOP,Gorakhpur (GOP),3021
+GOQ,Golmud (GOQ),3022
+GOT,Gothenburg (GOT),113
+GOU,Garoua (GOU),3025
+GOV,Gove (GOV),3026
+GOX,Mopa (GOX),8842
+GOY,Tura (GOY),8931
+GPA,Araxos (Patras) (GPA),19
+GPB,Guarapuava (GPB),8684
+GPI,Guapi (GPI),3030
+GPS,Baltra Island (GPS),3034
+GPT,Gulfport / Biloxi (GPT),3035
+GRB,Green Bay (GRB),3039
+GRI,Grand Island (GRI),3046
+GRJ,George (GRJ),3047
+GRK,Fort Hood / Killeen (GRK),3048
+GRO,Barcelona (Girona) (GRO),24
+GRQ,Groningen (GRQ),350
+GRR,Grand Rapids (GRR),3053
+GRU,São Paulo (GRU),3056
+GRV,Grozny (GRV),3057
+GRW,Graciosa Island (GRW),3058
+GRX,Granada (GRX),115
+GRY,Grímsey (GRY),3059
+GRZ,Graz (GRZ),116
+GSM,Qeshm (GSM),3065
+GSO,Greensboro (GSO),3067
+GSP,Greenville / Spartanburg (GSP),3068
+GST,Gustavus (GST),3072
+GSV,Saratov (GSV),8663
+GTE,Groote Eylandt (GTE),3078
+GTF,Great Falls (GTF),3079
+GTO,Gorontalo (GTO),3084
+GTR,Columbus (GTR),3085
+GTS,The Granites (GTS),8590
+GTZ,Grumeti (GTZ),8572
+GUA,Guatemala City (GUA),3090
+GUC,Gunnison (GUC),3092
+GUM,Guam (GUM),3101
+GUP,Gallup (GUP),3103
+GUR,Alotau (GUR),3105
+GUW,Atyrau (GUW),3110
+GVA,Geneva (GVA),108
+GVN,Sovetskaya Gavan (GVN),8787
+GVR,Governador Valadares (GVR),3118
+GWD,Gwadar (GWD),3122
+GWL,Gwalior (GWL),3124
+GWT,Westerland / Sylt (GWT),331
+GXF,Sayun (GXF),3131
+GXH,Xiahe (GXH),8220
+GYA,Guayaramerín (GYA),3136
+GYD,Baku (GYD),1011
+GYE,Guayaquil (GYE),3137
+GYN,Goiânia (GYN),3141
+GYO,Blangkejeren (GYO),8946
+GYS,Guangyuan (GYS),3144
+GYU,Guyuan (GYU),8289
+GZG,Ganzi (GZG),8670
+GZO,Gizo / Nusatupe (GZO),3149
+GZP,Gazipaşa (GZP),499
+GZT,Gaziantep (GZT),3150
+HAA,Hasvik (HAA),418
+HAC,Hachijōjima (HAC),3154
+HAD,Halmstad (HAD),3157
+HAH,Moroni (HAH),3163
+HAJ,Hanover (HAJ),120
+HAK,Haikou (HAK),3166
+HAM,Hamburg (HAM),119
+HAN,Hanoi (HAN),3170
+HAQ,Hanimaadhoo (HAQ),3179
+HAS,Ha'il (HAS),3182
+HAU,Haugesund (HAU),122
+HAV,Havana (HAV),3185
+HAY,Aguachica (HAY),8765
+HBA,Hobart (HBA),3196
+HBE,Alexandria (HBE),456
+HBQ,Qilian (HBQ),8551
+HBX,Hubli / Dharwad (HBX),3213
+HCJ,Hechi (HCJ),8285
+HCQ,Halls Creek (HCQ),3224
+HCR,Holy Cross (HCR),3227
+HCZ,Chenzhou (HCZ),8790
+HDF,Heringsdorf (HDF),453
+HDG,Handan (HDG),3234
+HDK,Kulhudhuffushi (HDK),8680
+HDN,Hayden (HDN),3240
+HDO,Ghaziabad (HDO),8930
+HDS,Hoedspruit (HDS),3244
+HDY,Hat Yai (HDY),3246
+HEA,Herat (HEA),3250
+HEH,Heho (HEH),3258
+HEK,Heihe (HEK),3260
+HEL,Helsinki (HEL),123
+HER,Heraklion (Crete) (HER),124
+HET,Hohhot (HET),3264
+HFE,Hefei (HFE),3270
+HFN,Höfn (HFN),3272
+HFS,Hagfors (HFS),3273
+HFT,Hammerfest (HFT),417
+HGA,Hargeisa (HGA),3274
+HGD,Hughenden (HGD),3275
+HGH,Hangzhou (HGH),3276
+HGI,Itanagar (HGI),8854
+HGN,Mae Hong Son (HGN),3278
+HGO,Korhogo (HGO),3279
+HGR,Hagerstown (HGR),3280
+HGU,Mount Hagen (HGU),3283
+HHH,Hilton Head Island (HHH),3287
+HHN,Frankfurt Hahn (HHN),102
+HHQ,Hua Hin (HHQ),3289
+HHR,Hawthorne (HHR),3290
+HHZ,Hikueru (HHZ),8640
+HIA,Huai'an (HIA),3292
+HIB,Hibbing (HIB),3293
+HID,Horn Island (HID),3294
+HIJ,Hiroshima (HIJ),3300
+HIN,Sacheon / Jinju (HIN),3303
+HIR,Honiara (HIR),3306
+HJJ,Huaihua (HJJ),3311
+HJR,Khajuraho (HJR),3312
+HKB,Healy Lake (HKB),3315
+HKD,Hakodate (HKD),3316
+HKG,Hong Kong (HKG),3317
+HKK,Hokitika (HKK),3318
+HKN,Hoskins (HKN),3319
+HKR,Maasai Mara (Mara North) (HKR),8608
+HKT,Phuket (HKT),3321
+HLA,Johannesburg (HLA),3324
+HLD,Hailar (HLD),3327
+HLE,Jamestown (HLE),8487
+HLH,Ulanhot (HLH),3330
+HLN,Helena (HLN),3335
+HLP,Jakarta (HLP),3337
+HLZ,Hamilton (HLZ),3345
+HMA,Khanty-Mansiysk (HMA),3346
+HMB,Sohag (HMB),7707
+HME,Hassi Messaoud (HME),3347
+HMI,Hami City (HMI),3349
+HMO,Hermosillo (HMO),3352
+HMS,Muara Teweh (HMS),8802
+HMV,Hemavan (HMV),3355
+HNA,Hanamaki (HNA),3356
+HND,Tokyo (HND),3359
+HNH,Hoonah (HNH),3362
+HNL,Honolulu (HNL),3365
+HNM,Hana (HNM),3366
+HNS,Haines (HNS),3368
+HNY,Hengyang (HNY),3369
+HOB,Hobbs (HOB),3371
+HOF,Hofuf (HOF),3375
+HOG,Holguín (HOG),3376
+HOI,Hao Island (HOI),3378
+HOM,Homer (HOM),3380
+HOR,"Horta, Azores (HOR)",3384
+HOT,Hot Springs (HOT),3386
+HOU,Houston (HOU),3387
+HOV,Orsta / Volda (HOV),431
+HOX,Homalin (HOX),3388
+HPA,Lifuka (HPA),3390
+HPB,Hooper Bay (HPB),3391
+HPH,Hai Phong (Haiphong) (HPH),3393
+HPN,White Plains (HPN),3394
+HQL,Tashkurgan (HQL),8868
+HQQ,Anyang (HQQ),8902
+HRB,Harbin (HRB),3401
+HRE,Harare (HRE),3403
+HRF,Hoarafushi (HRF),8768
+HRG,Hurghada (HRG),126
+HRL,Harlingen (HRL),3405
+HRO,Harrison (HRO),3408
+HSA,Turkistan (HSA),8750
+HSC,Shaoguan (HSC),3415
+HSG,Saga (HSG),3417
+HSL,Huslia (HSL),3421
+HSN,Zhoushan (HSN),3423
+HSR,Hirasar Rajkot (HSR),8887
+HSV,Huntsville (HSV),3427
+HTA,Chita (HTA),3429
+HTG,Khatanga (HTG),3432
+HTI,Hamilton Island (HTI),3434
+HTN,Hotan (HTN),3436
+HTS,Huntington (HTS),3439
+HTT,Mangnai (HTT),8411
+HTY,Hatay (HTY),3443
+HUE,Humera (HUE),3449
+HUH,Huahine (HUH),3452
+HUI,Hue (HUI),3453
+HUN,Hualien (HUN),3458
+HUO,Holingol (HUO),8447
+HUS,Hughes (HUS),3460
+HUU,Huánuco (HUU),3462
+HUX,Huatulco (HUX),3464
+HUY,Humberside (HUY),125
+HUZ,Huizhou (HUZ),3465
+HVB,Hervey Bay (HVB),3467
+HVD,Khovd (HVD),3468
+HVG,Honningsvåg (HVG),419
+HVN,New Haven (HVN),3472
+HVR,Havre (HVR),3473
+HWN,Hwange National Park (HWN),3479
+HXD,Delingha (HXD),8290
+HYA,Hyannis (HYA),3482
+HYD,Hyderabad (HYD),3484
+HYG,Hydaburg (HYG),3486
+HYN,Taizhou (HYN),3488
+HYS,Hays (HYS),3490
+HZA,Heze (HZA),8774
+HZG,Hanzhong (HZG),3493
+IAA,Igarka (IAA),3499
+IAD,Washington (IAD),3501
+IAG,Niagara Falls (IAG),3502
+IAH,Houston (IAH),3503
+IAL,Salinas (IAL),8900
+IAM,In Amenas (IAM),3505
+IAN,Kiana (IAN),3506
+IAO,Del Carmen (IAO),7708
+IAR,Yaroslavl (IAR),3508
+IAS,Iasi (IAS),401
+IBA,Ibadan (IBA),3510
+IBE,Ibagué (IBE),3511
+IBR,Ibaraki (IBR),7709
+IBZ,Ibiza (IBZ),127
+ICI,Cicia (ICI),3517
+ICN,Seoul (ICN),3520
+ICT,Wichita (ICT),3523
+IDA,Idaho Falls (IDA),3525
+IDR,Indore (IDR),3534
+IEG,Zielona Góra (IEG),3536
+IFJ,Isafjordur (IFJ),3542
+IFN,Isfahan (IFN),3544
+IFU,Ifuru (IFU),8353
+IGA,Inagua (IGA),3547
+IGD,Iğdır (IGD),8032
+IGR,Puerto Iguazú (IGR),3556
+IGT,Nazran (IGT),3558
+IGU,Foz do Iguaçu (IGU),3559
+IHR,Iranshahr (IHR),8491
+IIL,Ilam (IIL),7710
+IJK,Izhevsk (IJK),3567
+IKA,Tehran (IKA),3570
+IKE,Ikerasak (IKE),3572
+IKI,Iki (IKI),3573
+IKS,Tiksi (IKS),3578
+IKT,Irkutsk (IKT),3579
+IKU,Tamchy (IKU),8454
+ILD,Lleida (ILD),478
+ILG,Wilmington (ILG),3585
+ILI,Iliamna (ILI),3587
+ILM,Wilmington (ILM),3590
+ILO,Iloilo City (ILO),3592
+ILP,Ile des Pins (ILP),3593
+ILQ,Ilo (ILQ),3594
+ILR,Ilorin (ILR),3595
+ILY,Islay (ILY),494
+IMF,Imphal (IMF),3602
+IMK,Simikot (IMK),3605
+IMP,Imperatriz (IMP),3610
+IMT,Iron Mountain (IMT),3611
+INB,Independence (INB),3614
+INC,Yinchuan (INC),3615
+IND,Indianapolis (IND),3616
+INF,In Guezzam (INF),8566
+INH,Inhambane (INH),3620
+INI,Niš (INI),477
+INL,International Falls (INL),3623
+INN,Innsbruck (INN),128
+INU,Yaren (INU),3630
+INV,Inverness (INV),129
+INZ,In Salah (INZ),3634
+IOA,Ioannina (IOA),3635
+IOM,Isle of Man (IOM),130
+IOQ,Isortoq (IOQ),8141
+IOS,Ilhéus (IOS),3640
+IPA,Ipota (IPA),3643
+IPC,Easter Island (IPC),3644
+IPH,Ipoh (IPH),3647
+IPI,Ipiales (IPI),3648
+IPL,Imperial / El Centro (IPL),3649
+IPN,Ipatinga (IPN),3650
+IPT,Williamsport (IPT),3651
+IQM,Qiemo (IQM),3654
+IQN,Qingyang (IQN),3655
+IQQ,Iquique (IQQ),3656
+IQT,Iquitos (IQT),3657
+IRA,Kirakira (IRA),3658
+IRG,Lockhart River (IRG),3663
+IRI,Iringa (IRI),8334
+IRJ,La Rioja (IRJ),3665
+IRK,Kirksville (IRK),3666
+IRM,Igrim (IRM),7711
+IRZ,Santa Isabel do Rio Negro (IRZ),7989
+ISA,Mount Isa (ISA),3671
+ISB,Islamabad (ISB),3672
+ISC,St Mary's (ISC),3673
+ISE,Isparta (ISE),3675
+ISG,Ishigaki / Okinawa (ISG),3676
+ISK,Nasik (ISK),3680
+ISP,"Islip, Long Island (ISP)",3684
+IST,Istanbul (IST),131
+ISU,Sulaymaniyah (ISU),3687
+ITB,Itaituba (ITB),3690
+ITH,Ithaca (ITH),3692
+ITM,Osaka (ITM),3696
+ITO,Hilo (ITO),3698
+ITU,Iturup Island (ITU),8307
+IUE,Alofi (IUE),3703
+IUI,Innaarsuit (IUI),8143
+IVC,Invercargill (IVC),3708
+IVL,Ivalo (IVL),498
+IVR,Inverell (IVR),3711
+IWA,Ivanovo (IWA),3713
+IWD,Ironwood (IWD),3714
+IWJ,Masuda (IWJ),3715
+IWK,Iwakuni (IWK),8053
+IXA,Agartala (IXA),3718
+IXB,Bagdogra (IXB),3719
+IXC,Chandigarh (IXC),3720
+IXD,Allahabad (IXD),3721
+IXE,Mangalore (IXE),3722
+IXG,Belgaum (IXG),3723
+IXI,"Lakhimpur, Assam (IXI)",3725
+IXJ,Jammu (IXJ),3726
+IXL,Leh (IXL),3728
+IXM,Madurai (IXM),3729
+IXR,Ranchi (IXR),3733
+IXS,Silchar (IXS),3734
+IXT,Pasighat (IXT),3735
+IXU,Aurangabad (IXU),3736
+IXW,Jamshedpur (IXW),3738
+IXY,Kandla (IXY),3739
+IXZ,Port Blair (IXZ),3740
+IZA,Juiz de Fora (IZA),3742
+IZO,Izumo (IZO),3743
+JAC,Jackson (JAC),3747
+JAE,Jaén (JAE),8385
+JAF,Jaffna (JAF),3749
+JAI,Jaipur (JAI),3752
+JAN,Jackson (JAN),3756
+JAU,Jauja (JAU),3760
+JAV,Ilulissat (JAV),3761
+JAW,Araripina (JAW),8846
+JAX,Jacksonville (JAX),3762
+JBQ,Santo Domingo (JBQ),8279
+JBR,Jonesboro (JBR),3765
+JCH,Qasigiannguit (JCH),3770
+JCK,Julia Creek (JCK),3772
+JCL,Ceske Budejovice (JCL),8928
+JCS,Crateús (JCS),8831
+JCU,Ceuta (JCU),3777
+JDH,Jodhpur (JDH),3782
+JDO,Juazeiro do Norte (JDO),3785
+JDZ,Jingdezhen (JDZ),3790
+JED,Jeddah (JED),3791
+JEG,Aasiaat (JEG),3794
+JEK,Lower Zambezi National Park (JEK),8555
+JER,Jersey (JER),135
+JFK,New York City (JFK),3799
+JFR,Paamiut (JFR),3802
+JGA,Jamnagar (JGA),3803
+JGB,Jagdalpur (JGB),3804
+JGD,Jiagedaqi (JGD),8054
+JGN,Jiayuguan and Jiuquan (JGN),3808
+JGO,Qeqertarsuaq (JGO),3809
+JGS,Ji'an (JGS),3813
+JHB,Johor Bahru (JHB),3815
+JHG,Jinghong (JHG),3818
+JHM,Kapalua (JHM),3819
+JHS,Sisimiut (JHS),3821
+JIA,Juína (JIA),8464
+JIB,Djibouti (JIB),3824
+JIC,Jinchang (JIC),7712
+JIJ,Jijiga (JIJ),3826
+JIK,Ikria Island (Icaria) (JIK),3827
+JIM,Jimma (JIM),3829
+JIN,Jinja (JIN),3830
+JIO,Tiakur (JIO),8498
+JIQ,Qianjiang (JIQ),3833
+JIU,Jiujiang (JIU),3835
+JJD,"Cruz, Ceará (Jijoca de Jericoaco (JJD)",8469
+JJG,Jaguaruna (JJG),8351
+JJN,Quanzhou (JJN),3839
+JJU,Qaqortoq (JJU),3840
+JKH,Chios (JKH),72
+JKL,Kalymnos (JKL),3842
+JKR,Janakpur (JKR),3843
+JLN,Joplin (JLN),3849
+JLR,Jabalpur (JLR),3852
+JMA,Manhuaçu (JMA),8878
+JMJ,Lancang (JMJ),8451
+JMK,Mykonos (JMK),208
+JMS,Jamestown (JMS),3861
+JMU,Jiamusi (JMU),3862
+JNB,Johannesburg (JNB),3865
+JNG,Jining (JNG),3866
+JNN,Nanortalik (JNN),3868
+JNS,Narsaq (JNS),3870
+JNU,Juneau (JNU),3871
+JNX,Naxos (JNX),3872
+JNZ,Jinzhou (JNZ),3873
+JOE,Joensuu (JOE),461
+JOG,Yogyakarta (JOG),3874
+JOI,Joinville (JOI),3876
+JOS,Jos (JOS),3883
+JPA,"João Pessoa, Paraíba (JPA)",3885
+JPE,Paragominas (JPE),8793
+JPO,Patos (JPO),8780
+JPR,Ji-Paraná (JPR),3888
+JQA,Qaarsut and Uummannaq (JQA),3890
+JRG,Jharsuguda (JRG),8584
+JRH,Jorhat (JRH),3898
+JRO,Kilimanjaro (JRO),3901
+JSA,Jaisalmer (JSA),3903
+JSB,São Benedito (JSB),8828
+JSH,Sitia (JSH),3906
+JSI,Skiathos (JSI),362
+JSJ,Jiansanjiang (JSJ),8471
+JSO,Sobral (JSO),8830
+JSR,Jessore (JSR),3913
+JST,Johnstown (JST),3915
+JSU,Maniitsoq (JSU),3916
+JSY,Syros Island (JSY),3917
+JTC,Bauru (JTC),7713
+JTR,Santorini (JTR),274
+JTY,Astypalaia Island (JTY),3921
+JUB,Juba (JUB),3923
+JUH,Chizhou (JUH),8177
+JUJ,San Salvador de Jujuy (JUJ),3925
+JUK,Ukkusissat (JUK),8144
+JUL,Juliaca (JUL),3926
+JUV,Upernavik (JUV),3932
+JUZ,Quzhou (JUZ),3933
+JWN,Zanjan (JWN),8460
+JXA,Jixi (JXA),3940
+JYR,Jiroft (JYR),8492
+JYV,Jyväskylä (JYV),3943
+JZH,Jiuzhaigou (JZH),3944
+KAA,Kasama (KAA),3945
+KAB,Kariba (KAB),3946
+KAD,Kaduna (KAD),3948
+KAE,Kake (KAE),3949
+KAJ,Kajaani (KAJ),3953
+KAL,Kaltag (KAL),3955
+KAN,Kano (KAN),3957
+KAO,Kuusamo (KAO),470
+KAW,Kawthaung (KAW),3964
+KAZ,Kau (KAZ),3967
+KBC,Birch Creek (KBC),3969
+KBH,Kahama (KBH),8510
+KBL,Kabul (KBL),3977
+KBR,Kota Bharu (KBR),3982
+KBT,Maloelap Atoll (KBT),3984
+KBU,Kotabaru (KBU),3985
+KBV,Krabi (KBV),3986
+KCA,Kuqa (KCA),3991
+KCC,Coffman Cove (KCC),3993
+KCH,Kuching (KCH),3998
+KCK,Kirensk (KCK),8072
+KCM,Kahramanmaraş (KCM),4003
+KCT,Koggala (KCT),4010
+KCY,Krasnoyarsk Cheremshanka (KCY),8926
+KCZ,Kochi (KCZ),4012
+KDH,Kandahar (KDH),4020
+KDI,Kendari (KDI),4021
+KDL,Kärdla (KDL),4024
+KDM,Kaadedhdhoo Island (KDM),4025
+KDO,Kadhdhoo Island (KDO),4027
+KDU,Skardu (KDU),4033
+KDV,Kadavu Island (KDV),4034
+KDW,Kandy (KDW),8269
+KDY,Khandyga (KDY),8221
+KEA,Kerki (KEA),8804
+KEF,Reykjavik (Keflavik) (KEF),254
+KEI,Kepi (KEI),8925
+KEJ,Kemerovo (KEJ),4043
+KEM,Kemi / Tornio (KEM),4046
+KEO,Odienné (KEO),4048
+KEP,Nepalgunj (KEP),4049
+KER,Kerman (KER),4051
+KET,Kengtung (KET),4053
+KEU,Maasai Mara (Keekorok) (KEU),8579
+KEW,Keewaywin (KEW),4055
+KFA,Kiffa (KFA),4059
+KFS,Kastamonu (KFS),4063
+KGA,Kananga (KGA),4064
+KGC,Kingscote (KGC),4066
+KGD,Kaliningrad (KGD),136
+KGE,Kaghau Island (KGE),4067
+KGF,Karaganda (KGF),4068
+KGI,Kalgoorlie (KGI),4071
+KGL,Kigali (KGL),4074
+KGP,Kogalym (KGP),4077
+KGQ,Kangersuatsiaq (KGQ),8146
+KGS,Kos (KGS),148
+KGT,Kangding (KGT),7714
+KGX,Grayling (KGX),4081
+KHD,Khorramabad (KHD),4086
+KHG,Kashgar (KHG),4088
+KHH,Kaohsiung (KHH),4089
+KHI,Karachi (KHI),4090
+KHM,Khamti (KHM),4094
+KHN,Nanchang (KHN),4095
+KHQ,Kullorsuaq (KHQ),8147
+KHS,Khasab (KHS),4098
+KHT,Khost (KHT),4099
+KHV,Khabarovsk (KHV),4101
+KHX,Kihihi (KHX),8375
+KHY,Khoy (KHY),7715
+KHZ,Kauehi (KHZ),4103
+KID,Kristianstad (KID),4107
+KIE,Kieta (KIE),4108
+KIF,Kingfisher Lake (KIF),4109
+KIH,Kish Island (KIH),4111
+KIJ,Niigata (KIJ),4113
+KIK,Kirkuk (KIK),8851
+KIM,"Kimberley, Northern Cape (KIM)",4116
+KIN,Kingston (KIN),4117
+KIO,Kili Island (KIO),4118
+KIR,Kerry (KIR),140
+KIS,Kisumu (KIS),4121
+KIT,Kythira (KIT),469
+KIX,Osaka (KIX),4124
+KJA,Krasnoyarsk (KJA),4127
+KJB,Kurnool (KJB),8766
+KJH,Huangping (KJH),8222
+KJI,Burqin (KJI),4128
+KJT,Majalengka (KJT),8545
+KKA,Koyuk (KKA),4132
+KKB,Kitoi Bay (KKB),4133
+KKC,Khon Kaen (KKC),4134
+KKE,Kerikeri (KKE),4136
+KKH,Kongiganak (KKH),4138
+KKI,Akiachak (KKI),4139
+KKJ,Kitakyushu (KKJ),4140
+KKN,Kirkenes (KKN),142
+KKQ,Krasnosel'Kup (KKQ),7716
+KKR,Kaukura (KKR),4146
+KKS,Kashan (KKS),8604
+KKX,Kikaiga Shima (KKX),4150
+KLF,Kaluga (KLF),4158
+KLG,Kalskag (KLG),4159
+KLH,Kolhapur (KLH),4160
+KLN,Larsen Bay (KLN),4165
+KLO,Kalibo (KLO),4166
+KLR,Kalmar (KLR),420
+KLU,Klagenfurt (KLU),145
+KLW,Klawock (KLW),4170
+KLX,Kalamata (KLX),363
+KME,Cyangugu (KME),4177
+KMG,Kunming (KMG),4179
+KMI,Miyazaki (KMI),4181
+KMJ,Kumamoto (KMJ),4182
+KMQ,Komatsu (KMQ),4189
+KMS,Kumasi (KMS),4191
+KMV,Kalemyo (KMV),4194
+KMY,Moser Bay (KMY),4197
+KND,Kindu (KND),4201
+KNG,Kaimana (KNG),4204
+KNH,Kinmen (KNH),4205
+KNK,Kakhonak (KNK),4208
+KNO,Medan (KNO),8219
+KNQ,Kone (KNQ),4214
+KNS,King Island (KNS),4216
+KNU,Kanpur (KNU),4218
+KNX,Kununurra (KNX),4220
+KNY,Kodinsk (KNY),8897
+KOA,Kailua-Kona (KOA),4222
+KOC,Koumac (KOC),4224
+KOE,Kupang (KOE),4226
+KOI,Kirkwall (KOI),488
+KOJ,Kagoshima (KOJ),4230
+KOK,Kokkola (KOK),4231
+KOO,Kongolo (KOO),8210
+KOP,Nakhon Phanom (KOP),4236
+KOS,Sihanoukville (KOS),4239
+KOT,Kotlik (KOT),4240
+KOV,Kokshetau (KOV),4242
+KOW,Ganzhou (KOW),4243
+KOY,Olga Bay (KOY),4245
+KOZ,Ouzinkie (KOZ),4246
+KPB,Point Baker (KPB),4248
+KPN,Kipnuk (KPN),4257
+KPO,Pohang (KPO),4258
+KPR,Port Williams (KPR),4260
+KPW,Keperveyem (KPW),8199
+KPY,Port Bailey (KPY),4264
+KQH,Kishangarh / Ajmer (KQH),8557
+KQT,Qurghonteppa (KQT),7717
+KRF,Kramfors / Sollefteå (KRF),4273
+KRK,Krakow (KRK),150
+KRL,Korla (KRL),4278
+KRN,Kiruna (KRN),143
+KRO,Kurgan (KRO),4280
+KRS,Kristiansand (KRS),151
+KRT,Khartoum (KRT),4282
+KRW,Türkmenbaşy (KRW),4285
+KRY,Karamay (KRY),4287
+KSA,Kosrae (KSA),4289
+KSC,Košice (KSC),149
+KSE,Kasese (KSE),4292
+KSF,Kassel (KSF),4293
+KSH,Kermanshah (KSH),4295
+KSJ,Kasos Island (KSJ),4297
+KSM,St. Mary's (KSM),4300
+KSN,Kostanay (KSN),4301
+KSQ,Karshi (KSQ),4304
+KSU,Kristiansund (KSU),421
+KSY,Kars (KSY),4310
+KSZ,Kotlas (KSZ),4311
+KTA,Karratha / Dampier (KTA),4312
+KTB,Thorne Bay (KTB),4313
+KTC,Katiola (KTC),4314
+KTG,Ketapang (KTG),4318
+KTJ,Maasai Mara (Kichwa Tembo) (KTJ),8609
+KTL,Kitale (KTL),4322
+KTM,Kathmandu (KTM),4323
+KTN,Ketchikan (KTN),4324
+KTR,Katherine (KTR),8374
+KTS,Brevig Mission (KTS),4329
+KTT,Kittilä (KTT),144
+KTW,Katowice (KTW),138
+KUA,Kuantan (KUA),4333
+KUC,Kuria (KUC),8615
+KUF,Samara (KUF),457
+KUG,"Kubin, Moa Island (KUG)",4337
+KUH,Kushiro (KUH),4338
+KUK,Kasigluk (KUK),4341
+KUL,Kuala Lumpur (KUL),4342
+KUM,Yakushima (KUM),4343
+KUN,Kaunas (KUN),139
+KUO,Kuopio (KUO),152
+KUS,Kulusuk (KUS),4347
+KUT,Kutaisi (KUT),4348
+KUU,Kullu (KUU),4349
+KUV,Gunsan (KUV),4350
+KUZ,Kuummiit (KUZ),8148
+KVA,Kavala (KVA),346
+KVG,Kavieng (KVG),4355
+KVK,Kirovsk / Apatity (KVK),4356
+KVL,Kivalina (KVL),4357
+KVO,Kraljevo (KVO),8695
+KVR,Kavalerovo (KVR),7991
+KVX,Kirov (KVX),4359
+KWA,Kwajalein Island (KWA),4360
+KWE,Guiyang (KWE),4362
+KWI,Kuwait City (KWI),4366
+KWJ,Gwangju (KWJ),4367
+KWK,Kwigillingok (KWK),4368
+KWL,Guilin (KWL),4369
+KWM,Kowanyama (KWM),4370
+KWN,Quinhagak (KWN),4371
+KWP,West Point (KWP),4373
+KWT,Kwethluk (KWT),4376
+KWZ,Kolwezi (KWZ),4380
+KXA,Kasaan (KXA),8726
+KXB,Kolaka (KXB),8751
+KXF,Koro Island (KXF),4383
+KXO,Kisoro (KXO),8888
+KXU,Katiu (KXU),8270
+KYA,Konya (KYA),382
+KYK,Karluk (KYK),4390
+KYP,Kyaukpyu (KYP),4392
+KYS,Kayes (KYS),4393
+KYU,Koyukuk (KYU),4395
+KYZ,Kyzyl (KYZ),4397
+KZB,Zachar Bay (KZB),4398
+KZN,Kazan (KZN),454
+KZO,Kyzylorda (KZO),4405
+KZR,Kütahya (KZR),8034
+KZS,Megisti (KZS),4406
+LAD,Luanda (LAD),4410
+LAE,Lae (LAE),4411
+LAF,Lafayette (LAF),4412
+LAH,Labuha (LAH),8422
+LAK,Aklavik (LAK),4417
+LAL,Lakeland (LAL),4418
+LAN,Lansing (LAN),4420
+LAO,Laoag (LAO),4421
+LAP,La Paz (LAP),4422
+LAR,Laramie (LAR),4424
+LAS,Las Vegas (LAS),4425
+LAU,Lamu (LAU),4426
+LAW,Lawton (LAW),4428
+LAX,Los Angeles (LAX),4429
+LBA,Leeds / Bradford (LBA),160
+LBB,Lubbock (LBB),4432
+LBC,Hamburg (Lübeck) (LBC),178
+LBD,Khujand (LBD),4433
+LBE,Latrobe (LBE),4434
+LBF,North Platte (LBF),4435
+LBJ,Labuan Bajo (LBJ),4439
+LBL,Liberal (LBL),4441
+LBP,Long Banga (LBP),4445
+LBR,Lábrea (LBR),4447
+LBS,Labasa (LBS),4448
+LBU,Labuan (LBU),4450
+LBV,Libreville (LBV),4451
+LCA,Larnaca (LCA),158
+LCE,La Ceiba (LCE),4459
+LCG,A Coruña (LCG),153
+LCH,Lake Charles (LCH),4461
+LCJ,Lodz (LCJ),170
+LCK,Columbus (LCK),4463
+LCX,Longyan (LCX),4473
+LCY,London City (LCY),171
+LDB,Londrina (LDB),4475
+LDE,Lourdes / Tarbes (LDE),177
+LDH,Lord Howe Island (LDH),4478
+LDS,Yichun (Heilongjiang) (LDS),7718
+LDU,Lahad Datu (LDU),4486
+LDY,Derry (LDY),73
+LDZ,Londolozi (LDZ),8365
+LEA,Exmouth (LEA),4491
+LEB,Lebanon (LEB),4492
+LEC,Lençóis (LEC),4493
+LED,Saint Petersburg (LED),284
+LEI,Almería (LEI),10
+LEJ,Leipzig (LEJ),161
+LEN,León (LEN),383
+LEQ,Land's End (LEQ),4503
+LET,"Leticia, Amazonas (LET)",4506
+LEU,La Seu d'Urgell (LEU),4507
+LEX,Lexington (LEX),4510
+LFQ,Linfen (LFQ),8377
+LFR,La Fria (LFR),4518
+LFT,Lafayette (LFT),4519
+LFW,Lomé (LFW),4520
+LGA,New York City (LGA),4521
+LGB,Long Beach (LGB),4522
+LGG,Liege (LGG),180
+LGI,"Deadman's Cay, Long Island (LGI)",4528
+LGK,Langkawi (LGK),4529
+LGL,Long Lellang (LGL),4530
+LGW,London Gatwick (LGW),172
+LGZ,Shannan (LGZ),8858
+LHE,Lahore (LHE),4544
+LHG,Lightning Ridge (LHG),4545
+LHN,Linhares (LHN),8893
+LHR,London Heathrow (LHR),173
+LHW,Lanzhou (LHW),8024
+LIF,Lifou Island (LIF),4558
+LIG,Limoges (LIG),165
+LIH,"Lihue, Kauai (LIH)",4559
+LIK,Likiep Atoll (LIK),4561
+LIL,Lille (LIL),258
+LIM,Lima (LIM),4562
+LIN,Milan (Linate) (LIN),197
+LIO,Puerto Limón (LIO),4563
+LIR,Liberia (LIR),4566
+LIS,Lisbon (LIS),167
+LIT,Little Rock (LIT),4567
+LIX,Likoma Island (LIX),8629
+LJG,Lijiang (LJG),4575
+LJU,Ljubljana (LJU),169
+LKA,Larantuka (LKA),4577
+LKB,Lakeba Island (LKB),4578
+LKE,Seattle (LKE),4581
+LKH,Long Akah (LKH),7720
+LKI,Sinabang (LKI),8891
+LKL,Lakselv (LKL),423
+LKN,Leknes (LKN),424
+LKO,Lucknow (LKO),4584
+LKY,Lake Manyara (LKY),4590
+LLA,Luleå (LLA),181
+LLB,Libo County (LLB),4592
+LLF,Yongzhou (LLF),4594
+LLI,Lalibela (LLI),4597
+LLJ,Lubuklinggau (LLJ),8591
+LLK,Lankaran (LLK),7721
+LLM,Long Lama (LLM),8714
+LLO,Palopo (LLO),8427
+LLV,Lüliang (LLV),8256
+LLW,Lilongwe (LLW),4605
+LMA,Lake Minchumina (LMA),4608
+LMC,La Macarena (LMC),4610
+LML,Lae Atoll (LML),4616
+LMM,Los Mochis (LMM),4617
+LMN,Limbang (LMN),4618
+LMP,Lampedusa (LMP),157
+LMU,Anambas (LMU),8549
+LMV,Madivaru (LMV),8810
+LNB,Lamen Bay (LNB),4628
+LNE,Lonorore (LNE),4631
+LNJ,Lincang (LNJ),4636
+LNK,Lincoln (LNK),4637
+LNL,Longnan (LNL),8517
+LNO,Leonora (LNO),4640
+LNS,Lancaster (LNS),4644
+LNU,Malinau (LNU),8701
+LNV,Lihir Island (LNV),4645
+LNY,Lanai City (LNY),4647
+LNZ,Linz (LNZ),166
+LOD,Longana (LOD),4651
+LOE,Loei (LOE),4652
+LOH,Loja (LOH),4654
+LOK,Lodwar (LOK),4656
+LOO,Laghouat (LOO),4660
+LOP,"Praya, Lombok (LOP)",4661
+LOS,Lagos (LOS),4664
+LPA,Gran Canaria (Las Palmas) (LPA),159
+LPB,La Paz (LPB),4672
+LPF,Liupanshui (LPF),8305
+LPI,Linköping (LPI),408
+LPK,Lipetsk (LPK),4679
+LPL,Liverpool (LPL),168
+LPM,Lamap (LPM),4680
+LPP,Lappeenranta (LPP),476
+LPQ,Luang Prabang (LPQ),4682
+LPT,Lampang (LPT),4685
+LPX,Liepāja (LPX),164
+LQM,Puerto Leguizamo (LQM),4689
+LRD,Laredo (LRD),4694
+LRE,Longreach (LRE),4695
+LRH,La Rochelle (LRH),155
+LRM,La Romana (LRM),4701
+LRR,Lar (LRR),4703
+LRS,Leros (LRS),4704
+LRT,Lorient (LRT),176
+LRU,Las Cruces (LRU),4705
+LRV,Los Roques archipelago (LRV),4706
+LSC,La Serena (LSC),4709
+LSE,La Crosse (LSE),4710
+LSH,Lashio (LSH),4712
+LSI,Shetland Islands (LSI),489
+LSP,Las Piedras (LSP),4719
+LSQ,Los Angeles (LSQ),8747
+LST,Launceston (LST),4723
+LSW,Lhokseumawe (LSW),4726
+LTI,Altai (LTI),4735
+LTM,Lethem (LTM),4738
+LTN,London Luton (LTN),174
+LTO,Loreto (LTO),4739
+LUD,Lüderitz (LUD),4750
+LUM,Mang City (LUM),4758
+LUN,Lusaka (LUN),4759
+LUO,Luena (LUO),4760
+LUP,Kalaupapa (LUP),4761
+LUQ,San Luis (LUQ),4762
+LUR,Cape Lisburne (LUR),4763
+LUV,Langgur (LUV),4767
+LUW,Luwuk (LUW),4768
+LUX,Luxembourg City (LUX),182
+LUZ,Lublin (LUZ),8033
+LVI,Livingstone (LVI),4773
+LVO,Laverton (LVO),4777
+LWB,Lewisburg (LWB),4781
+LWE,Lewoleba (LWE),8511
+LWK,Lerwick (LWK),4786
+LWS,Lewiston (LWS),4791
+LWY,Lawas (LWY),4794
+LXA,Lhasa (LXA),4795
+LXG,Luang Namtha (LXG),4796
+LXR,Luxor (LXR),183
+LXS,Limnos (LXS),4799
+LYA,Luoyang (LYA),4802
+LYB,Little Cayman (LYB),4803
+LYC,Lycksele (LYC),4804
+LYG,Lianyungang (LYG),4806
+LYH,Lynchburg (LYH),4807
+LYI,Linyi (LYI),4808
+LYP,Faisalabad (LYP),4813
+LYR,Longyearbyen (LYR),385
+LYS,Lyon (LYS),184
+LZG,Langzhong (LZG),8911
+LZH,Liuzhou (LZH),4820
+LZN,"Nangan, Lienchiang (LZN)",4823
+LZO,Luzhou (LZO),4824
+LZY,Nyingchi (LZY),4826
+MAA,Chennai (MAA),4827
+MAB,"Marabá, Pará (MAB)",4828
+MAD,Madrid (MAD),186
+MAF,Midland (MAF),4831
+MAG,Madang (MAG),4832
+MAH,Menorca (Mahon) (MAH),187
+MAJ,Majuro (MAJ),4834
+MAM,Matamoros (MAM),4837
+MAN,Manchester (MAN),191
+MAO,Manaus (MAO),4838
+MAQ,Mae Sot (MAQ),4840
+MAR,Maracaibo (MAR),4841
+MAS,Manus Island (MAS),4842
+MAU,Maupiti (MAU),4844
+MAV,Taroa Island (MAV),4845
+MAZ,Mayagüez (MAZ),4849
+MBA,Mombasa (MBA),4850
+MBE,Monbetsu (MBE),4854
+MBI,Mbeya (MBI),4858
+MBJ,Montego Bay (MBJ),4859
+MBL,Manistee (MBL),4861
+MBQ,Mbarara (MBQ),4865
+MBS,Saginaw (MBS),4867
+MBT,Masbate City (MBT),4868
+MBZ,Maués (MBZ),8688
+MCE,Merced (MCE),4878
+MCI,Kansas City (MCI),4882
+MCK,McCook (MCK),4884
+MCM,Monaco (MCM),4886
+MCN,Macon (MCN),4887
+MCO,Orlando (MCO),4888
+MCP,Macapá (MCP),4889
+MCT,Muscat (MCT),4893
+MCV,McArthur River Mine (MCV),4895
+MCW,Mason City (MCW),4896
+MCX,Makhachkala (MCX),4897
+MCY,Sunshine Coast (MCY),4898
+MCZ,Maceió (MCZ),4899
+MDC,Manado (MDC),4902
+MDE,Medellín (MDE),4904
+MDG,Mudanjiang (MDG),4906
+MDI,Makurdi (MDI),4908
+MDK,Mbandaka (MDK),4910
+MDL,Mandalay (MDL),4911
+MDQ,Mar del Plata (MDQ),4916
+MDR,Maasai Mara (MDR),8543
+MDT,Harrisburg (MDT),4918
+MDW,Chicago (MDW),4921
+MDZ,Mendoza (MDZ),4924
+MEB,Melbourne (MEB),4926
+MEC,Manta (MEC),4927
+MED,Medina (MED),4928
+MEE,Mare (MEE),4929
+MEH,Mehamn (MEH),425
+MEI,Meridian (MEI),4932
+MEL,Melbourne (MEL),4934
+MEM,Memphis (MEM),4935
+MEQ,Meulaboh (MEQ),4939
+MEU,Almeirim (MEU),4943
+MEX,Mexico City (MEX),4946
+MFA,Mafia Island (MFA),8335
+MFE,McAllen (MFE),4953
+MFK,Matsu Islands (MFK),7722
+MFM,Macau (MFM),4959
+MFR,Medford (MFR),4963
+MFU,Mfuwe (MFU),4965
+MGA,Managua (MGA),4970
+MGB,Mount Gambier (MGB),4971
+MGF,Maringá (MGF),4975
+MGH,Margate (MGH),4977
+MGM,Montgomery (MGM),4981
+MGQ,Mogadishu (MGQ),4984
+MGT,Milingimbi Island (MGT),4987
+MGW,Morgantown (MGW),4989
+MGZ,Myeik (MGZ),4992
+MHC,Castro (MHC),8063
+MHD,Mashhad (MHD),4994
+MHH,Marsh Harbour (MHH),4997
+MHK,Manhattan (MHK),5000
+MHQ,Mariehamn (MHQ),5006
+MHT,Manchester (MHT),5008
+MIA,Miami (MIA),8652
+MID,Mérida (MID),5017
+MIG,Mianyang (MIG),5020
+MII,Marília (MII),5022
+MIJ,Mili Atoll (MIJ),5023
+MIM,Merimbula (MIM),5026
+MIR,Monastir (MIR),200
+MIS,Misima Island (MIS),5031
+MIU,Maiduguri (MIU),5033
+MJB,Mejit Island (MJB),5038
+MJC,Man (MJC),5039
+MJE,Majkin (MJE),5041
+MJF,Mosjøen (MJF),428
+MJI,Tripoli (MJI),5043
+MJK,Monkey Mia (MJK),5045
+MJM,Mbuji Mayi (MJM),5047
+MJN,Mahajanga (MJN),5048
+MJT,Mytilene (Lesbos) (MJT),163
+MJU,Mamuju Regency (MJU),5052
+MJZ,Mirny (MJZ),5055
+MKE,Milwaukee (MKE),5060
+MKG,Muskegon (MKG),5061
+MKK,Hoolehua / Kaunakakai (MKK),5064
+MKL,Jackson (MKL),5065
+MKM,Mukah (MKM),5066
+MKP,Makemo (MKP),5069
+MKQ,Merauke (MKQ),5070
+MKR,Meekatharra (MKR),5071
+MKW,Manokwari (MKW),5076
+MKY,Mackay (MKY),5078
+MLA,Malta (MLA),190
+MLB,Melbourne (MLB),5080
+MLE,Malé (MLE),5083
+MLG,Malang (MLG),5085
+MLI,Moline (MLI),5087
+MLL,Marshall (MLL),5089
+MLM,Morelia (MLM),5090
+MLN,Melilla (MLN),5091
+MLO,Milos (MLO),5092
+MLU,Monroe (MLU),5097
+MLX,Malatya (MLX),5100
+MMB,Memanbetsu (MMB),5103
+MME,Durham (Tees Valley) (MME),90
+MMG,Mount Magnet (MMG),5107
+MMH,Mammoth Lakes (MMH),5108
+MMJ,Matsumoto (MMJ),5110
+MMK,Murmansk (MMK),429
+MMO,Maio (MMO),5113
+MMX,Malmö (MMX),189
+MMY,Miyakojima (MMY),5120
+MNA,Melangguane (MNA),5122
+MNC,Nacala (MNC),5124
+MNG,Maningrida (MNG),5127
+MNI,Montserrat (MNI),5129
+MNK,Maiana (MNK),8623
+MNL,Manila (MNL),5132
+MNS,Mansa (MNS),5138
+MNX,Manicoré (MNX),8844
+MOB,Mobile (MOB),5146
+MOC,Montes Claros (MOC),5147
+MOF,Maumere (MOF),5150
+MOH,Morowali (MOH),8814
+MOL,Molde (MOL),427
+MOQ,Morondava (MOQ),7723
+MOT,Minot (MOT),5161
+MOU,Mountain Village (MOU),5162
+MOV,Moranbah (MOV),5163
+MOZ,Moorea (MOZ),5167
+MPA,Katima Mulilo (MPA),5168
+MPC,Muko-Muko (MPC),8569
+MPH,Caticlan (MPH),5174
+MPL,Montpellier (MPL),201
+MPM,Maputo (MPM),5178
+MPN,"Mount Pleasant, Falkland Islands (MPN)",5179
+MQF,Magnitogorsk (MQF),5195
+MQJ,Khonuu (MQJ),8223
+MQL,Mildura (MQL),5197
+MQM,Mardin (MQM),5198
+MQN,Mo i Rana (MQN),426
+MQP,Nelspruit (MQP),5199
+MQT,Marquette (MQT),5202
+MQX,Mekele (MQX),5205
+MRA,Misurata (MRA),5207
+MRE,Maasai Mara (Mara Serena) (MRE),5211
+MRI,Anchorage (MRI),5214
+MRS,Marseille (MRS),195
+MRU,Mauritius (MRU),5224
+MRV,Mineralnye Vody (MRV),5225
+MRY,Monterey (MRY),5228
+MRZ,Moree (MRZ),5229
+MSA,Muskrat Dam (MSA),5230
+MSH,Masirah Island (MSH),5235
+MSJ,Misawa (MSJ),5236
+MSL,Muscle Shoals (MSL),5237
+MSN,Madison (MSN),5239
+MSO,Missoula (MSO),5240
+MSP,Minneapolis (MSP),5241
+MSQ,Minsk (MSQ),199
+MSR,Muş (MSR),5242
+MSS,Massena (MSS),5243
+MST,Maastricht Aachen (MST),185
+MSU,Maseru (MSU),5244
+MSY,New Orleans (MSY),5248
+MSZ,Namibe (MSZ),5249
+MTJ,Montrose (MTJ),5258
+MTK,Makin (MTK),8616
+MTM,Metlakatla (MTM),5261
+MTR,Montería (MTR),5266
+MTT,Minatitlán (MTT),5268
+MTV,Mota Lava (MTV),5270
+MTY,Monterrey (MTY),5273
+MUA,Munda (MUA),5275
+MUB,Maun (MUB),5276
+MUC,Munich (MUC),205
+MUE,Kamuela (MUE),5278
+MUH,Mersa Matruh (MUH),194
+MUN,Maturín (MUN),5286
+MUR,Marudi (MUR),5290
+MUX,Multan (MUX),5293
+MVB,Franceville (MVB),5297
+MVD,Montevideo (MVD),5299
+MVF,Mossoro (MVF),5301
+MVP,Mitú (MVP),5309
+MVR,Maroua (MVR),5311
+MVT,Mataiva (MVT),5313
+MVY,Martha's Vineyard (MVY),5318
+MWA,Marion (MWA),5320
+MWF,Maewo (MWF),5325
+MWX,Muan (MWX),7724
+MWZ,Mwanza (MWZ),5338
+MXH,"Moro, Iagifu Ridge Camp (MXH)",5345
+MXL,Mexicali (MXL),5349
+MXP,Milan (Malpensa) (MXP),198
+MXQ,Cairu (MXQ),8809
+MXV,Moron (MXV),5358
+MXX,Mora (MXX),5360
+MXZ,Meizhou (MXZ),5362
+MYA,Moruya (MYA),5363
+MYD,Malindi (MYD),5366
+MYG,Mayaguana (MYG),5369
+MYI,Murray Island (MYI),5370
+MYJ,Matsuyama (MYJ),5371
+MYP,Mary (MYP),5377
+MYQ,Mysore (MYQ),5378
+MYR,Myrtle Beach (MYR),5379
+MYT,Myitkyina (MYT),5381
+MYW,Mtwara (MYW),5384
+MYY,Miri (MYY),5386
+MZA,Mazamari (MZA),8827
+MZG,Magong (MZG),5393
+MZH,Amasya (MZH),5394
+MZK,Marakei (MZK),5397
+MZL,Manizales (MZL),5398
+MZR,Mazar-e-Sharif (MZR),5403
+MZT,Mazatlán (MZT),5405
+MZV,Gunung Mulu National Park (MZV),5407
+MZW,Mechria (MZW),7725
+NAA,Narrabri (NAA),7726
+NAG,Nagpur (NAG),5412
+NAH,Tahuna (NAH),5413
+NAJ,Nakhchivan (NAJ),7727
+NAM,"Namlea, Buru Island (NAM)",8528
+NAN,Nadi (NAN),5417
+NAO,Nanchong (NAO),5418
+NAP,Naples (NAP),211
+NAQ,Qaanaaq (NAQ),8056
+NAS,Nassau (NAS),5419
+NAT,Natal (NAT),5420
+NAU,Napuka (NAU),8645
+NAV,Nevşehir (NAV),5421
+NAW,Narathiwat (NAW),7992
+NBC,Nizhnekamsk (NBC),5424
+NBE,Enfidha (NBE),480
+NBO,Nairobi (NBO),5427
+NBS,Baishan (NBS),5428
+NBX,Nabire (NBX),7728
+NCE,Nice (NCE),214
+NCL,Newcastle (NCL),212
+NCN,Chenega (NCN),5431
+NCU,Nukus (NCU),5432
+NDB,Nouadhibou (NDB),5434
+NDC,Nanded (NDC),5435
+NDG,Qiqihar (NDG),7729
+NDJ,N'Djamena (NDJ),5436
+NDK,Namorik Atoll (NDK),5437
+NDR,Nador (NDR),209
+NDU,Rundu (NDU),5439
+NEI,Terney (NEI),8525
+NEK,Nekemte (NEK),8941
+NER,Neryungri (NER),7730
+NEU,Sam Neua (NEU),8409
+NEV,Nevis (NEV),5447
+NGB,Ningbo (NGB),5453
+NGE,Ngaoundéré (NGE),8197
+NGK,Nogliki (NGK),8058
+NGO,Nagoya (NGO),5454
+NGQ,"Shiquanhe, Ngari (NGQ)",5456
+NGS,Nagasaki (NGS),5457
+NHV,Nuku Hiva (NHV),7731
+NIB,Nikolai (NIB),5465
+NIG,Nikunau (NIG),8620
+NIM,Niamey (NIM),5466
+NIQ,Niaqornat (NIQ),8149
+NIU,Niau (NIU),8293
+NJC,Nizhnevartovsk (NJC),5472
+NJF,Al Najaf (NJF),5473
+NKC,Nouakchott (NKC),5475
+NKG,Nanjing (NKG),5476
+NKI,Naukiti (NKI),7993
+NKM,Nagoya (NKM),5478
+NKT,Sirnak (NKT),8340
+NLA,Ndola (NLA),7732
+NLD,Nuevo Laredo (NLD),5482
+NLF,Darnley (NLF),8455
+NLH,Ninglang (NLH),8371
+NLI,Nikolayevsk-on-Amur (NLI),8546
+NLK,Norfolk Island (NLK),5485
+NLT,Xinyuan (NLT),5486
+NLU,Mexico City Santa Lucia (NLU),8799
+NMA,Namangan (NMA),7733
+NME,Nightmute (NME),5489
+NMF,Maafaru (NMF),8704
+NNB,Santa Ana Island (NNB),7734
+NNG,Nanning (NNG),5491
+NNL,Nondalton (NNL),5493
+NNM,Naryan-Mar (NNM),5494
+NNT,Nan (NNT),7735
+NNY,Nanyang (NNY),5496
+NOB,Nosara (NOB),5497
+NOC,Knock (NOC),146
+NOJ,Noyabrsk (NOJ),5500
+NON,Nonouti (NON),8619
+NOP,Sinop (NOP),7834
+NOS,Nosy Be (NOS),7736
+NOU,Noumea (NOU),5502
+NOV,Huambo (NOV),5503
+NOZ,Novokuznetsk (NOZ),5505
+NPE,Napier / Hastings (NPE),5507
+NPL,New Plymouth (NPL),5509
+NPY,Mpanda (NPY),8716
+NQN,Neuquén (NQN),5513
+NQU,Nuquí (NQU),5514
+NQY,Newquay (NQY),213
+NQZ,Astana (NQZ),8870
+NRA,Narrandera (NRA),7737
+NRE,Buru (NRE),8308
+NRK,Norrköping (NRK),475
+NRN,Düsseldorf (Weeze) (NRN),215
+NRR,Ceiba (NRR),8347
+NRT,Tokyo (NRT),5521
+NSB,Bimini (NSB),7739
+NSH,Noshahr (NSH),7740
+NSI,Yaoundé (NSI),5523
+NSK,Norilsk (NSK),5524
+NSN,Nelson (NSN),5525
+NSQ,Nuussuaq (NSQ),8150
+NSR,São Raimundo Nonato (NSR),8824
+NST,Nakhon Si Thammarat (NST),7741
+NTE,Nantes (NTE),210
+NTG,Nantong (NTG),7742
+NTL,Newcastle (NTL),5530
+NTN,Normanton (NTN),7743
+NTQ,Wajima (NTQ),7744
+NTT,Niuatoputapu (NTT),8453
+NTX,Natuna (NTX),5533
+NUE,Nuremberg (NUE),219
+NUF,Hatton (NUF),8432
+NUI,Nuiqsut (NUI),5536
+NUK,Nukutavake (NUK),8637
+NUL,Nulato (NUL),5537
+NUM,Neom (NUM),8667
+NUP,Nunapitchuk (NUP),5539
+NUS,Norsup (NUS),8093
+NUX,Novy Urengoy (NUX),5543
+NVA,"Neiva, Huila (NVA)",5544
+NVI,Navoi (NVI),8778
+NVT,Navegantes (NVT),5548
+NWA,Mohéli (NWA),8224
+NWI,Norwich (NWI),217
+NYA,Nyagan (NYA),5552
+NYI,Sunyani (NYI),5555
+NYK,Nanyuki (NYK),5556
+NYM,Nadym (NYM),5557
+NYO,Stockholm (Skavsta) (NYO),287
+NYR,Nyurba (NYR),8225
+NYT,Naypyidaw (NYT),5558
+NYU,Bagan (NYU),7746
+NYW,Monywa (NYW),8571
+NZG,Nizhneangarsk (NZG),8937
+NZH,Manzhouli (NZH),7994
+NZL,Zhalantun (NZL),8426
+OAG,Orange (OAG),7747
+OAJ,Jacksonville (OAJ),5563
+OAK,"Oakland, East Bay (OAK)",5564
+OAL,Cacoal (OAL),7748
+OAX,Oaxaca (OAX),5566
+OBN,Oban (OBN),8448
+OBO,Obihiro (OBO),5572
+OBU,Kobuk (OBU),5573
+OBY,Ittoqqortoormiit (OBY),5574
+OCC,Coca (OCC),5576
+OCJ,Ocho Rios (OCJ),5580
+ODB,Córdoba (ODB),5583
+ODN,Long Seridan (ODN),7749
+ODO,Bodaybo (ODO),7750
+ODY,Muang Xay (ODY),7995
+OER,Ornskoldsvik (OER),447
+OGD,Ogden (OGD),5598
+OGG,Kahului (OGG),5599
+OGL,Georgetown (OGL),5600
+OGS,Ogdensburg (OGS),5602
+OGU,Ordu / Giresun (OGU),8355
+OGX,Ouargla (OGX),7752
+OGZ,Vladikavkaz (OGZ),5603
+OHD,Ohrid (OHD),376
+OHE,Mohe (OHE),5604
+OHH,Okha (OHH),5605
+OHO,Okhotsk (OHO),5606
+OHS,Sohar (OHS),8325
+OIA,Ourilândia do Norte (OIA),8933
+OIR,Okushiri (OIR),5609
+OIT,Oita (OIT),5610
+OKA,Okinawa (OKA),5613
+OKC,Oklahoma City (OKC),5615
+OKD,Sapporo (OKD),8315
+OKE,Okinoerabujima (OKE),7754
+OKI,Oki Islands (OKI),7755
+OKJ,Okayama (OKJ),5617
+OKL,Oksibil (OKL),8180
+OKR,Yorke (OKR),8456
+OLA,Ørland (OLA),7756
+OLB,Olbia (Sardinia) (OLB),221
+OLF,Wolf Point (OLF),5624
+OLG,Olare (OLG),8610
+OLH,Old Harbor (OLH),5625
+OLP,Olympic Dam (OLP),7757
+OLX,Maasai Mara (Olkiombo) (OLX),8611
+OLZ,Olyokminsk (OLZ),8226
+OMA,Omaha (OMA),5631
+OMD,Oranjemund (OMD),7996
+OME,Nome (OME),5633
+OMH,Urmieh (OMH),8027
+OMO,Mostar (OMO),5638
+OMR,Oradea (OMR),5639
+OMS,Omsk (OMS),5640
+OND,Ondangwa (OND),7758
+ONG,Mornington Island (ONG),7759
+ONJ,Odate / Noshiro (ONJ),5643
+ONK,Olenyok (ONK),8249
+ONQ,Zonguldak (ONQ),5649
+ONS,Onslow (ONS),8202
+ONT,Ontario (ONT),5650
+OOK,Toksook Bay (OOK),5654
+OOL,Gold Coast (OOL),8672
+OOT,Onotoa (OOT),8621
+OPF,Miami (OPF),5656
+OPO,Porto (OPO),246
+OPP,Salinópolis (OPP),8836
+OPS,"Sinop, Mato Grosso (OPS)",5658
+ORB,Orebro (ORB),5660
+ORD,Chicago (ORD),5662
+ORF,Norfolk (ORF),5664
+ORG,Paramaribo (ORG),5665
+ORH,Worcester (ORH),5666
+ORI,Port Lions (ORI),5667
+ORK,Cork (ORK),77
+ORN,Oran (ORN),497
+ORT,Northway (ORT),5673
+ORU,Oruro (ORU),5674
+ORV,Noorvik (ORV),5675
+ORY,Paris (Orly) (ORY),236
+OSD,Östersund (OSD),225
+OSI,Osijek (OSI),471
+OSJ,Ol Seki (OSJ),8612
+OSL,Oslo (OSL),223
+OSR,Ostrava (OSR),377
+OSS,Osh (OSS),5680
+OST,Ostend (OST),222
+OSW,Orsk (OSW),5683
+OSY,Namsos (OSY),5684
+OTH,North Bend (OTH),5687
+OTI,Morotai (OTI),8309
+OTP,Bucharest (OTP),60
+OTZ,Kotzebue (OTZ),5693
+OUA,Ouagadougou (OUA),5694
+OUD,Oujda (OUD),226
+OUI,Ushant (OUI),8796
+OUL,Oulu (OUL),227
+OUZ,Zouerate (OUZ),5700
+OVB,Novosibirsk (OVB),5701
+OVD,Asturias (OVD),228
+OVS,Sovetsky (OVS),5704
+OWB,Owensboro (OWB),5706
+OXB,Bissau (OXB),5709
+OYE,Oyem (OYE),8408
+OZC,Ozamiz (OZC),5715
+OZG,Zagora (OZG),8280
+OZZ,Ouarzazate (OZZ),354
+PAB,Bilaspur (PAB),5717
+PAC,Panama City (PAC),7763
+PAD,Paderborn (PAD),229
+PAE,Everett (PAE),5718
+PAF,Pakuba (PAF),5719
+PAG,Pagadian (PAG),5720
+PAH,Paducah (PAH),5721
+PAP,Port-au-Prince (PAP),5726
+PAS,Paros (PAS),5729
+PAT,Patna (PAT),5730
+PAV,Paulo Afonso (PAV),8240
+PBC,Puebla (PBC),5732
+PBG,Plattsburgh (PBG),5734
+PBH,Paro (PBH),5735
+PBI,West Palm Beach (PBI),5736
+PBJ,Paama (PBJ),7764
+PBM,Paramaribo (PBM),5737
+PBO,Paraburdoo (PBO),5738
+PBR,Puerto Barrios (PBR),8442
+PBU,Putao (PBU),7765
+PBZ,Plettenberg Bay (PBZ),8260
+PCL,Pucallpa (PCL),5745
+PCN,Picton (PCN),8317
+PCP,Príncipe Island (PCP),7766
+PCQ,Phongsali (PCQ),8410
+PCR,Puerto Carreño (PCR),5747
+PDA,Puerto Inírida (PDA),5749
+PDB,Pedro Bay (PDB),5750
+PDG,Padang (PDG),5752
+PDL,Ponta Delgada (PDL),5754
+PDM,Pedasi (PDM),8262
+PDP,Punta del Este (PDP),5755
+PDS,Piedras Negras (PDS),5756
+PDT,Pendleton (PDT),5757
+PDV,Plovdiv (PDV),450
+PDX,Portland (PDX),5758
+PEC,Pelican (PEC),7767
+PED,Pardubice (PED),5759
+PEE,Perm (PEE),5760
+PEG,Perugia (PEG),240
+PEI,Pereira (PEI),5761
+PEK,Beijing (PEK),5762
+PEM,Puerto Maldonado (PEM),5763
+PEN,Penang (PEN),5764
+PER,Perth (PER),5766
+PES,Petrozavodsk (PES),5767
+PET,Pelotas (PET),8855
+PEU,Puerto Lempira (PEU),7998
+PEV,Pécs (PEV),8927
+PEW,Peshawar (PEW),5769
+PEZ,Penza (PEZ),5771
+PFB,Passo Fundo (PFB),5772
+PFO,Paphos (PFO),230
+PFQ,Parsabad (PFQ),7768
+PGA,Page (PGA),5776
+PGD,Punta Gorda (PGD),5778
+PGF,Perpignan (PGF),239
+PGH,Pantnagar (PGH),8300
+PGK,Pangkal Pinang (PGK),7769
+PGM,Port Graham (PGM),5781
+PGU,Assaluyeh (PGU),7770
+PGV,Greenville (PGV),5785
+PGZ,Ponta Grossa (PGZ),8424
+PHB,Parnaíba (PHB),5787
+PHC,Port Harcourt (PHC),5788
+PHE,Port Hedland (PHE),5790
+PHF,Newport News (PHF),5791
+PHL,Philadelphia (PHL),8651
+PHO,Point Hope (PHO),5796
+PHS,Phitsanulok (PHS),7771
+PHX,Phoenix (PHX),5799
+PIA,Peoria (PIA),5801
+PIB,Hattiesburg / Laurel (PIB),5802
+PIE,Tampa (PIE),5804
+PIH,Pocatello (PIH),5805
+PIK,Glasgow (Prestwick) (PIK),112
+PIN,Parintins (PIN),5808
+PIR,Pierre (PIR),5810
+PIS,Poitiers (PIS),244
+PIT,Pittsburgh (PIT),5811
+PIU,Piura (PIU),5812
+PIX,Pico Island (PIX),5813
+PIZ,Point Lay (PIZ),5814
+PJA,Pajala (PJA),7774
+PJM,Puerto Jimenez (PJM),5818
+PKA,Napaskiak (PKA),5820
+PKB,Parkersburg (PKB),5821
+PKC,Petropavlovsk-Kamchatsky (PKC),5822
+PKE,Parkes (PKE),7775
+PKN,Pangkalan Bun (PKN),7777
+PKP,Puka-Puka (PKP),8639
+PKR,Pokhara (PKR),5827
+PKU,Pekanbaru (PKU),5829
+PKV,Pskov (PKV),5830
+PKX,Beijing Daxing (PKX),8603
+PKY,Palangkaraya (PKY),7999
+PKZ,Pakse (PKZ),7778
+PLJ,Placencia (PLJ),5834
+PLM,Palembang (PLM),5837
+PLN,Pellston (PLN),5838
+PLO,Port Lincoln (PLO),7779
+PLQ,Palanga (PLQ),393
+PLS,Providenciales (PLS),5840
+PLW,Palu (PLW),7780
+PLX,Semey (PLX),5842
+PLZ,Port Elizabeth (PLZ),5844
+PMA,Pemba Island (PMA),8000
+PMC,Puerto Montt (PMC),5846
+PMF,Parma (PMF),237
+PMG,Ponta Porã (PMG),5848
+PMI,Palma de Mallorca (PMI),232
+PMK,Palm Island (PMK),8372
+PMO,Palermo (PMO),231
+PMR,Palmerston North (PMR),5853
+PMV,Porlamar (PMV),5855
+PMW,Palmas (PMW),8001
+PMY,Puerto Madryn (PMY),5856
+PNA,Pamplona (PNA),343
+PND,Punta Gorda (PND),8092
+PNH,Phnom Penh (PNH),5860
+PNI,Pohnpei (PNI),5861
+PNK,Pontianak (PNK),5862
+PNL,Pantelleria (PNL),233
+PNP,Popondetta (PNP),7782
+PNQ,Pune (PNQ),5864
+PNR,Pointe-Noire (PNR),5865
+PNS,Pensacola (PNS),5866
+PNT,Puerto Natales (PNT),5867
+PNZ,Petrolina (PNZ),5871
+POA,Porto Alegre (POA),5872
+POG,Port-Gentil (POG),5878
+POJ,Patos de Minas (POJ),5880
+POL,Pemba (POL),5881
+POM,Port Moresby (POM),5882
+POP,Puerto Plata (POP),5883
+POR,Pori (POR),5884
+POS,Port of Spain (POS),5885
+POZ,Poznań (POZ),247
+PPB,Presidente Prudente (PPB),5892
+PPG,Pago Pago (PPG),5895
+PPK,Petropavl (PPK),5897
+PPL,Phaplu (PPL),5898
+PPN,Popayán (PPN),5900
+PPP,Proserpine (PPP),5902
+PPQ,Paraparaumu Beach (PPQ),5903
+PPS,Puerto Princesa (PPS),5904
+PPT,Tahiti (PPT),5905
+PPV,Port Protection (PPV),5906
+PQC,Phu Quoc (PQC),7784
+PQI,Presque Isle (PQI),5907
+PQQ,Port Macquarie (PQQ),5908
+PQS,Pilot Station (PQS),5909
+PQT,Qeqertaq (PQT),8151
+PRA,Paraná (PRA),5910
+PRC,Prescott (PRC),5912
+PRG,Prague (PRG),248
+PRI,Praslin Island (PRI),5914
+PRM,Portimão (PRM),5915
+PRN,Pristina (PRN),250
+PRS,Parasi (PRS),8547
+PSA,Pisa (PSA),242
+PSC,Pasco (PSC),5925
+PSE,Ponce (PSE),5926
+PSG,Petersburg (PSG),5928
+PSM,Portsmouth (PSM),5931
+PSO,Pasto (PSO),5933
+PSP,Palm Springs (PSP),5934
+PSR,Pescara (PSR),241
+PSS,Posadas (PSS),5936
+PSU,Putussibau (PSU),8188
+PTA,Port Alsworth (PTA),5940
+PTG,"Polokwane, Limpopo (PTG)",7785
+PTO,Pato Branco (PTO),8540
+PTP,Pointe-à-Pitre (PTP),5948
+PTQ,Porto De Moz (PTQ),8693
+PTU,Platinum (PTU),5951
+PTX,Pitalito (PTX),8341
+PTY,Panama City (PTY),5954
+PUB,Pueblo (PUB),5956
+PUF,Pau (Pyrenees) (PUF),238
+PUJ,Punta Cana (PUJ),5960
+PUK,Pukarua (PUK),8641
+PUQ,Punta Arenas (PUQ),5963
+PUS,Busan (PUS),5964
+PUU,Puerto Asís (PUU),5965
+PUW,Pullman (PUW),5966
+PUY,Pula (PUY),251
+PUZ,Puerto Cabezas (PUZ),5967
+PVA,Providencia Island (PVA),5968
+PVC,Provincetown (PVC),5969
+PVD,Providence (PVD),5970
+PVG,Shanghai (PVG),5972
+PVH,Porto Velho (PVH),5973
+PVK,Preveza / Lefkada (PVK),249
+PVR,Puerto Vallarta (PVR),5976
+PVU,Provo (PVU),5978
+PWE,Pevek (PWE),5982
+PWM,Portland (PWM),5984
+PWQ,Pavlodar (PWQ),5985
+PXM,"Puerto Escondido, Oaxaca (PXM)",5988
+PXO,Porto Santo Island (PXO),5989
+PXU,Pleiku (PXU),7787
+PYB,Jeypore (PYB),8866
+PYG,Gangtok (PYG),8582
+PYH,Puerto Ayacucho (PYH),7788
+PYJ,Udachny (PYJ),7789
+PYT,Paracatu (PYT),8850
+PZB,Pietermaritzburg (PZB),7790
+PZI,Panzhihua (PZI),8125
+PZO,Puerto Ordaz and San Felix (PZO),7793
+PZU,Port Sudan (PZU),7794
+PZY,Piestany (PZY),8822
+QBC,Bella Coola (QBC),5992
+QCU,Akunnaaq (QCU),8152
+QFI,Iginniarfik (QFI),8154
+QGP,Garanhuns (QGP),8832
+QGQ,Attu (QGQ),8158
+QIG,Iguatu (QIG),8829
+QJE,Kitsissuarsuit (QJE),8159
+QJI,Ikamiut (QJI),8161
+QNS,Canoas (QNS),8940
+QOW,Owerri (QOW),6017
+QPW,Kangaatsiaq (QPW),8164
+QRO,Querétaro (QRO),6022
+QRW,Warri (QRW),7795
+QRY,Ikerasaarsuk (QRY),8165
+QSF,Setif (QSF),6025
+QSR,Salerno (QSR),6027
+QSZ,Yarkant (Shache) (QSZ),8475
+QUO,Uyo (QUO),7796
+QUV,Aappilattoq (QUV),8167
+QUW,Ammassivik (QUW),8168
+RAB,Rabaul (RAB),6038
+RAE,Arar (RAE),7797
+RAH,Rafha (RAH),7798
+RAI,Praia (RAI),6041
+RAK,Marrakech (RAK),192
+RAO,Ribeirão Preto (RAO),6044
+RAP,Rapid City (RAP),6045
+RAR,Rarotonga Island (RAR),6046
+RAS,Rasht (RAS),7799
+RBA,Rabat (RBA),465
+RBB,Borba (RBB),8845
+RBQ,Rurrenabaque (RBQ),6055
+RBR,Rio Branco (RBR),6056
+RBV,Ramata Island (RBV),7800
+RBY,Ruby (RBY),6058
+RCB,Richards Bay (RCB),7802
+RCH,Riohacha (RCH),6061
+RCM,Richmond (RCM),6063
+RCQ,Reconquista (RCQ),8468
+RCU,Río Cuarto (RCU),8399
+RDD,Redding (RDD),6067
+RDM,Redmond / Bend (RDM),6069
+RDN,Redang (RDN),7803
+RDO,Radom (RDO),8344
+RDP,Durgapur (RDP),8342
+RDU,Raleigh / Durham (RDU),6072
+RDV,Red Devil (RDV),6073
+RDZ,Rodez (RDZ),260
+REA,Reao (REA),8642
+REC,Recife (REC),6074
+REG,Reggio Calabria (REG),252
+REL,Trelew (REL),6077
+REN,Orenburg (REN),6078
+RER,Retalhuleu (RER),6081
+RES,Resistencia (RES),6082
+RET,Røst (RET),6083
+REU,Barcelona Reus (Salou) (REU),25
+REX,Reynosa (REX),6084
+REZ,Resende (REZ),8130
+RFD,Chicago (Rockford) (RFD),6085
+RFP,Raiatea (RFP),7804
+RGA,Río Grande (RGA),6087
+RGI,Rangiroa (RGI),7805
+RGK,Gorno-Altaysk (RGK),8035
+RGL,Río Gallegos (RGL),6088
+RGN,Yangon (RGN),6089
+RHD,Termas de Río Hondo (RHD),8039
+RHI,Rhinelander (RHI),6092
+RHO,Rhodes (RHO),255
+RIA,Santa Maria (RIA),6095
+RIB,Riberalta (RIB),6096
+RIC,Richmond (RIC),6097
+RIH,Rio Hato (RIH),8292
+RIS,Rishiri (RIS),8101
+RIW,Riverton (RIW),6107
+RIX,Riga (RIX),256
+RIY,Al Mukalla (RIY),7806
+RIZ,Rizhao (RIZ),8376
+RJA,Rajahmundry (RJA),7807
+RJB,Rajbiraj (RJB),8552
+RJH,Rajshahi (RJH),6108
+RJK,Rijeka (RJK),257
+RJL,Logroño (RJL),7808
+RKA,Aratika (RKA),8276
+RKD,Rockland (RKD),6110
+RKE,Roskilde (RKE),6111
+RKS,Rock Springs (RKS),6114
+RKT,Ras Al Khaimah (RKT),6115
+RKV,Reykjavik (RKV),6116
+RKZ,Shigatse (RKZ),6118
+RLG,Rostock Laage (RLG),263
+RLK,Bayannur (RLK),7809
+RLO,Santa Rosa de Conlara (RLO),8299
+RMA,Roma (RMA),7810
+RMF,Marsa Alam (RMF),193
+RMI,Rimini (RMI),259
+RMO,Chișinău (RMO),353
+RMQ,Taichung (RMQ),6129
+RMT,Rimatara (RMT),7811
+RMU,Murcia (RMU),8542
+RMZ,Remezov (RMZ),8792
+RNA,Arona (RNA),6131
+RNB,Ronneby (RNB),433
+RNI,Corn Island (RNI),6136
+RNJ,Yoron (RNJ),8002
+RNL,Rennell Island (RNL),7812
+RNN,"Bornholm, Rønne (RNN)",432
+RNO,Reno (RNO),6137
+RNS,Rennes (RNS),253
+ROA,Roanoke (ROA),6141
+ROB,Monrovia (ROB),6142
+ROC,Rochester (ROC),6143
+ROI,Roi Et (ROI),7813
+ROK,Rockhampton (ROK),6145
+RON,Paipa (RON),8835
+ROO,Rondonópolis (ROO),7814
+ROP,Rota Island (ROP),6147
+ROR,Koror (ROR),6148
+ROS,Rosario (ROS),6149
+ROT,Rotorua (ROT),6150
+ROW,Roswell (ROW),6152
+RPR,Raipur (RPR),6156
+RQA,Ruoqiang Loulan (RQA),8577
+RQY,Shimoga (RQY),8877
+RRG,Rodrigues Island (RRG),6158
+RRJ,Rio de Janeiro - Jacarepaguá (RRJ),8709
+RRK,Rourkela (RRK),6159
+RRR,Raroia (RRR),6161
+RRS,Røros (RRS),6162
+RSA,Santa Rosa (RSA),6164
+RSD,Rock Sound (RSD),7815
+RSH,Russian Mission (RSH),6165
+RSI,Red Sea (RSI),8882
+RST,Rochester (RST),6169
+RSU,Yeosu (RSU),7816
+RSW,Fort Myers (RSW),6170
+RTA,Rotuma Island (RTA),7817
+RTB,Roatan (RTB),6171
+RTG,Ruteng (RTG),7818
+RTI,Roti (RTI),8310
+RTM,Rotterdam (RTM),264
+RUA,Arua (RUA),6176
+RUH,Riyadh (RUH),6178
+RUL,Maavaarulu (RUL),8733
+RUN,Saint-Denis (RUN),6181
+RUR,Rurutu (RUR),6183
+RUT,Rutland (RUT),6185
+RVD,Rio Verde (RVD),7819
+RVE,Saravena (RVE),6186
+RVK,Rørvik (RVK),434
+RVN,Rovaniemi (RVN),265
+RVV,"Raivavae, Rairua (RVV)",7820
+RXS,"Roxas, Capiz (RXS)",6193
+RYL,Royal (RYL),8711
+RZE,Rzeszów (RZE),266
+RZH,Preobrazheniye (RZH),8526
+RZR,Ramsar (RZR),8004
+RZV,Rize–Artvin (RZV),8818
+SAB,Saba (SAB),6200
+SAE,Saattut (SAE),8213
+SAF,Santa Fe (SAF),6204
+SAG,Shirdi (SAG),8496
+SAH,Sana'a (SAH),6206
+SAI,Siem Reap (SAI),8885
+SAL,San Salvador (SAL),6210
+SAN,San Diego (SAN),6211
+SAP,San Pedro Sula (SAP),6213
+SAQ,Andros (SAQ),8648
+SAT,San Antonio (SAT),6216
+SAU,Savu (SAU),8922
+SAV,Savannah (SAV),6217
+SAW,Istanbul (Sabiha) (SAW),132
+SBA,Santa Barbara (SBA),6220
+SBD,San Bernardino (SBD),6221
+SBH,Saint Barthélemy (SBH),6223
+SBN,South Bend (SBN),6228
+SBP,San Luis Obispo (SBP),6230
+SBR,Saibai Island (SBR),8457
+SBT,Sabetta (SBT),8624
+SBW,Sibu (SBW),6233
+SBY,Salisbury / Ocean City (SBY),6235
+SBZ,Sibiu (SBZ),400
+SCC,Prudhoe Bay / Deadhorse (SCC),6237
+SCE,State College (SCE),6239
+SCF,Scottsdale (SCF),6240
+SCK,Stockton (SCK),6242
+SCL,Santiago de Chile (SCL),6243
+SCM,Scammon Bay (SCM),6244
+SCN,Saarbrücken (SCN),267
+SCO,Aktau (SCO),6245
+SCQ,Santiago de Compostela (SCQ),273
+SCR,Sälen - Trysil (SCR),8666
+SCT,Socotra (SCT),8087
+SCU,Santiago de Cuba (SCU),6247
+SCV,Suceava (SCV),487
+SCW,Syktyvkar (SCW),6248
+SCY,San Cristóbal Island (Galápagos  (SCY),6250
+SCZ,Santa Cruz Island (SCZ),7822
+SDD,Lubango (SDD),6253
+SDE,Santiago del Estero (SDE),6254
+SDF,Louisville (SDF),6255
+SDJ,Sendai (SDJ),6256
+SDK,Sandakan (SDK),6257
+SDL,Sundsvall (SDL),441
+SDN,Sandane (SDN),435
+SDP,Sand Point (SDP),6259
+SDQ,Santo Domingo (SDQ),6260
+SDR,Santander (SDR),272
+SDU,Rio de Janeiro (SDU),6261
+SDW,Sindhudurg (SDW),8760
+SDY,Sidney (SDY),6264
+SEA,Seattle / Tacoma (SEA),6265
+SEB,Sabha (SEB),7824
+SEK,Srednekolymsk (SEK),8227
+SEN,London (Southend) (SEN),352
+SES,Svetlogorsk (SES),8903
+SET,Serra Talhada (SET),8744
+SEU,Seronera (SEU),8041
+SEZ,Mahé (SEZ),6278
+SFA,Sfax (SFA),6279
+SFB,Orlando (SFB),6280
+SFG,Saint Martin (SFG),7825
+SFJ,Kangerlussuaq (SFJ),6284
+SFL,São Filipe (SFL),6285
+SFN,Santa Fe (SFN),7826
+SFO,San Francisco (SFO),6287
+SFT,Skellefteå (SFT),437
+SGC,Surgut (SGC),6292
+SGD,Sønderborg (SGD),500
+SGF,Springfield / Branson (SGF),6294
+SGG,Sermiligaaq (SGG),8169
+SGN,Ho Chi Minh City (SGN),6297
+SGO,St George (SGO),7828
+SGU,St. George (SGU),6301
+SGX,Songea (SGX),8322
+SGY,Skagway (SGY),6302
+SHA,Shanghai (SHA),6303
+SHB,Nakashibetsu (SHB),6304
+SHC,Shire (SHC),7829
+SHD,Staunton / Waynesboro         (SHD),6305
+SHE,Shenyang (SHE),6306
+SHF,Shihezi (SHF),8378
+SHG,Shungnak (SHG),6307
+SHH,Shishmaref (SHH),6308
+SHI,Shimojishima (SHI),6309
+SHJ,Dubai (Sharjah) (SHJ),6310
+SHL,Shillong (SHL),6311
+SHM,Shirahama (SHM),6312
+SHO,Manzini (SHO),8537
+SHR,Sheridan (SHR),6315
+SHS,Jingzhou (SHS),8761
+SHV,Shreveport (SHV),8104
+SHW,Sharurah (SHW),7831
+SHX,Shageluk (SHX),7832
+SID,"Sal, Cape Verde (SID)",7835
+SIF,"Simara, Bara (SIF)",7836
+SIG,San Juan (Puerto Rico) (SIG),8348
+SIN,Singapore (SIN),7837
+SIQ,Dabo (SIQ),8700
+SIR,Sion (SIR),7838
+SIS,Sishen (SIS),8261
+SIT,Sitka (SIT),7839
+SIW,Parapat (SIW),8947
+SJC,San Jose (SJC),7840
+SJD,San José del Cabo (SJD),7841
+SJE,San José del Guaviare (SJE),7842
+SJI,"San Jose, Mindoro (SJI)",7843
+SJJ,Sarajevo (SJJ),347
+SJK,Sao Jose Dos Campos (SJK),7844
+SJL,São Gabriel da Cachoeira (SJL),7845
+SJO,San José (SJO),7846
+SJP,São José do Rio Preto (SJP),7847
+SJT,San Angelo (SJT),8106
+SJU,San Juan (SJU),7848
+SJW,Shijiazhuang (SJW),7849
+SJZ,São Jorge Island (SJZ),7850
+SKB,Saint Kitts (SKB),7851
+SKD,Samarkand (SKD),7852
+SKG,Thessaloniki (SKG),300
+SKH,Surkhet (SKH),8530
+SKK,Shaktoolik (SKK),7853
+SKN,Stokmarknes (SKN),440
+SKO,Sokoto (SKO),7854
+SKP,Skopje (SKP),279
+SKT,Sialkot (SKT),7855
+SKU,Skyros (SKU),468
+SKX,Saransk (SKX),7856
+SKZ,Sukkur (SKZ),7857
+SLA,Salta (SLA),7858
+SLC,Salt Lake City (SLC),7859
+SLE,Salem (SLE),8484
+SLH,Sola (SLH),7861
+SLI,Solwezi (SLI),8061
+SLK,Saranac Lake (SLK),8108
+SLL,Salalah (SLL),7862
+SLM,Salamanca (SLM),366
+SLN,Salina (SLN),8079
+SLP,San Luis Potosí (SLP),7863
+SLQ,Sleetmute (SLQ),8109
+SLU,Saint Lucia (SLU),7864
+SLV,Shimla (SLV),7865
+SLX,"Salt Cay, Turks Islands (SLX)",8074
+SLY,Salekhard (SLY),7867
+SLZ,São Luís (SLZ),7868
+SMA,Santa Maria Island (SMA),7869
+SMF,Sacramento (SMF),7870
+SMI,Samos (SMI),270
+SMK,St. Michael (SMK),7871
+SML,"Stella Maris, Long Island (SML)",7872
+SMQ,Sampit (SMQ),7873
+SMR,Santa Marta (SMR),7874
+SMS,Sainte-Marie (SMS),7875
+SMT,Sorriso (SMT),8398
+SMX,Santa Maria (SMX),8091
+SMZ,Stoelmanseiland (SMZ),8898
+SNA,Santa Ana (SNA),8006
+SNE,São Nicolau (SNE),7876
+SNN,Shannon (SNN),277
+SNO,Sakon Nakhon (SNO),7877
+SNP,St. Paul Island (SNP),6316
+SNR,Saint-Nazaire (SNR),6317
+SNU,Santa Clara (SNU),6319
+SNW,Thandwe (SNW),7878
+SOC,Surakarta (Solo) (SOC),6322
+SOF,Sofia (SOF),281
+SOG,Sogndal (SOG),438
+SOJ,Sørkjosen (SOJ),439
+SON,Luganville (SON),7879
+SOQ,Sorong (SOQ),7880
+SOU,Southampton (SOU),282
+SOV,Seldovia (SOV),6327
+SOW,Show Low (SOW),6328
+SPB,Saint Thomas (SPB),6331
+SPC,Santa Cruz de La Palma (SPC),154
+SPD,Saidpur (SPD),6332
+SPI,Springfield (SPI),6336
+SPN,Saipan Island (SPN),6340
+SPP,Menongue (SPP),7881
+SPR,San Pedro (SPR),6341
+SPS,Wichita Falls (SPS),6342
+SPU,Split (SPU),283
+SPX,Giza (SPX),8852
+SPY,San-Pédro (SPY),8306
+SQD,Shangrao (SQD),8445
+SQG,Sintang (SQG),8288
+SQJ,Sanming (SQJ),8381
+SQL,San Carlos (SQL),6347
+SQN,Sanana (SQN),8413
+SRA,Santa Rosa (SRA),8682
+SRE,Sucre (SRE),6352
+SRG,Semarang (SRG),6353
+SRK,Siorapaluk (SRK),8170
+SRP,Stord (SRP),6356
+SRQ,Sarasota / Bradenton (SRQ),6357
+SRV,Stony River (SRV),6359
+SRY,Sari (SRY),6362
+SSA,Salvador da Bahia (SSA),6364
+SSB,Saint Croix (SSB),6365
+SSG,Malabo (SSG),6369
+SSH,Sharm el-Sheikh (SSH),278
+SSJ,Sandnessjøen (SSJ),436
+SSR,Sara (SSR),6373
+STB,Santa Bárbara del Zulia (STB),6378
+STC,St. Cloud (STC),6379
+STD,Santo Domingo (STD),6380
+STI,Santiago de los Caballeros (STI),6384
+STL,St. Louis (STL),6387
+STM,Santarém (STM),6388
+STN,London Stansted (STN),175
+STR,Stuttgart (STR),290
+STS,Santa Rosa (STS),6392
+STT,Saint Thomas (STT),6393
+STV,Surat (STV),6394
+STW,Stavropol (STW),6395
+STX,Saint Croix (STX),6396
+SUB,Surabaya (SUB),6398
+SUF,Lamezia Terme (SUF),156
+SUG,Surigao City (SUG),6401
+SUJ,Satu Mare (SUJ),6403
+SUK,Batagay-Alyta (SUK),8229
+SUN,Hailey / Sun Valley (SUN),6405
+SUR,Nibinamik First Nation (SUR),8007
+SUV,Suva (SUV),6410
+SUX,Sioux City (SUX),6412
+SUY,Suntar (SUY),8230
+SVA,Savoonga (SVA),6413
+SVB,Sambava (SVB),7883
+SVC,Silver City (SVC),6414
+SVD,Saint Vincent (SVD),6415
+SVG,Stavanger (SVG),285
+SVI,San Vicente Del Caguan (SVI),7882
+SVJ,Svolvær (SVJ),442
+SVL,Savonlinna (SVL),8110
+SVO,Moscow Sheremetyevo (SVO),203
+SVQ,Seville (SVQ),276
+SVR,Savissivik (SVR),8171
+SVU,Savusavu (SVU),7885
+SVX,Yekaterinburg (SVX),6422
+SVZ,San Antonio del Táchira (SVZ),6423
+SWA,Shantou (SWA),6424
+SWF,"Newburgh, New York (SWF)",6426
+SWJ,South West Bay (SWJ),8062
+SWO,Stillwater (SWO),6429
+SWQ,Sumbawa Besar (SWQ),7886
+SWT,Strezhevoy (SWT),6431
+SWV,Evensk (SWV),8206
+SXB,Strasbourg (SXB),360
+SXK,Saumlaki (SXK),8040
+SXM,Sint Maarten (SXM),6434
+SXP,Sheldon Point (SXP),6435
+SXR,Srinagar (SXR),6437
+SXV,Salem District (SXV),6438
+SXZ,Siirt (SXZ),6440
+SYB,Seal Bay (SYB),8111
+SYD,Sydney (SYD),6442
+SYJ,Sirjan (SYJ),8137
+SYM,Simao (SYM),7888
+SYO,Shonai (SYO),6447
+SYR,Syracuse (SYR),6450
+SYS,Saskylakh (SYS),8205
+SYU,Warraber (SYU),8458
+SYX,Sanya (SYX),6452
+SYY,Stornoway (SYY),289
+SYZ,Shiraz (SYZ),6453
+SZA,Soyo (SZA),8059
+SZB,Kuala Lumpur (SZB),6454
+SZE,Semera (SZE),8246
+SZF,Samsun (SZF),6456
+SZG,Salzburg (SZG),269
+SZH,Shuozhou (SZH),8912
+SZK,"Skukuza, Kruger National Park (SZK)",8231
+SZX,Shenzhen (SZX),6467
+SZY,Szczytno (SZY),8419
+SZZ,Szczecin (SZZ),291
+TAB,Tobago (TAB),6469
+TAC,Tacloban (TAC),6470
+TAE,Daegu (TAE),6472
+TAG,Tagbilaran (TAG),6474
+TAH,Tanna (TAH),8008
+TAK,Takamatsu (TAK),7887
+TAL,Tanana (TAL),6477
+TAM,Tampico (TAM),6478
+TAO,Qingdao (TAO),6480
+TAP,Tapachula (TAP),6481
+TAS,Tashkent (TAS),6483
+TAT,Poprad-Tatry (TAT),245
+TAY,Tartu (TAY),6485
+TAZ,Daşoguz (TAZ),6486
+TBB,Tuy Hoa (TBB),7889
+TBF,Tabiteuea (TBF),8617
+TBG,Tabubil (TBG),7890
+TBN,Fort Leonard Wood (TBN),6489
+TBO,Tabora (TBO),8112
+TBP,Tumbes (TBP),6490
+TBS,Tbilisi (TBS),297
+TBT,Tabatinga (TBT),6492
+TBU,Nukuʻalofa (TBU),6493
+TBW,Tambov (TBW),6494
+TBZ,Tabriz (TBZ),6495
+TCA,Tennant Creek (TCA),8373
+TCG,Trat (TCG),7892
+TCO,Tumaco (TCO),7893
+TCQ,Tacna (TCQ),7894
+TCR,Thoothukudi (TCR),7895
+TCT,Takotna (TCT),6503
+TCX,Tabas (TCX),6505
+TCZ,Tengchong (TCZ),6506
+TDD,Trinidad (TDD),6507
+TDK,Taldykorgan (TDK),8607
+TDX,Tongren and Fenghuang (TDX),6513
+TEB,Teterboro (TEB),6515
+TEC,Telêmaco Borba (TEC),8679
+TEE,Tébessa (TEE),7896
+TEI,Tezu (TEI),6518
+TEK,Tatitlek (TEK),6519
+TEN,Tongren (TEN),8907
+TEQ,Tekirdağ (TEQ),6521
+TER,Terceira Island (TER),379
+TET,Tete (TET),6522
+TEX,Telluride (TEX),6523
+TEZ,Tezpur (TEZ),6524
+TFF,Tefé (TFF),6525
+TFL,Teófilo Otoni (TFL),8849
+TFN,Tenerife (Los Rodeos) (TFN),298
+TFS,Tenerife (Reina Sofía) (TFS),299
+TFU,Chengdu (TFU),8762
+TGC,Tanjung Manis (TGC),7897
+TGD,Podgorica (TGD),399
+TGG,Kuala Terengganu (TGG),7898
+TGI,Tingo María (TGI),6529
+TGJ,Tiga Island (TGJ),7900
+TGM,Târgu Mureş (TGM),303
+TGO,Tongliao (TGO),7902
+TGP,Bor (TGP),8113
+TGR,Touggourt (TGR),7903
+TGT,Tanga (TGT),8323
+TGU,Tegucigalpa (TGU),6530
+TGZ,Tuxtla Gutiérrez (TGZ),6531
+THD,Thanh Hoa Province (THD),8064
+THE,Teresina (THE),6534
+THL,Tachilek (THL),6537
+THN,Trollhättan (THN),6538
+THO,Thorshofn (THO),6539
+THQ,Tianshui (THQ),7904
+THR,Tehran (THR),6541
+THS,Sukhothai (THS),6542
+THU,Pituffik (THU),6544
+THX,Turukhansk (THX),6546
+TIA,Tirana (TIA),302
+TID,Tiaret (TID),7905
+TIF,Ta'if (TIF),6549
+TIH,Tikehau (TIH),7906
+TIJ,Tijuana (TIJ),6552
+TIM,Timika (TIM),7907
+TIN,Tindouf (TIN),8038
+TIQ,Tinian Island (TIQ),6553
+TIR,Tirupati (TIR),6554
+TIU,Timaru (TIU),6555
+TIV,Tivat (TIV),345
+TIZ,Tari (TIZ),7908
+TJA,Tarija (TJA),6559
+TJH,Toyooka (TJH),8009
+TJK,Tokat (TJK),6560
+TJL,Tres Lagoas (TJL),8241
+TJM,Tyumen (TJM),6561
+TJN,Takume (TJN),8638
+TJQ,Tanjung Pandan (TJQ),6562
+TJS,Tanjung Selor (TJS),8313
+TJU,Kulob (TJU),7909
+TKD,Sekondi-Takoradi (TKD),6564
+TKE,Tenakee Springs (TKE),8010
+TKF,Truckee (TKF),6565
+TKG,Bandar Lampung (TKG),6566
+TKJ,Tok (TKJ),6568
+TKK,"Chuuk, Weno (TKK)",6569
+TKM,Taksimo (TKM),8936
+TKN,Tokunoshima (TKN),7910
+TKP,Takapoto (TKP),8114
+TKQ,Kigoma (TKQ),7911
+TKS,Tokushima (TKS),7912
+TKU,Turku (TKU),314
+TKV,Tatakoto (TKV),8643
+TKX,Takaroa (TKX),7913
+TLA,Teller (TLA),6571
+TLC,Mexico City / Toluca (TLC),6572
+TLE,Toliara (TLE),7914
+TLH,Tallahassee (TLH),6574
+TLI,Tolitoli (TLI),8187
+TLK,Talakan (TLK),8258
+TLL,Tallinn (TLL),294
+TLM,Tlemcen (TLM),7915
+TLN,Toulon (TLN),304
+TLQ,Turpan (TLQ),8297
+TLS,Toulouse (TLS),305
+TLT,Tuluksak (TLT),6578
+TLU,Tolú (TLU),8443
+TLV,Tel Aviv (TLV),368
+TLY,Plastun (TLY),8078
+TMC,Tambolaka (TMC),7916
+TME,Tame (TME),6582
+TMF,Thaa Atoll (TMF),8232
+TMH,Tanahmerah (TMH),8548
+TMI,Tumlingtar (TMI),7917
+TMJ,Termez (TMJ),6583
+TML,Tamale (TML),6584
+TMM,Toamasina (TMM),6585
+TMN,Tamana (TMN),8622
+TMP,Tampere (TMP),295
+TMR,Tamanrasset (TMR),6587
+TMS,São Tomé (TMS),6588
+TMT,Porto Trombetas (TMT),6589
+TMW,Tamworth (TMW),6591
+TMX,Timimoun (TMX),8037
+TNA,Jinan (TNA),6593
+TNC,Tin City (TNC),6594
+TNE,Tanegashima (TNE),7918
+TNG,Tangier (TNG),296
+TNH,Tonghua (TNH),6596
+TNJ,Tanjung Pinang (TNJ),6598
+TNK,Tununak (TNK),6599
+TNN,Tainan (TNN),6602
+TNO,Tamarindo (TNO),6603
+TNR,Antananarivo (TNR),6606
+TOB,Tobruk (TOB),6610
+TOE,Tozeur (TOE),390
+TOF,Tomsk (TOF),6612
+TOH,Torres Islands (TOH),7920
+TOL,Toledo (TOL),6616
+TOM,Timbuktu (TOM),6617
+TOS,Tromsø (TOS),310
+TOY,Toyama (TOY),6621
+TPA,Tampa (TPA),6622
+TPE,Taipei (TPE),6623
+TPJ,Taplejung (TPJ),7922
+TPK,Tapaktuan (TPK),8945
+TPP,Tarapoto (TPP),7923
+TPQ,Tepic (TPQ),6627
+TPS,Trapani (TPS),307
+TQA,Tasiusaq (TQA),8172
+TQI,Tiniteqilaaq (TQI),8173
+TQO,Tulum (TQO),8892
+TQQ,Tomia (TQQ),8702
+TRC,Torreón (TRC),6630
+TRD,Trondheim (TRD),311
+TRE,Tiree (TRE),495
+TRF,Oslo (Torp) (TRF),224
+TRG,Tauranga (TRG),6631
+TRI,"Blountville (Bristol, Johnson, K (TRI)",6633
+TRK,Tarakan (TRK),6634
+TRN,Turin (TRN),313
+TRR,Trincomalee (TRR),6637
+TRS,Trieste (TRS),308
+TRT,Tana Toraja (TRT),8740
+TRU,Trujillo (TRU),6638
+TRV,Thiruvananthapuram (TRV),6639
+TRW,Tarawa (TRW),6640
+TRZ,Tiruchirappalli (TRZ),6642
+TSA,Taipei (TSA),6643
+TSF,Venice (Treviso) (TSF),320
+TSJ,Tsushima (TSJ),7926
+TSN,Tianjin (TSN),6648
+TSR,Timișoara (TSR),301
+TST,Trang (TST),6652
+TSU,Tabiteuea South (TSU),8618
+TSV,Townsville (TSV),6653
+TTA,Tan-Tan (TTA),6656
+TTE,Ternate (TTE),7927
+TTJ,Tottori (TTJ),8011
+TTN,Trenton (TTN),6660
+TTQ,Tortuguero (TTQ),6662
+TTT,Taitung (TTT),6664
+TTU,Tétouan (TTU),479
+TUB,Tubuai (TUB),7928
+TUC,Tucumán (TUC),6666
+TUF,Tours (TUF),306
+TUG,Tuguegarao (TUG),6668
+TUI,Turaif (TUI),7929
+TUK,Turbat (TUK),7930
+TUL,Tulsa (TUL),6669
+TUN,Tunis (TUN),312
+TUO,Taupo (TUO),6670
+TUP,Tupelo (TUP),6671
+TUR,Tucuruí (TUR),7931
+TUS,Tucson (TUS),6673
+TUU,Tabuk (TUU),6674
+TVC,Traverse City (TVC),6676
+TVF,Thief River Falls (TVF),6677
+TVS,Tangshan (TVS),6680
+TVU,Taveuni (TVU),7932
+TVY,Dawei (TVY),6681
+TWC,Tumxuk (TWC),8578
+TWF,Twin Falls (TWF),6685
+TWT,Tawi Tawi Island (TWT),8069
+TWU,Tawau (TWU),6686
+TXK,Texarkana (TXK),6687
+TXN,Huangshan City (TXN),7934
+TYD,Tynda (TYD),6690
+TYF,Torsby (TYF),7935
+TYL,Talara (TYL),6692
+TYN,Taiyuan (TYN),6693
+TYR,Tyler (TYR),6695
+TYS,Knoxville (TYS),6696
+TZA,Belize City (TZA),6698
+TZL,Tuzla (TZL),8203
+TZN,South Andros (TZN),8649
+TZX,Trabzon (TZX),6699
+UAH,Ua Huka (UAH),7936
+UAK,Narsarsuaq (UAK),6700
+UAP,Ua Pou (UAP),7937
+UAQ,San Juan (UAQ),6703
+UAS,Samburu (UAS),8068
+UBA,Uberaba (UBA),6704
+UBB,Mabuiag (UBB),8459
+UBJ,Ube (UBJ),6705
+UBN,Ulaanbaatar (UBN),8729
+UBP,Ubon Ratchathani (UBP),6706
+UCB,Ulanqab (UCB),8402
+UCT,Ukhta / Sosnogorsk (UCT),6712
+UDI,Uberlândia (UDI),6716
+UDR,Udaipur (UDR),6717
+UEL,Quelimane (UEL),6718
+UEO,Kumejima (UEO),7939
+UET,Quetta (UET),6720
+UFA,Ufa (UFA),6721
+UGC,Urgench (UGC),7940
+UGI,Uganik (UGI),8116
+UHS,Alexandrovsk-Sakhalinsky (UHS),8913
+UIB,Quibdó (UIB),6727
+UIH,Qui Nhơn (UIH),6728
+UIN,Quincy (UIN),6731
+UIO,Quito (UIO),6732
+UIT,Jaluit Atoll (UIT),6734
+UJE,Ujae Atoll (UJE),6735
+UKA,Ukunda (UKA),7941
+UKB,Kobe (UKB),6736
+UKE,Utkela (UKE),8914
+UKG,Ust-Kuyga (UKG),8233
+UKK,Oskemen (Ust-Kamenogorsk) (UKK),6738
+UKX,Ust-Kut (UKX),6741
+ULB,Ulei (ULB),8012
+ULG,Ölgii (ULG),6742
+ULH,Al Ula (ULH),7943
+ULK,Lensk (ULK),8013
+ULO,Ulaangom (ULO),6746
+ULP,Quilpie (ULP),8090
+ULV,Ulyanovsk (ULV),7944
+ULZ,Uliastai (ULZ),7945
+UMB,Kalumbila (UMB),8915
+UMD,Uummannaq (UMD),6749
+UME,Umeå (UME),315
+UMU,Umuarama (UMU),8801
+UNA,Una (UNA),8713
+UNG,Kiunga (UNG),7946
+UNK,Unalakleet (UNK),6755
+UNN,Ranong (UNN),6756
+UPG,Makassar (UPG),6762
+UPN,Uruapan (UPN),6764
+URA,Oral (Uralsk) (URA),6766
+URC,Urumqi (URC),6767
+URE,Kuressaare (URE),422
+URG,Uruguaiana (URG),6768
+URJ,Uray (URJ),6770
+URS,Kursk (URS),6772
+URT,Surat Thani (URT),6773
+URY,Gurayat (URY),7947
+USA,Concord (USA),8235
+USH,Ushuaia (USH),6775
+USJ,Usharal (USJ),8606
+USK,Usinsk (USK),7948
+USM,Ko Samui (USM),6777
+USN,Ulsan (USN),7949
+USR,Ust-Nera (USR),8200
+USU,Busuanga / Coron (USU),6780
+UTH,Udon Thani (UTH),7950
+UTK,Utirik Island (UTK),6783
+UTN,Upington (UTN),6785
+UTP,"U-Tapao, Rayong / Pattaya (UTP)",6787
+UTT,Mthatha (UTT),7952
+UUA,Bugulma (UUA),6788
+UUD,Ulan-Ude (UUD),6789
+UUS,Yuzhno-Sakhalinsk (UUS),6791
+UVE,Ouvéa Island (UVE),7953
+UVF,Saint Lucia (UVF),6794
+UVI,União da Vitória (UVI),8707
+UYN,Yulin (UYN),7954
+UYU,Uyuni (UYU),7955
+UZR,Urzhar (UZR),8236
+VAA,Vaasa (VAA),316
+VAG,Varginha (VAG),7956
+VAI,Vanimo (VAI),8014
+VAK,Chevak (VAK),6800
+VAM,Maamigili (VAM),6801
+VAN,Van (VAN),6802
+VAO,Suavanao (VAO),7957
+VAQ,Vanavara (VAQ),8895
+VAR,Varna (VAR),319
+VAS,Sivas (VAS),6803
+VAV,Vavaʻu (VAV),8139
+VAW,Vardø (VAW),444
+VBA,Ann (VBA),8320
+VBP,Bokpyin (VBP),8321
+VBV,Vanua Balavu (VBV),7958
+VBY,Visby (VBY),445
+VCA,Can Tho (VCA),6805
+VCE,Venice Marco Polo (VCE),321
+VCL,Chu Lai (VCL),6808
+VCP,São Paulo (VCP),6809
+VCS,Con Dao Island (VCS),6810
+VCT,Victoria (VCT),6811
+VDC,Vitória da Conquista (VDC),7959
+VDE,Valverde (VDE),7960
+VDH,Dong Hoi (VDH),7961
+VDM,Viedma (VDM),6816
+VDO,Ha Long (VDO),8562
+VDS,Vadsø (VDS),443
+VDY,Toranagallu (VDY),8488
+VDZ,Valdez (VDZ),6818
+VEE,Venetie (VEE),6819
+VEL,Vernal (VEL),6820
+VEO,Krasnoyarsk (VEO),8896
+VER,Veracruz (VER),6821
+VEY,Vestmannaeyjar (VEY),6822
+VFA,Victoria Falls (VFA),6824
+VGA,Vijayawada (VGA),7962
+VGD,Vologda (VGD),6825
+VGO,Vigo (VGO),325
+VGZ,Villagarzón (VGZ),6827
+VHC,Saurimo (VHC),8015
+VHM,Vilhelmina (VHM),6828
+VHZ,Vahitahi (VHZ),8636
+VIE,Vienna (VIE),330
+VIG,El Vigía (VIG),6832
+VII,Vinh (VII),6834
+VIJ,Virgin Gorda (VIJ),6835
+VIL,Dakhla (VIL),6836
+VIT,Vitoria-Gasteiz (VIT),327
+VIX,"Vitória, Espírito Santo (VIX)",6841
+VJB,Xai-Xai (VJB),8805
+VKG,Rach Gia (VKG),6844
+VKO,Moscow Vnukovo (VKO),204
+VKT,Vorkuta (VKT),6846
+VLC,Valencia (VLC),317
+VLD,Valdosta (VLD),6848
+VLI,Port Vila (VLI),6851
+VLL,Valladolid (VLL),318
+VLN,Valencia (VLN),6852
+VLV,Valera (VLV),6854
+VNO,Vilnius (VNO),326
+VNS,Varanasi (VNS),6859
+VNX,Vilankulos (VNX),6861
+VOG,Volgograd (VOG),6864
+VOL,Volos (VOL),364
+VOZ,Voronezh (VOZ),6867
+VPE,Ondjiva (VPE),7964
+VPG,Vipingo (VPG),7965
+VPN,Vopnafjörður (VPN),6868
+VPS,Destin / Fort Walton Beach (VPS),6869
+VPY,Chimoio (VPY),6870
+VQS,Vieques (VQS),6872
+VRA,Varadero (VRA),6873
+VRB,Vero Beach (VRB),6874
+VRC,"Virac, Catanduanes (VRC)",6875
+VRL,Vila Real (VRL),7966
+VRN,Verona (VRN),322
+VSA,Villahermosa (VSA),6879
+VSE,Viseu (VSE),8395
+VST,Stockholm (Västerås) (VST),288
+VTE,Vientiane (VTE),6883
+VTZ,Visakhapatnam (VTZ),6886
+VUP,Valledupar (VUP),6887
+VUS,Veliky Ustyug (VUS),6888
+VUU,Liwonde Mvuu Camp (VUU),8676
+VVC,Villavicencio (VVC),7968
+VVI,Santa Cruz de la Sierra (VVI),6889
+VVO,Vladivostok (VVO),6890
+VVZ,Illizi (VVZ),8080
+VXC,Lichinga (VXC),6891
+VXE,São Vicente (VXE),6892
+VXO,Växjö (VXO),375
+WAA,Wales (WAA),6895
+WAE,Wadi al-Dawasir (WAE),7969
+WAG,Whanganui (WAG),6897
+WAW,Warsaw (WAW),328
+WBB,Stebbins (WBB),6902
+WBM,Wapenamanda (WBM),7970
+WDH,Windhoek (WDH),6913
+WDS,Shiyan (WDS),8379
+WEF,Weifang (WEF),6916
+WEH,Weihai (WEH),6917
+WEI,Weipa (WEI),6918
+WGA,Wagga Wagga (WGA),6922
+WGE,Walgett (WGE),8703
+WGN,Shaoyang (WGN),8472
+WGP,Waingapu (WGP),6925
+WHA,Wuhu Xuanzhou (WHA),8777
+WHK,Whakatane (WHK),6928
+WIC,Wick (WIC),493
+WIL,Nairobi (WIL),6932
+WIN,Winton (WIN),7971
+WJA,Woja (WJA),6933
+WJR,Wajir (WJR),8017
+WJU,Wonju (WJU),6935
+WKA,Wanaka (WKA),6936
+WKJ,Wakkanai (WKJ),6937
+WLE,Miles (WLE),8250
+WLG,Wellington (WLG),6941
+WLH,Walaha (WLH),7972
+WLK,Selawik (WLK),6942
+WLS,Wallis and Futuna Islands (WLS),6947
+WMI,Warsaw (WMI),6953
+WMN,Maroantsetra (WMN),8018
+WMO,White Mountain (WMO),6956
+WMT,Zunyi (WMT),8473
+WMX,Wamena (WMX),8049
+WNA,Napakiak (WNA),6957
+WNH,Wenshan (WNH),6959
+WNN,Wunnummin Lake (WNN),8019
+WNP,"Naga, Camarines Sur (WNP)",6960
+WNR,Windorah (WNR),7974
+WNZ,Wenzhou (WNZ),6961
+WOL,Wollongong (WOL),6963
+WPL,Powell Lake (WPL),8861
+WPR,Porvenir (WPR),8433
+WPU,Puerto Williams (WPU),8434
+WRE,Whangarei (WRE),6971
+WRG,Wrangell (WRG),6972
+WRO,Wrocław (WRO),332
+WRZ,Weerawila (WRZ),6977
+WSK,Wushan (WSK),8664
+WSZ,Westport (WSZ),6988
+WTB,Toowoomba (WTB),8291
+WTE,Wotje (Wotje Atoll) (WTE),6991
+WTK,Noatak (WTK),6992
+WTL,Tuntutuliak (WTL),6993
+WTO,Wotho (WTO),6994
+WUA,Wuhai (WUA),6997
+WUH,Wuhan (WUH),6998
+WUN,Wiluna (WUN),8020
+WUS,"Wuyishan, Nanping, Fujian (WUS)",7977
+WUT,Xinzhou (WUT),8380
+WUU,Wau (WUU),6999
+WUX,Wuxi / Suzhou (WUX),7000
+WUZ,Wuzhou (WUZ),7001
+WVB,Walvis Bay (WVB),7002
+WWK,Wewak (WWK),7978
+WWP,North Whale Pass (WWP),7008
+WWT,Newtok (WWT),7010
+WXN,Wanzhou (WXN),7013
+WYA,Whyalla (WYA),7979
+WYS,West Yellowstone (WYS),7016
+WZA,Wa (WZA),8673
+XAI,Xinyang (XAI),8544
+XAP,Chapecó (XAP),7020
+XBE,Bearskin Lake (XBE),7024
+XBJ,Birjand (XBJ),7026
+XCH,Christmas Island (XCH),7032
+XCR,Paris (Vatry) (XCR),485
+XEQ,Tasiusaq (XEQ),8175
+XFN,Xiangyang (XFN),7045
+XGR,Kangiqsualujjuaq (XGR),7051
+XIC,Xichang (XIC),7052
+XIL,Xilinhot (XIL),7054
+XIQ,Ilimanaq (XIQ),8176
+XIY,Xi'an (XIY),7056
+XKH,Phonsavan (XKH),7058
+XKS,Kasabonika First Nation (XKS),7061
+XLS,Saint-Louis (XLS),7065
+XMH,Manihi (XMH),7072
+XMN,Xiamen (XMN),7075
+XMY,Yam Island (XMY),7078
+XNA,Fayetteville (XNA),7079
+XNN,Xining (XNN),7080
+XPL,Comayagua (XPL),7086
+XQP,Quepos (XQP),7089
+XRY,Jerez de la Frontera (XRY),134
+XSC,South Caicos (XSC),7092
+XSP,Singapore (Seletar) (XSP),7097
+XTG,Thargomindah (XTG),7098
+XUZ,Xuzhou (XUZ),7102
+XWA,Williston (XWA),8668
+YAA,Anahim Lake (YAA),7110
+YAB,Arctic Bay (YAB),7111
+YAC,Cat Lake (YAC),7112
+YAE,Yartsevo (YAE),8919
+YAK,Yakutat (YAK),7118
+YAM,Sault Ste. Marie (YAM),7120
+YAP,Yap (YAP),7123
+YAQ,Maple Bay (YAQ),8329
+YAT,Attawapiskat (YAT),7126
+YAX,Wapekeka (YAX),7980
+YAY,St. Anthony (YAY),7130
+YAZ,Tofino (YAZ),7131
+YBB,Kugaaruk (YBB),7133
+YBC,Baie-Comeau (YBC),7134
+YBE,Uranium City (YBE),7136
+YBG,Saguenay (YBG),7138
+YBK,Baker Lake (YBK),7142
+YBL,Campbell River (YBL),7143
+YBP,Yibin (YBP),7147
+YBR,Brandon (YBR),7149
+YBX,Blanc-Sablon (YBX),7153
+YCB,Cambridge Bay (YCB),7156
+YCD,Nanaimo (YCD),7158
+YCG,Castlegar (YCG),7161
+YCK,Colville Lake (YCK),7164
+YCO,Kugluktuk (YCO),7168
+YCS,Chesterfield Inlet (YCS),7172
+YCU,Yuncheng (YCU),7981
+YCY,Clyde River (YCY),7177
+YDA,Dawson City (YDA),7179
+YDF,Deer Lake (YDF),7183
+YDL,Dease Lake (YDL),7188
+YDP,Nain (YDP),7191
+YEG,Edmonton (YEG),7202
+YEI,Bursa (YEI),7203
+YEK,Arviat (YEK),7204
+YER,Fort Severn (YER),7211
+YES,Yasuj (YES),8021
+YEV,Inuvik (YEV),7214
+YFA,Fort Albany (YFA),7216
+YFB,Iqaluit (YFB),7217
+YFC,Fredericton (YFC),7218
+YFH,Fort Hope (YFH),7222
+YFJ,Wekweeti (YFJ),8075
+YFO,Flin Flon (YFO),7224
+YFS,Fort Simpson (YFS),7226
+YGG,Ganges (YGG),7232
+YGH,Fort Good Hope (YGH),7233
+YGJ,Yonago (YGJ),7234
+YGL,La Grande Riviere (YGL),7236
+YGP,Gaspé (YGP),7240
+YGR,Les Îles-de-la-Madeleine (YGR),7242
+YGT,Igloolik (YGT),7244
+YGV,Havre-Saint-Pierre (YGV),7245
+YGW,Kuujjuarapik (YGW),7246
+YGX,Gillam (YGX),7247
+YGZ,Grise Fiord (YGZ),7249
+YHD,Dryden (YHD),7253
+YHI,Ulukhaktok (YHI),7257
+YHK,Gjoa Haven (YHK),7258
+YHM,Hamilton (YHM),7259
+YHO,Hopedale (YHO),7261
+YHP,Poplar Hill (YHP),7262
+YHR,Chevery (YHR),7263
+YHS,Sechelt (YHS),7264
+YHU,Longueuil (YHU),7266
+YHY,Hay River (YHY),7267
+YHZ,Halifax (YHZ),7268
+YIA,Yogyakarta (YIA),8632
+YIC,"Yichun, Jiangxi (YIC)",8127
+YIE,Arxan (YIE),7270
+YIF,Saint-Augustin / Pakuashipi (YIF),7271
+YIH,Yichang (YIH),7273
+YIK,Ivujivik (YIK),7274
+YIN,Yining (YIN),7275
+YIO,Pond Inlet (YIO),7276
+YIW,Yiwu (YIW),7279
+YKA,Kamloops (YKA),7284
+YKF,Kitchener / Waterloo (YKF),7288
+YKG,Kangirsuk (YKG),7289
+YKH,Yingkou (YKH),8384
+YKL,Schefferville (YKL),7291
+YKM,Yakima (YKM),7292
+YKO,Hakkari (YKO),8356
+YKQ,Waskaganish (YKQ),7294
+YKS,Yakutsk (YKS),7295
+YKU,Chisasibi (YKU),7297
+YLC,Kimmirut (YLC),7303
+YLE,Lac La Martre (YLE),7305
+YLH,Lansdowne House (YLH),7308
+YLW,Kelowna (YLW),7319
+YLX,Yulin (YLX),8732
+YMM,Fort McMurray (YMM),7331
+YMN,Makkovik (YMN),7332
+YMO,Moosonee (YMO),7333
+YMT,Chibougamau (YMT),7337
+YMX,Montreal (YMX),7339
+YNA,Natashquan (YNA),7340
+YNB,Yanbu (Yenbo) (YNB),7341
+YNC,Wemindji (YNC),7342
+YNJ,Yanji (YNJ),7348
+YNL,Points North Landing (YNL),7350
+YNO,North Spirit Lake (YNO),7352
+YNP,Natuashish (YNP),7983
+YNS,Nemiscau (YNS),7354
+YNT,Yantai (YNT),7355
+YNZ,Yancheng (YNZ),7356
+YOC,"Old Crow, Yukon (YOC)",7357
+YOG,Ogoki Post (YOG),7360
+YOJ,High Level (YOJ),7362
+YOL,Yola (YOL),7363
+YON,Trashigang (YON),8182
+YOW,Ottawa (YOW),7368
+YPA,Prince Albert (YPA),7370
+YPH,Inukjuak (YPH),7377
+YPJ,Aupaluk (YPJ),7379
+YPL,Pickle Lake (YPL),7380
+YPM,Pikangikum (YPM),7381
+YPN,Port-Menier (YPN),7382
+YPO,Peawanuck (YPO),7383
+YPR,Prince Rupert (YPR),7386
+YPW,Powell River (YPW),7389
+YPX,Puvirnituq (YPX),7390
+YPY,Fort Chipewyan (YPY),7391
+YQB,Quebec City (YQB),7394
+YQC,Quaqtaq (YQC),7395
+YQD,The Pas (YQD),7396
+YQG,Windsor (YQG),7399
+YQK,Kenora (YQK),7402
+YQL,Lethbridge (YQL),7403
+YQM,Moncton (YQM),7404
+YQQ,Comox (YQQ),7406
+YQR,Regina (YQR),7407
+YQT,Thunder Bay (YQT),7409
+YQU,Grande Prairie (YQU),7410
+YQX,Gander (YQX),7413
+YQY,Sydney (Canada) (YQY),7414
+YQZ,Quesnel (YQZ),7415
+YRA,Gameti (YRA),7416
+YRB,Resolute (YRB),7417
+YRG,Rigolet (YRG),7422
+YRL,Red Lake (YRL),7425
+YRT,Rankin Inlet (YRT),7433
+YSB,Sudbury (YSB),7436
+YSF,Stony Rapids (YSF),7440
+YSG,Lutselke (YSG),7441
+YSJ,Saint John (YSJ),7444
+YSK,Sanikiluaq (YSK),7445
+YSM,Fort Smith (YSM),7447
+YSO,Postville (YSO),7449
+YSQ,Songyuan (YSQ),8474
+YTE,Cape Dorset (YTE),7462
+YTH,Thompson (YTH),7465
+YTL,Big Trout Lake (YTL),7468
+YTP,Tofino (YTP),7472
+YTQ,Tasiujaq (YTQ),7473
+YTS,Timmins (YTS),7475
+YTW,Yutian (YTW),8869
+YTY,Yangzhou (YTY),7478
+YTZ,Toronto (YTZ),7479
+YUD,Umiujaq (YUD),7482
+YUL,Montreal (YUL),7484
+YUM,Yuma (YUM),7485
+YUS,"Yushu City, Qinghai (YUS)",7486
+YUT,Repulse Bay (YUT),7487
+YUX,Hall Beach (YUX),7488
+YUY,Rouyn-Noranda (YUY),7489
+YVB,Bonaventure (YVB),7491
+YVC,La Ronge (YVC),7492
+YVM,Qikiqtarjuaq (YVM),7496
+YVO,Val-d'Or (YVO),7497
+YVP,Kuujjuaq (YVP),7498
+YVQ,Norman Wells (YVQ),7499
+YVR,Vancouver (YVR),7500
+YVZ,Deer Lake (YVZ),7503
+YWB,Kangiqsujuaq (YWB),7505
+YWG,Winnipeg (YWG),7507
+YWH,Victoria (YWH),7508
+YWJ,Deline (YWJ),7509
+YWK,Wabush (YWK),7510
+YWL,Williams Lake (YWL),7511
+YWP,Webequie (YWP),7515
+YWS,Whistler (YWS),7517
+YXC,Cranbrook (YXC),7520
+YXE,Saskatoon (YXE),7522
+YXH,Medicine Hat (YXH),7524
+YXJ,Fort St. John (YXJ),7525
+YXL,Sioux Lookout (YXL),7527
+YXN,Whale Cove (YXN),7528
+YXP,Pangnirtung (YXP),7529
+YXS,Prince George (YXS),7532
+YXT,Terrace (YXT),7533
+YXU,London (YXU),7534
+YXX,Abbotsford (YXX),7535
+YXY,Whitehorse (YXY),7536
+YYA,Yueyang (YYA),8595
+YYB,North Bay (YYB),7539
+YYC,Calgary (YYC),7540
+YYD,Smithers (YYD),7541
+YYE,Fort Nelson (YYE),7542
+YYF,Penticton (YYF),7543
+YYG,Charlottetown (YYG),7544
+YYH,Taloyoak (YYH),7545
+YYJ,Victoria (YYJ),7547
+YYQ,Churchill (YYQ),7551
+YYR,Happy Valley / Goose Bay (YYR),7552
+YYT,St. John's (YYT),7553
+YYY,Mont-Joli (YYY),7556
+YYZ,Toronto (YYZ),7557
+YZF,Yellowknife (YZF),7562
+YZG,Salluit (YZG),7563
+YZP,Sandspit (YZP),7566
+YZS,Coral Harbour (YZS),7568
+YZT,Port Hardy (YZT),7569
+YZV,Sept-Îles (YZV),7571
+YZY,Zhangye (YZY),7574
+YZZ,Trail (YZZ),8120
+ZAD,Zadar (ZAD),333
+ZAG,Zagreb (ZAG),334
+ZAH,Zahedan (ZAH),7577
+ZAL,Valdivia (ZAL),7579
+ZAM,Zamboanga City (ZAM),7580
+ZAT,Zhaotong (ZAT),7583
+ZAZ,Zaragoza (ZAZ),336
+ZBF,Bathurst (ZBF),7585
+ZBL,Biloela (ZBL),7984
+ZBR,Chabahar (ZBR),7589
+ZBY,Sayaboury (ZBY),7590
+ZCL,Zacatecas (ZCL),7591
+ZCO,Temuco (ZCO),7593
+ZEL,Bella Bella (ZEL),7596
+ZEM,Eastmain (ZEM),7597
+ZER,Ziro (ZER),7598
+ZFD,Fond-du-Lac (ZFD),7601
+ZFL,Zhaosu (ZFL),8813
+ZFN,Tulita (ZFN),7604
+ZGS,La Romaine (ZGS),8025
+ZGU,Gaua (ZGU),7613
+ZHA,Zhanjiang (ZHA),7614
+ZHY,Zhongwei (ZHY),7617
+ZIA,Moscow Zhukovsky (ZIA),8400
+ZIH,Ixtapa / Zihuatanejo (ZIH),7620
+ZIX,Zhigansk (ZIX),8239
+ZKE,Kashechewan (ZKE),7624
+ZKP,Zyryanka (ZKP),8217
+ZLO,Manzanillo (ZLO),7630
+ZLT,La Tabatière (ZLT),7631
+ZMT,Masset (ZMT),7635
+ZNA,Nanaimo (ZNA),7636
+ZND,Zinder (ZND),7638
+ZNE,Newman (ZNE),7639
+ZNZ,Zanzibar (ZNZ),7642
+ZOS,Osorno (ZOS),7644
+ZPB,Sachigo Lake (ZPB),7645
+ZQN,Queenstown (ZQN),7650
+ZQZ,Zhangjiakou (ZQZ),8193
+ZRH,Zürich (ZRH),337
+ZRI,Serui (ZRI),8567
+ZSA,San Salvador Island (ZSA),7655
+ZSE,Saint-Pierre (ZSE),7656
+ZSJ,Sandy Lake (ZSJ),7657
+ZTA,Tureia (ZTA),7662
+ZTB,Tête-à-la-Baleine (ZTB),7663
+ZTH,Zakynthos Island (ZTH),335
+ZUH,Zhuhai (ZUH),7670
+ZUM,Churchill Falls (ZUM),7672
+ZVK,Savannakhet (ZVK),7675
+ZWL,Wollaston Lake (ZWL),7677
+ZYI,Zunyi (ZYI),7679
+ZYL,Sylhet (ZYL),7680
+ZZO,Tymovskoye Zonalnoye (ZZO),8763
+ZZU,Mzuzu (ZZU),7681

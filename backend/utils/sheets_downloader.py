@@ -6,17 +6,21 @@ import os
 
 import pandas as pd
 
+import backend.utils.flightconnections as flightconnections
 
-def _download_airports_sheet() -> None:
+
+def _download_airports_sheet(force_download: bool = False) -> None:
     """
     Downloads the airports.csv file from datahub.io if it is not there already.
+
+    :param force_download: if True, the file will be downloaded even if it already exists
     """
-    url = "https://datahub.io/core/airport-codes/r/airport-codes.csv"
+    url = "https://davidmegginson.github.io/ourairports-data/airports.csv"
     filename = "airports.csv"
     filepath = f"backend/data/sheets/{filename}"
 
-    # if file already exists, do nothing
-    if os.path.isfile(filepath):
+    # if file already exists, do nothing unless force_download is True
+    if os.path.isfile(filepath) and not force_download:
         return
 
     df = pd.read_csv(url)
@@ -25,20 +29,16 @@ def _download_airports_sheet() -> None:
     df = df[(df["iata_code"].notnull()) & (df.iata_code.str.len() == 3)]
 
     # get only useful columns
-    df = df[["iata_code", "name", "iso_country", "iso_region", "municipality", "type", "coordinates"]]
+    df = df[["iata_code", "name", "iso_country", "iso_region", "municipality", "type", "latitude_deg", "longitude_deg"]]
 
     # set iata_code as index
     df = df.set_index("iata_code").sort_index()
 
-    # split coordinates into lat and long
-    df[["lat", "lon"]] = df["coordinates"].str.split(",", expand=True).astype(float).round(4)
-    df = df.drop("coordinates", axis=1)
+    # rename columns
+    df = df.rename(columns={"latitude_deg": "lat", "longitude_deg": "lon"})
 
     # clean up "type" column
     df["type"] = df["type"].str.replace("_airport", "")
-
-    # fix encoding of airport name
-    df["name"] = df["name"].str.encode("latin1").str.decode("utf-8")
 
     # remove duplicates
     df = df[~df.index.duplicated(keep="first")]
@@ -48,16 +48,18 @@ def _download_airports_sheet() -> None:
     print(f"Downloaded file: {filepath}")
 
 
-def _download_countries_sheet() -> None:
+def _download_countries_sheet(force_download: bool = False) -> None:
     """
     Downloads the countries.csv file from github if it is not there already.
+
+    :param force_download: if True, the file will be downloaded even if it already exists
     """
     url = "https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv"
     filename = "countries.csv"
     filepath = f"backend/data/sheets/{filename}"
 
-    # if file already exists, do nothing
-    if os.path.isfile(filepath):
+    # if file already exists, do nothing unless force_download is True
+    if os.path.isfile(filepath) and not force_download:
         return
 
     df = pd.read_csv(url)
@@ -76,9 +78,53 @@ def _download_countries_sheet() -> None:
     print(f"Downloaded file: {filepath}")
 
 
-def download_all_sheets():
+def _download_flightconnections_airport_codes_sheet(force_download: bool = False) -> None:
+    filepath = "backend/data/sheets/airports_flightconnections.csv"
+
+    # if file already exists, do nothing unless force_download is True
+    if os.path.isfile(filepath) and not force_download:
+        return
+
+    iata_airports_filepath = "backend/data/sheets/airports.csv"
+    assert os.path.isfile(iata_airports_filepath), "airports.csv file not found. Please download it first."
+    iata_df = pd.read_csv(iata_airports_filepath)
+
+    # scrape
+    df = flightconnections.create_airports_codes_df(iata_df)
+
+    # export to csv
+    df.to_csv(filepath, index=False)
+    print(f"Downloaded file: {filepath}")
+
+
+def _download_flightconnections_airport_connections_sheet(force_download: bool = False) -> None:
+    filepath = "backend/data/sheets/connections_flightconnections.csv"
+
+    # if file already exists, do nothing unless force_download is True
+    if os.path.isfile(filepath) and not force_download:
+        return
+
+    flightconnections_codes_filepath = "backend/data/sheets/airports_flightconnections.csv"
+    assert os.path.isfile(
+        flightconnections_codes_filepath
+    ), "airports_flightconnections.csv file not found. Please download it first."
+    flightconnections_codes_df = pd.read_csv(flightconnections_codes_filepath)
+
+    # scrape
+    df = flightconnections.create_airport_connections_df(flightconnections_codes_df)
+
+    # export to csv
+    df.to_csv(filepath, index=False)
+    print(f"Downloaded file: {filepath}")
+
+
+def download_all_sheets(force_download: bool = False):
     """
     Downloads all sheets.
+
+    :param force_download: if True, the files will be downloaded even if they already exist
     """
-    _download_airports_sheet()
-    _download_countries_sheet()
+    _download_airports_sheet(force_download)
+    _download_countries_sheet(force_download)
+    _download_flightconnections_airport_codes_sheet(force_download)
+    _download_flightconnections_airport_connections_sheet(force_download)
