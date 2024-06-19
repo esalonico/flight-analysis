@@ -6,8 +6,8 @@ Example: FCO to MUC (direct) on 2024-02-25 (IT6671).
 import uuid
 from datetime import datetime
 
-from flight_analysis.scrapers.search_query import SearchQuery
-from flight_analysis.utils import utils
+from backend.scrapers.search_query import SearchQuery
+from backend.utils import utils
 
 
 class Flight:

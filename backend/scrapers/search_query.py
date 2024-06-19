@@ -1,7 +1,7 @@
 from datetime import date
 
-from flight_analysis.objects.airport import Airport
-from flight_analysis.utils import utils
+from backend.objects.airport import Airport
+from backend.utils import utils
 
 
 class SearchQuery:

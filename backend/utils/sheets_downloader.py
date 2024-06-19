@@ -13,7 +13,7 @@ def _download_airports_sheet() -> None:
     """
     url = "https://datahub.io/core/airport-codes/r/airport-codes.csv"
     filename = "airports.csv"
-    filepath = f"flight_analysis/data/sheets/{filename}"
+    filepath = f"backend/data/sheets/{filename}"
 
     # if file already exists, do nothing
     if os.path.isfile(filepath):
@@ -54,7 +54,7 @@ def _download_countries_sheet() -> None:
     """
     url = "https://raw.githubusercontent.com/lukes/ISO-3166-Countries-with-Regional-Codes/master/all/all.csv"
     filename = "countries.csv"
-    filepath = f"flight_analysis/data/sheets/{filename}"
+    filepath = f"backend/data/sheets/{filename}"
 
     # if file already exists, do nothing
     if os.path.isfile(filepath):

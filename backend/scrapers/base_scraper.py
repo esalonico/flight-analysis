@@ -9,9 +9,9 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
-from flight_analysis.objects.flight import Flight
-from flight_analysis.scrapers.search_query import SearchQuery
-from flight_analysis.utils import utils
+from backend.objects.flight import Flight
+from backend.scrapers.search_query import SearchQuery
+from backend.utils import utils
 from datetime import datetime
 
 

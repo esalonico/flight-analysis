@@ -6,8 +6,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 from tqdm import tqdm
 
-from flight_analysis.scrapers.base_scraper import BaseScraper
-from flight_analysis.scrapers.search_query import SearchQuery
+from backend.scrapers.base_scraper import BaseScraper
+from backend.scrapers.search_query import SearchQuery
 
 
 class RoundTripScraper(BaseScraper):

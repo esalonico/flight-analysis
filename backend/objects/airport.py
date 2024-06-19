@@ -1,4 +1,3 @@
-import os
 
 import pandas as pd
 
@@ -6,7 +5,7 @@ import pandas as pd
 class Airport:
 
     def __init__(self, iata) -> None:
-        self._airports_df_filepath = "flight_analysis/data/sheets/airports.csv"
+        self._airports_df_filepath = "backend/data/sheets/airports.csv"
         self._airports_df = pd.read_csv(self._airports_df_filepath, index_col=0)
 
         self.iata = self._check_airport_exists(iata)

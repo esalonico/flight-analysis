@@ -1,8 +1,8 @@
 import pandas as pd
 
-from flight_analysis.scrapers.base_scraper import BaseScraper
-from flight_analysis.scrapers.search_query import SearchQuery
-from flight_analysis.utils import utils
+from backend.scrapers.base_scraper import BaseScraper
+from backend.scrapers.search_query import SearchQuery
+from backend.utils import utils
 
 
 class BaseItinerary:

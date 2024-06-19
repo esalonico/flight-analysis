@@ -1,5 +1,5 @@
-from flight_analysis.scrapers.base_scraper import BaseScraper
-from flight_analysis.scrapers.search_query import SearchQuery
+from backend.scrapers.base_scraper import BaseScraper
+from backend.scrapers.search_query import SearchQuery
 
  
 class OneWayScraper(BaseScraper):
