@@ -1,13 +1,13 @@
 from backend.scrapers.base_scraper import BaseScraper
-from backend.scrapers.search_query import SearchQuery
+from backend.scrapers.search_query import SimpleSearchQuery
 
  
 class OneWayScraper(BaseScraper):
-    def __init__(self, search_query: SearchQuery, direct_only: bool):
+    def __init__(self, search_query: SimpleSearchQuery, direct_only: bool):
         """
         Initialize the OneWayScraper.
 
-        :param search_query: SearchQuery object with the search parameters
+        :param search_query: SimpleSearchQuery object with the search parameters
         :param direct_only: Whether to search for direct flights only (True) or not (False)
         """
         self.direct_only = direct_only

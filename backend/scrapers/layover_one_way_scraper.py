@@ -1,9 +1,9 @@
 from backend.scrapers.base_scraper import BaseScraper
-from backend.scrapers.search_query import SearchQuery
+from backend.scrapers.search_query import SeaSimpleSearchQueryrchQuery
 
 
 class LayoverOneWayScaper(BaseScraper):
-    def __init__(self, search_query: SearchQuery):
+    def __init__(self, search_query: SimpleSearchQuery):
         super().__init__(search_query)
 
     def _build_url(self) -> str:

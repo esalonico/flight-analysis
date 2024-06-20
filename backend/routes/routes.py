@@ -6,7 +6,7 @@ import backend.utils.utils as utils
 from backend.itineraries.itinerary import OneWayItinerary
 from backend.objects.airport import Airport
 from backend.scrapers.one_way_scraper import OneWayScraper
-from backend.scrapers.search_query import SearchQuery
+from backend.scrapers.search_query import SimpleSearchQuery
 
 router = APIRouter()
 
@@ -34,7 +34,7 @@ def get_itinerary_one_way(search_data: dict):
     airport_from = Airport(search_data["airport_from"])
     airport_to = Airport(search_data["airport_to"])
 
-    search_query = SearchQuery(airport_from, airport_to, datetime_dep)
+    search_query = SimpleSearchQuery(airport_from, airport_to, datetime_dep)
     scraper = OneWayScraper(search_query, direct_only=search_data["direct_only"])
     scraper.scrape()
 

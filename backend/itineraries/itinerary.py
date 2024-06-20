@@ -1,7 +1,7 @@
 import pandas as pd
 
 from backend.scrapers.base_scraper import BaseScraper
-from backend.scrapers.search_query import SearchQuery
+from backend.scrapers.search_query import SimpleSearchQuery
 from backend.utils import utils
 
 
@@ -52,11 +52,11 @@ class RoundTripItinerary(BaseItinerary):
     def __init__(self, scraper: BaseScraper):
         super().__init__(scraper)
 
-    def compute_flight_leg_within_itinerary(self, sq: SearchQuery, flight: pd.Series) -> str:
+    def compute_flight_leg_within_itinerary(self, sq: SimpleSearchQuery, flight: pd.Series) -> str:
         """
         In a given roundtrip itinerary, compute the flight leg (either departing or returning) that a given flight belongs to.
 
-        :param sq: SearchQuery object with the search parameters
+        :param sq: SimpleSearchQuery object with the search parameters
         :param flight: pd.Series representing a flight
 
         :return: String with the leg of the flight within the itinerary.

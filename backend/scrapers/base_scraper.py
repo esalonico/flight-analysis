@@ -10,13 +10,13 @@ from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from backend.objects.flight import Flight
-from backend.scrapers.search_query import SearchQuery
+from backend.scrapers.search_query import SimpleSearchQuery
 from backend.utils import utils
 from datetime import datetime
 
 
 class BaseScraper:
-    def __init__(self, search_query: SearchQuery, datetime_access: datetime = datetime.now()):
+    def __init__(self, search_query: SimpleSearchQuery, datetime_access: datetime = datetime.now()):
         self.search_query = search_query
         self.datetime_access = datetime_access
         self.flights = None
@@ -196,11 +196,11 @@ class BaseScraper:
 
         return flights
 
-    def _clean_flight_details(self, flight_list: list, sq: SearchQuery) -> dict:
+    def _clean_flight_details(self, flight_list: list, sq: SimpleSearchQuery) -> dict:
         """
         From a list of strings (representing a flight), return a dictionary of flights details after cleaning.
         :param flight_list: List of strings representing a flight.
-        :param sq: SearchQuery object.
+        :param sq: SimpleSearchQuery object.
         :return: Dictionary of flight details.
         """
         flight_dict = dict()
@@ -269,7 +269,7 @@ class BaseScraper:
 
         return n_stops, stops, stop_layover_time
 
-    def is_flight_returning_flight(self, sq: SearchQuery, airport_dep: str) -> bool:
+    def is_flight_returning_flight(self, sq: SimpleSearchQuery, airport_dep: str) -> bool:
         """
         If the departure airport of the search query is equal to the departure airport scraped, then it is a departing flight, otherwise it is a returning flight.
         """

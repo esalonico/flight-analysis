@@ -6,12 +6,12 @@ Example: FCO to MUC (direct) on 2024-02-25 (IT6671).
 import uuid
 from datetime import datetime
 
-from backend.scrapers.search_query import SearchQuery
+from backend.scrapers.search_query import SimpleSearchQuery
 from backend.utils import utils
 
 
 class Flight:
-    def __init__(self, search_query: SearchQuery, flight_info: dict = dict(), datetime_access: datetime = datetime.now()):
+    def __init__(self, search_query: SimpleSearchQuery, flight_info: dict = dict(), datetime_access: datetime = datetime.now()):
         self._id = uuid.uuid4()
         self._search_query = search_query
 
