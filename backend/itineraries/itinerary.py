@@ -1,4 +1,5 @@
 import pandas as pd
+from tqdm import tqdm
 
 from backend.scrapers.base_scraper import BaseScraper
 from backend.scrapers.one_way_scraper import OneWayScraper
@@ -11,15 +12,23 @@ class BaseItinerary:
     def __init__(self, search_query: BaseSearchQuery, direct_only: bool):
         self.search_query = search_query
         self.direct_only = direct_only
+        self.is_multidate = self._is_itinerary_multidate()
 
         self.scraper = None
         self.df = None
+
+        # for multi-date search queries
+        self.simple_search_queries = None
+        self.all_scrapers = []
 
     def scrape(self):
         raise NotImplementedError("This method must be implemented in a subclass.")
 
     def make_itinerary_df(self):
         raise NotImplementedError("This method must be implemented in a subclass.")
+    
+    def _is_itinerary_multidate(self):
+        return self.search_query.__class__.__name__ == "MultiDateSearchQuery"
 
 
 class OneWayItinerary(BaseItinerary):
@@ -27,25 +36,41 @@ class OneWayItinerary(BaseItinerary):
         super().__init__(search_query, direct_only)
 
     def scrape(self, export_to: str = None):
-        self.scraper = OneWayScraper(self.search_query, self.direct_only)
-        self.scraper.scrape()
+        # Case 1: multidate itinerary
+        if self.is_multidate:
+            self.simple_search_queries = self.search_query.make_simple_search_queries()
 
-        self.df = self.make_itinerary_df(export_to)
+            single_dates_flights = []
+            for ssq in tqdm(self.simple_search_queries):
+                scraper = OneWayScraper(ssq, self.direct_only)
+                scraper.scrape()
+                df = scraper.make_flights_df()
+                single_dates_flights.append(df)
+                
+            flight_df = pd.concat(single_dates_flights)
+            self.df = self.make_itinerary_df(flight_df, export_to)
 
-    def make_itinerary_df(self, export_to: str = None) -> pd.DataFrame:
+        # Case 2: single date itinerary
+        else:
+            print("To check better")
+            self.scraper = OneWayScraper(self.search_query, self.direct_only)
+            self.scraper.scrape()
+            self.df = self.make_itinerary_df(export_to)
+
+    def make_itinerary_df(self, flights_df: pd.DataFrame = None, export_to: str = None) -> pd.DataFrame:
         """
         Create a DataFrame with the flights information.
 
+        :param flights_df: Optional DataFrame with the flights information.
         :param export_to: Optional string with the filename to export the DataFrame to a CSV file.
 
         :return: DataFrame with the flights information.
         """
-        if not self.scraper.flights or len(self.scraper.flights) == 0:
-            return
-
-        flights_df = self.scraper.make_flights_df()
+        if flights_df is None:
+            flights_df = self.scraper.make_flights_df()
+        
         itinerary_df = flights_df.copy()
-
+        
         # sort by number of stops and price
         itinerary_df = itinerary_df.sort_values(["price", "n_stops", "duration"], ascending=[True, True, True])
 

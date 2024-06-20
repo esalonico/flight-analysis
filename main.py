@@ -12,29 +12,24 @@ if __name__ == "__main__":
 
     download_all_sheets(force_download=False)
 
-    ### USER INPUTS
-    airport_from = Airport("FCO")
-    airport_to = Airport("LIS")
-    datetime_dep = date(2024, 6, 25)
-    datetime_ret = date(2024, 7, 2)
-    ###
-
-    search_query = SimpleSearchQuery(airport_from, airport_to, datetime_dep, return_date=datetime_ret)
-
-    # ### USER INPUTS
+    # # SimpleSearchQuery
     # airport_from = Airport("FCO")
     # airport_to = Airport("LIS")
-    # datetime_dep = [date(2024, 6, 25), date(2024, 6, 26)]
-    # datetime_ret = [date(2024, 7, 2), date(2024, 7, 3)]
-    # ###
+    # datetime_dep = date(2024, 6, 25)
+    # datetime_ret = date(2024, 7, 2)
+    # search_query = SimpleSearchQuery(airport_from, airport_to, datetime_dep, return_date=datetime_ret)
 
-    # search_query = MultiDateSearchQuery(airport_from, airport_to, datetime_dep)
-    # print(search_query)
-
+    # MultiDateSearchQuery
+    airport_from = Airport("FCO")
+    airport_to = Airport("LIS")
+    datetime_dep = [date(2024, 6, 25), date(2024, 6, 26)]
+    datetime_ret = [date(2024, 7, 2), date(2024, 7, 3)]
+    search_query = MultiDateSearchQuery(airport_from, airport_to, datetime_dep, return_date=datetime_ret)
+    
     # Case 1: Direct one-way
-    # direct_one_way_itinerary = OneWayItinerary(search_query, direct_only=True)
-    # direct_one_way_itinerary.scrape()
-    # print(direct_one_way_itinerary.df)
+    direct_one_way_itinerary = OneWayItinerary(search_query, direct_only=True)
+    direct_one_way_itinerary.scrape(export_to="miani.csv")
+    print(direct_one_way_itinerary.df)
 
     # Case 2: Layover one-way
     # layover_one_way_itinerary = OneWayItinerary(search_query, direct_only=False)
@@ -47,6 +42,6 @@ if __name__ == "__main__":
     # print(direct_round_trip_itinerary.df)
 
     # Case 4: Layover round-trip
-    layover_round_trip_itinerary = RoundTripItinerary(search_query, direct_only=False)
-    layover_round_trip_itinerary.scrape()
-    print(layover_round_trip_itinerary.df)
+    # layover_round_trip_itinerary = RoundTripItinerary(search_query, direct_only=False)
+    # layover_round_trip_itinerary.scrape()
+    # print(layover_round_trip_itinerary.df)

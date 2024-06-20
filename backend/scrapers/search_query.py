@@ -1,4 +1,5 @@
 from datetime import date
+from itertools import product
 from typing import List, Optional
 
 from backend.objects.airport import Airport
@@ -42,7 +43,7 @@ class SimpleSearchQuery(BaseSearchQuery):
     – 1 return date (optional) (date)
     """
 
-    def __init__(self, airport_dep: Airport, airport_arr: Airport, departure_date: date, return_date: date = None):
+    def __init__(self, airport_dep: Airport, airport_arr: Airport, departure_date: date, return_date: date = None, debug: bool = True):
         assert utils.is_date_in_future(departure_date), "Desired date must be in the future (or today)."
 
         if return_date:
@@ -54,7 +55,8 @@ class SimpleSearchQuery(BaseSearchQuery):
         self.departure_date = departure_date
         self.return_date = return_date
 
-        print(self)
+        if debug:
+            print(self)
 
 
 class MultiDateSearchQuery(BaseSearchQuery):
@@ -83,9 +85,26 @@ class MultiDateSearchQuery(BaseSearchQuery):
             for ret_date in return_date:
                 assert utils.is_date_in_future(ret_date), "Return date must be in the future (or today)."
 
+        # assert that no date from the return_date list is before the departure_date
+        if return_date:
+            for dep_date, ret_date in product(departure_date, return_date):
+                assert ret_date > dep_date, "Return date must be after departure date."
+
         self.airport_dep = airport_dep
         self.airport_arr = airport_arr
         self.departure_date = departure_date
         self.return_date = return_date
 
         print(self)
+
+    def make_simple_search_queries(self) -> List[SimpleSearchQuery]:
+        """
+        From a MultiDateSearchQuery, create a list of SimpleSearchQuery objects.
+
+        :return: List of SimpleSearchQuery objects.
+        """
+        combinations = list(product(self.departure_date, self.return_date))
+        unique_combinations = set(combinations)
+
+        # create a list of SimpleSearchQuery objects
+        return [SimpleSearchQuery(self.airport_dep, self.airport_arr, dep, ret, debug=False) for dep, ret in unique_combinations]
