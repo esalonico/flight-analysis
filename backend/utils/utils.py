@@ -81,7 +81,7 @@ def convert_string_to_duration(duration_str: str) -> timedelta:
         minutes = duration_str.split("min")[0].strip()
 
     else:
-        print(duration_str)
+        print("String giving error:", duration_str)
         raise ValueError("Invalid duration string.")
 
     return timedelta(hours=int(hours), minutes=int(minutes))

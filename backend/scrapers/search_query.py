@@ -54,6 +54,8 @@ class SimpleSearchQuery(BaseSearchQuery):
         self.departure_date = departure_date
         self.return_date = return_date
 
+        print(self)
+
 
 class MultiDateSearchQuery(BaseSearchQuery):
     """
@@ -85,3 +87,5 @@ class MultiDateSearchQuery(BaseSearchQuery):
         self.airport_arr = airport_arr
         self.departure_date = departure_date
         self.return_date = return_date
+
+        print(self)

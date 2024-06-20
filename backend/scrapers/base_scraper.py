@@ -24,9 +24,11 @@ class BaseScraper:
 
         self.driver = self._create_driver()
         self.url = self._build_url()
+        
+        print(self)
 
     def __repr__(self) -> str:
-        return f"Scrape({self.__class__.__name__}, {self.url})"
+        return f"{self.__class__.__name__}({self.url})"
 
     def _create_driver(self) -> webdriver.Chrome:
         """
@@ -59,9 +61,7 @@ class BaseScraper:
         WebDriverWait(driver, timeout).until(lambda s: "Before you continue to Google" in s.page_source)
 
         # click on accept terms button
-        WebDriverWait(driver, timeout).until(
-            EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all')]"))
-        ).click()
+        WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all')]"))).click()
 
     def _get_raw_flight_results(self) -> list:
         """
@@ -172,6 +172,7 @@ class BaseScraper:
             "Other departing flights",
             "Other returning flights",
             "Separate tickets booked together",
+            "Separate tickets",
             "Price graph",
             "Date grid",
             "more flights",

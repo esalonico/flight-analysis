@@ -1,21 +1,36 @@
 import pandas as pd
 
 from backend.scrapers.base_scraper import BaseScraper
-from backend.scrapers.search_query import SimpleSearchQuery
+from backend.scrapers.one_way_scraper import OneWayScraper
+from backend.scrapers.round_trip_scraper import RoundTripScraper
+from backend.scrapers.search_query import BaseSearchQuery
 from backend.utils import utils
 
 
 class BaseItinerary:
-    def __init__(self, scraper: BaseScraper):
-        self.scraper = scraper
+    def __init__(self, search_query: BaseSearchQuery, direct_only: bool):
+        self.search_query = search_query
+        self.direct_only = direct_only
+
+        self.scraper = None
+        self.df = None
+
+    def scrape(self):
+        raise NotImplementedError("This method must be implemented in a subclass.")
 
     def make_itinerary_df(self):
         raise NotImplementedError("This method must be implemented in a subclass.")
 
 
 class OneWayItinerary(BaseItinerary):
-    def __init__(self, scraper: BaseScraper):
-        super().__init__(scraper)
+    def __init__(self, search_query, direct_only):
+        super().__init__(search_query, direct_only)
+
+    def scrape(self, export_to: str = None):
+        self.scraper = OneWayScraper(self.search_query, self.direct_only)
+        self.scraper.scrape()
+
+        self.df = self.make_itinerary_df(export_to)
 
     def make_itinerary_df(self, export_to: str = None) -> pd.DataFrame:
         """
@@ -49,24 +64,14 @@ class OneWayItinerary(BaseItinerary):
 
 
 class RoundTripItinerary(BaseItinerary):
-    def __init__(self, scraper: BaseScraper):
-        super().__init__(scraper)
+    def __init__(self, search_query, direct_only):
+        super().__init__(search_query, direct_only)
 
-    def compute_flight_leg_within_itinerary(self, sq: SimpleSearchQuery, flight: pd.Series) -> str:
-        """
-        In a given roundtrip itinerary, compute the flight leg (either departing or returning) that a given flight belongs to.
+    def scrape(self, export_to: str = None):
+        self.scraper = RoundTripScraper(self.search_query, self.direct_only)
+        self.scraper.scrape()
 
-        :param sq: SimpleSearchQuery object with the search parameters
-        :param flight: pd.Series representing a flight
-
-        :return: String with the leg of the flight within the itinerary.
-        """
-        if flight["airport_dep"] == sq.airport_dep.iata:
-            return "departing"
-        elif flight["airport_dep"] == sq.airport_arr.iata:
-            return "returning"
-        else:
-            return "unknown"
+        self.df = self.make_itinerary_df(export_to)
 
     def make_itinerary_df(self, export_to: str = None) -> pd.DataFrame:
         if not self.scraper.flights or len(self.scraper.flights) == 0:
@@ -75,7 +80,7 @@ class RoundTripItinerary(BaseItinerary):
         flights_df = self.scraper.make_flights_df()
 
         df = flights_df.copy()
-        df["leg"] = df.apply(lambda x: self.compute_flight_leg_within_itinerary(self.scraper.search_query, x), axis=1)
+        df["leg"] = df.apply(lambda x: self._compute_flight_leg_within_itinerary(self.scraper.search_query, x), axis=1)
 
         # group by flight combination and sort by leg
         df = (
@@ -96,3 +101,19 @@ class RoundTripItinerary(BaseItinerary):
             df.to_csv(export_to, index=False)
 
         return df
+
+    def _compute_flight_leg_within_itinerary(self, sq: BaseSearchQuery, flight: pd.Series) -> str:
+        """
+        In a given roundtrip itinerary, compute the flight leg (either departing or returning) that a given flight belongs to.
+
+        :param sq: SimpleSearchQuery object with the search parameters
+        :param flight: pd.Series representing a flight
+
+        :return: String with the leg of the flight within the itinerary.
+        """
+        if flight["airport_dep"] == sq.airport_dep.iata:
+            return "departing"
+        elif flight["airport_dep"] == sq.airport_arr.iata:
+            return "returning"
+        else:
+            return "unknown"
