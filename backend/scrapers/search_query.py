@@ -6,105 +6,121 @@ from backend.objects.airport import Airport
 from backend.utils import utils
 
 
-class BaseSearchQuery:
-    def __init__(self):
-        pass
-
-    def __repr__(self) -> str:
-        # handle dates as list
-        if isinstance(self.departure_date, list):
-            departure_date = [x.strftime("%Y-%m-%d") for x in self.departure_date]
-        else:
-            departure_date = self.departure_date.strftime("%Y-%m-%d")
-
-        if self.return_date and isinstance(self.return_date, list):
-            return_date = [x.strftime("%Y-%m-%d") for x in self.return_date]
-        elif self.return_date:
-            return_date = self.return_date.strftime("%Y-%m-%d")
-        else:
-            return_date = None
-
-        # make string
-        rep = f"{self.__class__.__name__}({self.airport_dep}, {self.airport_arr}, {departure_date}"
-
-        if self.return_date:
-            rep += f", {return_date}"
-
-        return rep + ")"
-
-
-class SimpleSearchQuery(BaseSearchQuery):
-    """
-    Simple search query.
-
-    – 1 departure airport (Airport)
-    – 1 arrival airport (Airport)
-    – 1 departure date (date)
-    – 1 return date (optional) (date)
-    """
-
-    def __init__(self, airport_dep: Airport, airport_arr: Airport, departure_date: date, return_date: date = None, debug: bool = True):
-        assert utils.is_date_in_future(departure_date), "Desired date must be in the future (or today)."
-
-        if return_date:
-            assert utils.is_date_in_future(return_date), "Return date must be in the future (or today)."
-            assert return_date > departure_date, "Return date must be after departure date."
-
+class SingleItemSearchQuery:
+    def __init__(self, airport_dep: Airport, airport_arr: Airport, departure_date: date, return_date: Optional[date] = None, debug: bool = False):
         self.airport_dep = airport_dep
         self.airport_arr = airport_arr
         self.departure_date = departure_date
         self.return_date = return_date
+
+        self.combinations = [self]
 
         if debug:
             print(self)
 
+    def __repr__(self) -> str:
+        return f"SingleItemSearchQuery({self.airport_dep}, {self.airport_arr}, {self.departure_date}, {self.return_date})"
 
-class MultiDateSearchQuery(BaseSearchQuery):
-    """
-    Multi-date search query.
 
-    – 1 departure airport (Airport)
-    – 1 arrival airport (Airport)
-    – N departure date (List[date])
-    – 1-N return date (List[date]) (optional)
-    """
-
-    def __init__(self, airport_dep: Airport, airport_arr: Airport, departure_date: List[date], return_date: Optional[List[date]] = None):
-        # assert departure_date and return_date are lists
-        assert isinstance(departure_date, list), "Departure date must be a list."
-        assert return_date is None or isinstance(return_date, list), "Return date must be a list or None."
-
-        # assert departure_date and return_date are not empty
-        assert departure_date, "Departure date must not be empty."
-        assert return_date is None or return_date, "Return date must not be empty."
-
-        # assert dates are in the future
-        for dep_date in departure_date:
-            assert utils.is_date_in_future(dep_date), "Desired date must be in the future (or today)."
-        if return_date:
-            for ret_date in return_date:
-                assert utils.is_date_in_future(ret_date), "Return date must be in the future (or today)."
-
-        # assert that no date from the return_date list is before the departure_date
-        if return_date:
-            for dep_date, ret_date in product(departure_date, return_date):
-                assert ret_date > dep_date, "Return date must be after departure date."
-
-        self.airport_dep = airport_dep
-        self.airport_arr = airport_arr
-        self.departure_date = departure_date
-        self.return_date = return_date
-
-        print(self)
-
-    def make_simple_search_queries(self) -> List[SimpleSearchQuery]:
+class SearchQuery:
+    # TODO: maybe add direct_only parameter here?
+    def __init__(
+        self,
+        airports_dep: List[Airport],
+        airports_arr: List[Airport],
+        departure_dates: List[date],
+        return_dates: Optional[List[date]] = None,
+        debug: bool = False,
+    ):
         """
-        From a MultiDateSearchQuery, create a list of SimpleSearchQuery objects.
+        Initialize the SearchQuery object.
 
-        :return: List of SimpleSearchQuery objects.
+        :param airport_dep: List of departure airports (Airport objects)
+        :param airport_arr: List of arrival airports (Airport objects)
+        :param departure_date: List of departure dates (date objects)
+        :param return_date: Optional list of return dates (date objects)
+        :param debug: Whether to print the object representation or not
         """
-        combinations = list(product(self.departure_date, self.return_date))
+        self._check_dates_validity(departure_dates, return_dates)
+        self._check_airports_validity(airports_dep, airports_arr)
+
+        self.airports_dep = airports_dep
+        self.airports_arr = airports_arr
+        self.departure_dates = departure_dates
+        self.return_dates = return_dates
+
+        self.combinations = self.make_single_items_combinations(debug)
+
+        if debug:
+            print(self)
+
+    def __repr__(self) -> str:
+        # handle dates as list
+        departure_dates = [x.strftime("%Y-%m-%d") for x in self.departure_dates]
+
+        if self.return_dates:
+            return_dates = [x.strftime("%Y-%m-%d") for x in self.return_dates]
+        else:
+            return_dates = None
+
+        airports_dep = [airport.iata for airport in self.airports_dep]
+        airport_arr = [airport.iata for airport in self.airports_arr]
+
+        # make string
+        rep = f"SeachQuery({airports_dep}, {airport_arr}, {departure_dates}"
+
+        if self.return_dates:
+            rep += f", {return_dates}"
+
+        return rep + f", [{len(self.combinations)} combinations])"
+
+    def _check_dates_validity(self, departure_dates: List[date], return_dates: Optional[List[date]]):
+        """Check the validity of the input dates."""
+
+        # check if the lists are empty
+        if not departure_dates:
+            raise ValueError("Departure date list must not be empty.")
+        if return_dates is not None and not return_dates:
+            raise ValueError("Return date list must be either None or not empty.")
+
+        # check if the departing dates are in the future
+        for dep_date in departure_dates:
+            if not utils.is_date_in_future(dep_date):
+                raise ValueError(f"Departure date {dep_date} must be in the future (or today).")
+
+        if return_dates:
+            # check if the return dates are in the future
+            for ret_date in return_dates:
+                if not utils.is_date_in_future(ret_date):
+                    raise ValueError(f"Return date {ret_date} must be in the future (or today).")
+
+            # check if the return dates are after the departure dates
+            for dep_date, ret_date in product(departure_dates, return_dates):
+                if ret_date <= dep_date:
+                    raise ValueError(f"Return date {ret_date} must be after departure date {dep_date}.")
+
+    def _check_airports_validity(self, airports_dep: List[Airport], airports_arr: List[Airport]):
+        """Check the validity of the input airports."""
+
+        # check if the lists are empty
+        if not airports_dep:
+            raise ValueError("Departure airport list must not be empty.")
+        if not airports_arr:
+            raise ValueError("Arrival airport list must not be empty.")
+
+        # check if the same airport is in both lists
+        if any(airport in airports_arr for airport in airports_dep):
+            raise ValueError("Departure and arrival airports must be different.")
+
+    def make_single_items_combinations(self, debug: bool = False):
+        if self.return_dates:
+            return_dates = self.return_dates
+        else:
+            return_dates = [None]
+        combinations = list(product(self.airports_dep, self.airports_arr, self.departure_dates, return_dates))
         unique_combinations = set(combinations)
 
-        # create a list of SimpleSearchQuery objects
-        return [SimpleSearchQuery(self.airport_dep, self.airport_arr, dep, ret, debug=False) for dep, ret in unique_combinations]
+        return [
+            SingleItemSearchQuery(airport_dep, airport_arr, departure_date, return_date, debug=debug)
+            for airport_dep, airport_arr, departure_date, return_date in unique_combinations
+        ]

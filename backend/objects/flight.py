@@ -6,12 +6,12 @@ Example: FCO to MUC (direct) on 2024-02-25 (IT6671).
 import uuid
 from datetime import datetime
 
-from backend.scrapers.search_query import SimpleSearchQuery
+from backend.scrapers.search_query import SearchQuery
 from backend.utils import utils
 
 
 class Flight:
-    def __init__(self, search_query: SimpleSearchQuery, flight_info: dict = dict(), datetime_access: datetime = datetime.now()):
+    def __init__(self, search_query: SearchQuery, flight_info: dict = dict(), datetime_access: datetime = datetime.now()):
         self._id = uuid.uuid4()
         self._search_query = search_query
 
@@ -36,6 +36,7 @@ class Flight:
         self.duration = flight_info.get("duration", None)
         self.flight_combination = flight_info.get("flight_combination", None)
         self.url = flight_info.get("url", None)
+        self.departing_flight_id = flight_info.get("departing_flight_id", None)
 
     def __repr__(self) -> str:
         rep = f"Flight({str(self._id)[:8]}"
@@ -51,4 +52,4 @@ class Flight:
         Returns a dictionary with all public attributes of the flight.
         """
         # don't return private attributes
-        return {key: value for key, value in self.__dict__.items() if not key.startswith("_")}
+        return {"_id": self._id} | {key: value for key, value in self.__dict__.items() if not key.startswith("_")}

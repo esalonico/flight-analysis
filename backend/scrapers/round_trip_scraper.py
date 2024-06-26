@@ -7,15 +7,15 @@ from selenium.webdriver.support.ui import WebDriverWait
 from tqdm import tqdm
 
 from backend.scrapers.base_scraper import BaseScraper
-from backend.scrapers.search_query import SimpleSearchQuery
+from backend.scrapers.search_query import SearchQuery
 
 
 class RoundTripScraper(BaseScraper):
-    def __init__(self, search_query: SimpleSearchQuery, direct_only: bool):
+    def __init__(self, search_query: SearchQuery, direct_only: bool):
         """
         Initialize the RoundTripScraper.
 
-        :param search_query: SimpleSearchQuery object with the search parameters
+        :param search_query: SearchQuery object with the search parameters
         :param direct_only: Whether to search for direct flights only (True) or not (False)
         """
         assert search_query.return_date, "Return date must be provided for a roundtrip flight."
@@ -116,7 +116,7 @@ class RoundTripScraper(BaseScraper):
             departing_flight_elements_li.extend(flights_li_within_section)
 
         n_departing_flights = len(departing_flight_elements_li)
-        print(f"{n_departing_flights} departing flights found")
+        # print(f"{n_departing_flights} departing flights found")
 
         flights_objects = []
 
@@ -155,7 +155,7 @@ class RoundTripScraper(BaseScraper):
 
             # returning flights
             returning_flights = self.make_flight_objects_from_driver(
-                flight_combination=flight_combination, url=self.driver.current_url
+                flight_combination=flight_combination, url=self.driver.current_url, departing_flight_id=departing_flights[i]._id
             )
             flights_objects.append(returning_flights)
 

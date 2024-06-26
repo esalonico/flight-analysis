@@ -1,7 +1,10 @@
 import re
+from datetime import datetime
+from uuid import UUID
 
 import pandas as pd
 from selenium import webdriver
+from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -10,13 +13,12 @@ from selenium.webdriver.support.ui import WebDriverWait
 from webdriver_manager.chrome import ChromeDriverManager
 
 from backend.objects.flight import Flight
-from backend.scrapers.search_query import SimpleSearchQuery
+from backend.scrapers.search_query import SearchQuery
 from backend.utils import utils
-from datetime import datetime
 
 
 class BaseScraper:
-    def __init__(self, search_query: SimpleSearchQuery, datetime_access: datetime = datetime.now()):
+    def __init__(self, search_query: SearchQuery, datetime_access: datetime = datetime.now(), debug: bool = False):
         self.search_query = search_query
         self.datetime_access = datetime_access
         self.flights = None
@@ -24,8 +26,9 @@ class BaseScraper:
 
         self.driver = self._create_driver()
         self.url = self._build_url()
-        
-        print(self)
+
+        if debug:
+            print(self)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.url})"
@@ -67,7 +70,12 @@ class BaseScraper:
         """
         Extracts the raw flight results from the page.
         """
-        WebDriverWait(self.driver, 5).until(lambda s: "€" in s.page_source)  # wait for the page to load
+        try:
+            WebDriverWait(self.driver, 5).until(lambda s: "€" in s.page_source)  # wait for the page to load
+        except TimeoutException as e:
+            self.driver.save_screenshot(f"TimeoutException.png")
+            print("TimeoutException:", e)
+            raise e
         return self.driver.find_element(by=By.XPATH, value='//body[@id = "yDmH0d"]').text.split("\n")
 
     def _search_has_no_flights(self, results_raw: list) -> bool:
@@ -120,6 +128,7 @@ class BaseScraper:
             "Other flights",
             "Avoids as much CO2",
             "The cheapest time to book",
+            "Price unavailable",
         ]
 
         # compile all regexes
@@ -171,11 +180,11 @@ class BaseScraper:
             "round trip",
             "Other departing flights",
             "Other returning flights",
-            "Separate tickets booked together",
             "Separate tickets",
             "Price graph",
             "Date grid",
             "more flights",
+            "Prices are likely to go",
         ]
 
         for clutter in clutter_strings:
@@ -197,11 +206,11 @@ class BaseScraper:
 
         return flights
 
-    def _clean_flight_details(self, flight_list: list, sq: SimpleSearchQuery) -> dict:
+    def _clean_flight_details(self, flight_list: list, sq: SearchQuery) -> dict:
         """
         From a list of strings (representing a flight), return a dictionary of flights details after cleaning.
         :param flight_list: List of strings representing a flight.
-        :param sq: SimpleSearchQuery object.
+        :param sq: SearchQuery object.
         :return: Dictionary of flight details.
         """
         flight_dict = dict()
@@ -263,14 +272,12 @@ class BaseScraper:
 
         # step 3: identify if there is a change of airport
         for element in flight_list:
-            if "601" in element:
-                print("miani")
             if "change of airport" in element.lower():
                 stops = "change of airport"
 
         return n_stops, stops, stop_layover_time
 
-    def is_flight_returning_flight(self, sq: SimpleSearchQuery, airport_dep: str) -> bool:
+    def is_flight_returning_flight(self, sq: SearchQuery, airport_dep: str) -> bool:
         """
         If the departure airport of the search query is equal to the departure airport scraped, then it is a departing flight, otherwise it is a returning flight.
         """
@@ -301,17 +308,18 @@ class BaseScraper:
             return False
         return True
 
-    def make_flight_objects_from_driver(self, flight_combination: int = None, url: str = None) -> list[Flight]:
+    def make_flight_objects_from_driver(self, flight_combination: int = None, url: str = None, departing_flight_id: UUID = None) -> list[Flight]:
         """
         Create Flight objects from a driver page.
 
         :return: List of Flight objects
         """
+        self._skip_google_terms_page(self.driver)
         results_raw = self._get_raw_flight_results()
 
         flights_exist = self.check_if_flights_exist(results_raw)
         if not flights_exist:
-            print("No flights found for this search.")
+            print(f"No flights found for this search ({url}).")
             return []
 
         results_raw_filtered = self._filter_raw_results(results_raw)
@@ -325,6 +333,7 @@ class BaseScraper:
             flight_dict = self._clean_flight_details(flight_list, self.search_query)
             flight_dict["flight_combination"] = flight_combination
             flight_dict["url"] = url
+            flight_dict["departing_flight_id"] = departing_flight_id
             flight_obj = Flight(self.search_query, flight_dict, datetime_access=self.datetime_access)
 
             flight_objects.append(flight_obj)
