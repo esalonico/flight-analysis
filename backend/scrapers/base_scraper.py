@@ -33,6 +33,10 @@ class BaseScraper:
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.url})"
 
+    def __del__(self):
+        if self.driver:
+            self.driver.quit()
+
     def _create_driver(self) -> webdriver.Chrome:
         """
         Creates a Chrome webdriver instance.

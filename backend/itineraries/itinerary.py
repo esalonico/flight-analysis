@@ -249,7 +249,7 @@ class CrazyLayoverItinerary(BaseItinerary):
         for itinerary in pbar:
             pbar.set_description(f"Scraping connection {itinerary['connection_id']}/{n_total_connections}")
             try:
-                itinerary["itinerary"].scrape()
+                itinerary["itinerary"].scrape() # OneWayItinerary.scrape()
                 df = itinerary["itinerary"].df
                 df["option"] = itinerary["connection_id"]
                 df["connection_leg"] = itinerary["connection_leg"]
