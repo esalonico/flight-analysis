@@ -88,6 +88,7 @@ class RoundTripScraper(BaseScraper):
         jsaction_pattern = re.compile(r"^click:([a-zA-Z0-9]{6};)([a-zA-Z0-9]{6}:)")
         filtered_elements = [el for el in jsaction_elements if jsaction_pattern.match(el.get_attribute("jsaction"))]
         if not filtered_elements:
+            self.driver.save_screenshot("jsaction_element_not_found.png")
             raise ValueError("No flight found.")
         return filtered_elements[0]
 
@@ -128,9 +129,11 @@ class RoundTripScraper(BaseScraper):
             flight.flight_combination = i + 1
         flights_objects.append(departing_flights)
 
-        for i in tqdm(range(n_departing_flights)):
+        pbar = tqdm(range(n_departing_flights), leave=False)
+        for i in pbar:
             # flight combination: number of the flight combination (1, 2, 3, ...) that are proposed on the page
             flight_combination = i + 1
+            pbar.set_description(f"Departing flight {flight_combination}/{n_departing_flights}")
 
             self.driver.get(url)
 
@@ -141,8 +144,13 @@ class RoundTripScraper(BaseScraper):
                 loop_flights_li_within_section = loop_section.find_elements(By.TAG_NAME, "li")
                 loop_departing_flight_elements_li.extend(loop_flights_li_within_section)
 
-            element_to_click = self._get_jsaction_element(loop_departing_flight_elements_li[i])
-            element_to_click.click()
+            try:
+                element_to_click = self._get_jsaction_element(loop_departing_flight_elements_li[i])
+                element_to_click.click()
+            except ValueError as e:
+                # TODO: log it as debug
+                # print("Flight not found")
+                continue
 
             # wait for the page to load
             try:

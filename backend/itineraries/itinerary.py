@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 import pandas as pd
 from tqdm import tqdm
 
@@ -29,11 +31,18 @@ class OneWayItinerary(BaseItinerary):
 
     def scrape(self, export_to: str = None):
         combination_flights = []
-        for combination in tqdm(self.search_query.combinations):
+        pbar = tqdm(self.search_query.combinations, leave=False)
+        for combination in pbar:
+            pbar.set_description(f"Scraping {combination}")
             scraper = OneWayScraper(combination, self.direct_only)
             scraper.scrape()
             df = scraper.make_flights_df()
-            combination_flights.append(df)
+            if not df.empty and not df.isna().all(axis=None):
+                combination_flights.append(df)
+
+        if not combination_flights:
+            self.df = pd.DataFrame()
+            return
 
         flight_df = pd.concat(combination_flights)
         self.df = self.make_itinerary_df(flight_df, export_to)
@@ -75,11 +84,14 @@ class RoundTripItinerary(BaseItinerary):
 
     def scrape(self, export_to: str = None):
         combination_flights = []
-        for combination in tqdm(self.search_query.combinations):
+        pbar = tqdm(self.search_query.combinations)
+        for combination in pbar:
+            pbar.set_description(f"Scraping {combination}")
             scraper = RoundTripScraper(combination, self.direct_only)
             scraper.scrape()
             df = scraper.make_flights_df()
-            combination_flights.append(df)
+            if not df.empty and not df.isna().all(axis=None):
+                combination_flights.append(df)
 
         flight_df = pd.concat(combination_flights)
         self.df = self.make_itinerary_df(flight_df, export_to)
@@ -100,12 +112,10 @@ class RoundTripItinerary(BaseItinerary):
 
         # assign each departing flight an ID of itself
         df_in["departing_flight_id"] = df_in["departing_flight_id"].fillna(df_in["_id"])
-        df_in.to_csv("df_in.csv", index=False)
 
         # Compute column for the price rank within the departing flights to order them
-        df_departing = df_in[df_in["leg"] == "departing"]
-        df_departing.to_csv("departing.csv", index=False)
-        df_departing["departing_price_rank"] = df_departing.groupby("departing_flight_id")["price"].rank(method="dense")
+        df_departing = df_in[df_in["leg"] == "departing"].copy()
+        df_departing.loc[:, "departing_price_rank"] = df_departing.groupby("departing_flight_id")["price"].rank(method="dense")
 
         # Merge the ranks back into the original DataFrame
         df_in = df_in.merge(df_departing[["departing_flight_id", "_id", "departing_price_rank"]], on=["departing_flight_id", "_id"], how="left")
@@ -158,11 +168,13 @@ class RoundTripItinerary(BaseItinerary):
 
 
 class CrazyLayoverItinerary(BaseItinerary):
-    def __init__(self, search_query, direct_only, max_stops: int = 2):
+    def __init__(self, search_query, direct_only, max_stops: int = 2, min_layover_time: timedelta = timedelta(hours=2)):
         # TODO: maybe have n_layovers as a parameter in the SearchQuery object?
         assert max_stops in [2, 3], "Number of max stops must be 2 (one layover) or 3 (two layovers)."
         assert search_query.return_dates is None, "CrazyLayoverItinerary only supports one-way flights."
+
         self.max_stops = max_stops
+        self.min_layover_time = min_layover_time
 
         super().__init__(search_query, direct_only)
 
@@ -226,12 +238,16 @@ class CrazyLayoverItinerary(BaseItinerary):
 
         return one_way_itineraries
 
-    def scrape(self):
+    def scrape(self, export_to: str = None):
         search_queries = self.create_search_queries_from_connections()
         one_way_itineraries = self.create_one_way_itineraries_from_search_queries(search_queries)
 
+        n_total_connections = pd.DataFrame(one_way_itineraries)["connection_id"].nunique()
+
         one_way_itineraries_dfs = []
-        for itinerary in tqdm(one_way_itineraries):
+        pbar = tqdm(one_way_itineraries, position=0)
+        for itinerary in pbar:
+            pbar.set_description(f"Scraping connection {itinerary['connection_id']}/{n_total_connections}")
             try:
                 itinerary["itinerary"].scrape()
                 df = itinerary["itinerary"].df
@@ -240,17 +256,87 @@ class CrazyLayoverItinerary(BaseItinerary):
                 one_way_itineraries_dfs.append(df)
             except Exception as e:
                 print(f"Error in connection {itinerary['connection_id']}: {e}")
+                raise e
 
-            # if itinerary["connection_id"] >= 20:
-            #     break
+            if itinerary["connection_id"] >= 3:
+                break
 
         flight_df = pd.concat(one_way_itineraries_dfs)
-        flight_df.to_csv("crazy_layover.csv", index=False)
+        self.df = self.make_itinerary_df(flight_df, export_to)
 
     def make_itinerary_df(self, flights_df: pd.DataFrame, export_to: str = None) -> pd.DataFrame:
-        df = flights_df.copy()
+        df = flights_df.copy().reset_index(drop=True)
 
         if df.empty:
             return pd.DataFrame()
 
-        # TODO: implement this method
+        arrival_airports = [a.iata for a in self.search_query.airports_arr]
+        df = self._clean_df(df, arrival_airports)
+
+        # Export to CSV if requested
+        if export_to:
+            df.to_csv(export_to, index=False)
+
+    def _clean_df(self, df: pd.DataFrame, arrival_airports: list[str]) -> pd.DataFrame:
+        # Initialize a list to store the indices of rows to remove
+        indices_to_remove = []
+
+        # Initialize dictionaries to store the minimum total price and minimum layover time for each option
+        min_total_prices = {}
+        min_layover_times = {}
+
+        # First loop: Identify indices to remove and calculate minimum layover time
+        for option, data in df.groupby("option"):
+            # Determine the number of unique connection legs in the current option
+            num_legs = data["connection_leg"].nunique()
+
+            # Case 1: Single leg flight checks
+            if num_legs == 1:
+                # Check if it does not arrive in the arrival airports desired or is marked as the second leg
+                if data["airport_arr"].mode().values[0] not in arrival_airports or data["connection_leg"].min() == 2:
+                    indices_to_remove.extend(data.index.to_list())
+                else:
+                    # Single leg flight to FMM, consider its price as the total price and set layover time to 0
+                    min_total_prices[option] = data["price"].min()
+                    min_layover_times[option] = timedelta(0)
+
+            # Case 2: Multiple leg flight checks
+            elif num_legs > 1:
+                # Separate the first and second leg flights
+                first_leg_flights = data[data["connection_leg"] == 1]
+                second_leg_flights = data[data["connection_leg"] == 2]
+
+                # Determine the earliest possible departure time for the second leg after the minimum layover
+                earliest_second_leg_time = pd.to_datetime(second_leg_flights["datetime_dep"].min()) - self.min_layover_time
+
+                # Identify first leg flights that arrive too late for the layover
+                late_first_leg_flights = first_leg_flights[pd.to_datetime(first_leg_flights["datetime_arr"]) > earliest_second_leg_time]
+
+                # Add these late flights to the removal list
+                indices_to_remove.extend(late_first_leg_flights.index)
+
+                # If all first leg flights are too late, remove the entire option
+                if len(late_first_leg_flights) == len(first_leg_flights):
+                    indices_to_remove.extend(data.index)
+                else:
+                    # Find the minimum price combination of leg 1 and leg 2
+                    min_first_leg_price = first_leg_flights[~first_leg_flights.index.isin(late_first_leg_flights.index)]["price"].min()
+                    min_second_leg_price = second_leg_flights["price"].min()
+                    min_total_prices[option] = min_first_leg_price + min_second_leg_price
+
+                    # Calculate the minimum layover time
+                    latest_first_leg_arrival = pd.to_datetime(
+                        first_leg_flights[~first_leg_flights.index.isin(late_first_leg_flights.index)]["datetime_arr"]
+                    ).max()
+                    earliest_second_leg_departure = pd.to_datetime(second_leg_flights["datetime_dep"]).min()
+                    layover_time = earliest_second_leg_departure - latest_first_leg_arrival
+                    min_layover_times[option] = layover_time
+
+        # Filter the DataFrame to exclude the identified rows
+        filtered_df = df[~df.index.isin(indices_to_remove)].copy()
+
+        # Map the minimum total prices and minimum layover times to the filtered DataFrame
+        filtered_df["min_total_price"] = filtered_df["option"].map(min_total_prices)
+        filtered_df["min_layover_time"] = filtered_df["option"].map(min_layover_times)
+
+        return filtered_df

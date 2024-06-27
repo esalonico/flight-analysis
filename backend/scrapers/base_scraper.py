@@ -71,9 +71,14 @@ class BaseScraper:
         Extracts the raw flight results from the page.
         """
         try:
-            WebDriverWait(self.driver, 5).until(lambda s: "€" in s.page_source)  # wait for the page to load
+            # wait for the page to load
+            # WebDriverWait(self.driver, 5).until(lambda s: "€" in s.page_source)  # wait for the page to load
+            WebDriverWait(self.driver, 5).until(lambda s: "Search results" in s.page_source or "Best flights" in s.page_source)
         except TimeoutException as e:
             self.driver.save_screenshot(f"TimeoutException.png")
+            # save s.page_source to a file
+            with open("page_source.html", "w") as f:
+                f.write(self.driver.page_source)
             print("TimeoutException:", e)
             raise e
         return self.driver.find_element(by=By.XPATH, value='//body[@id = "yDmH0d"]').text.split("\n")
@@ -183,8 +188,9 @@ class BaseScraper:
             "Separate tickets",
             "Price graph",
             "Date grid",
-            "more flights",
+            "more flight",
             "Prices are likely to go",
+            "hide",
         ]
 
         for clutter in clutter_strings:
@@ -213,6 +219,9 @@ class BaseScraper:
         :param sq: SearchQuery object.
         :return: Dictionary of flight details.
         """
+        if len(flight_list) < 9 and not flight_list[-1].isdigit():
+            return None
+
         flight_dict = dict()
 
         flight_dict["airport_dep"] = self.get_airports_from_txt(flight_list[4])[0]
@@ -319,10 +328,15 @@ class BaseScraper:
 
         flights_exist = self.check_if_flights_exist(results_raw)
         if not flights_exist:
-            print(f"No flights found for this search ({url}).")
+            # TODO: add logging (debug level) for this
+            # print(f"No flights found for this search ({url}).")
             return []
 
-        results_raw_filtered = self._filter_raw_results(results_raw)
+        try:
+            results_raw_filtered = self._filter_raw_results(results_raw)
+        except Exception as e:
+            self.driver.save_screenshot("error_filtering_results.png")
+            raise e
 
         self.metadata = self._get_flight_search_metadata(results_raw)
 
@@ -330,7 +344,18 @@ class BaseScraper:
 
         flight_objects = []
         for flight_list in flights:
-            flight_dict = self._clean_flight_details(flight_list, self.search_query)
+            if "Price unavailable" in flight_list:
+                continue
+
+            try:
+                flight_dict = self._clean_flight_details(flight_list, self.search_query)
+            except Exception as e:
+                self.driver.save_screenshot("error_cleaning_flight.png")
+                print("FLIGHT LIST")
+                print(flight_list)
+                raise e
+            if flight_dict is None:
+                continue
             flight_dict["flight_combination"] = flight_combination
             flight_dict["url"] = url
             flight_dict["departing_flight_id"] = departing_flight_id

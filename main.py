@@ -1,4 +1,4 @@
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 
 from backend.itineraries.itinerary import (CrazyLayoverItinerary,
                                            OneWayItinerary, RoundTripItinerary)
@@ -18,12 +18,7 @@ if __name__ == "__main__":
     airports_arr = [Airport("FMM")]
     departure_dates = [date(2024, 7, 25), date(2024, 7, 26)]
     return_dates = [date(2024, 7, 29)]
-    search_query = SearchQuery(airports_dep, airports_arr, departure_dates, return_dates=None, debug=False)
-
-    itinerary = CrazyLayoverItinerary(search_query, direct_only=False, max_stops=2)
-    itinerary.scrape()
-    # x = airports_dep[0].get_all_connections("FMM", 2)
-    # print(x)
+    search_query = SearchQuery(airports_dep, airports_arr, departure_dates, return_dates, debug=False)
 
     # Case 1: Direct one-way
     # direct_one_way_itinerary = OneWayItinerary(search_query, direct_only=True)
@@ -37,10 +32,15 @@ if __name__ == "__main__":
 
     # Case 3: Direct round-trip
     # direct_round_trip_itinerary = RoundTripItinerary(search_query, direct_only=True)
-    # direct_round_trip_itinerary.scrape(export_to="mianivacca.csv")
+    # direct_round_trip_itinerary.scrape(export_to="miani.csv")
     # print(direct_round_trip_itinerary.df)
 
     # Case 4: Layover round-trip
     # layover_round_trip_itinerary = RoundTripItinerary(search_query, direct_only=False)
-    # layover_round_trip_itinerary.scrape(export_to="mianiputtana.csv")
+    # layover_round_trip_itinerary.scrape(export_to="miani.csv")
     # print(layover_round_trip_itinerary.df)
+
+    # Case 5: Crazy layover
+    search_query = SearchQuery(airports_dep, airports_arr, departure_dates, return_dates=None, debug=False)
+    itinerary = CrazyLayoverItinerary(search_query, direct_only=False, max_stops=2, min_layover_time=timedelta(hours=2))
+    itinerary.scrape(export_to="miani.csv")
