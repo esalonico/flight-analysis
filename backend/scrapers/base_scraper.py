@@ -84,7 +84,9 @@ class BaseScraper:
             with open("page_source.html", "w") as f:
                 f.write(self.driver.page_source)
             print("TimeoutException:", e)
-            raise e
+            print(self.driver.current_url)
+            return []
+
         return self.driver.find_element(by=By.XPATH, value='//body[@id = "yDmH0d"]').text.split("\n")
 
     def _search_has_no_flights(self, results_raw: list) -> bool:
@@ -316,6 +318,9 @@ class BaseScraper:
         """
         Check if flights are found in the search.
         """
+        if not results_raw:
+            return False
+
         results_joined = " ".join(results_raw)
         if "No results returned" in results_joined or "No options matching your search" in results_joined:
             return False

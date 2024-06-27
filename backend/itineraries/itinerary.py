@@ -1,3 +1,4 @@
+import multiprocessing
 from datetime import timedelta
 
 import pandas as pd
@@ -31,7 +32,7 @@ class OneWayItinerary(BaseItinerary):
 
     def scrape(self, export_to: str = None):
         combination_flights = []
-        pbar = tqdm(self.search_query.combinations, leave=False)
+        pbar = tqdm(self.search_query.combinations, position=1, leave=False)
         for combination in pbar:
             pbar.set_description(f"Scraping {combination}")
             scraper = OneWayScraper(combination, self.direct_only)
@@ -238,18 +239,62 @@ class CrazyLayoverItinerary(BaseItinerary):
 
         return one_way_itineraries
 
-    def scrape(self, export_to: str = None):
+    def run_scraper(self, itinerary_dict: dict) -> pd.DataFrame:
+        itinerary_dict["itinerary"].scrape()  # OneWayItinerary.scrape()
+        df = itinerary_dict["itinerary"].df
+        df["option"] = itinerary_dict["connection_id"]
+        df["connection_leg"] = itinerary_dict["connection_leg"]
+        return df
+
+    @staticmethod
+    def collect_result(result, all_flights_multiprocess: list, progress_counter, progress_bar):
+        all_flights_multiprocess.append(result)
+        with progress_counter.get_lock():
+            progress_counter.value += 1
+            progress_bar.update(1)
+
+    def scrape(self, multiprocess: bool, num_processes: int = 10, export_to: str = None):
+        if multiprocess:
+            self.scrape_multiprocess(num_processes, export_to)
+        else:
+            self.scrape_single_process(export_to)
+
+    def scrape_multiprocess(self, num_processes: int, export_to: str = None):
+        search_queries = self.create_search_queries_from_connections()
+        one_way_itineraries = self.create_one_way_itineraries_from_search_queries(search_queries)
+
+        manager = multiprocessing.Manager()
+        all_flights_multiprocess = manager.list()
+
+        progress_counter = multiprocessing.Value("i", 0)
+
+        with multiprocessing.Pool(processes=num_processes) as pool:
+            with tqdm(total=len(one_way_itineraries), position=0, leave=True) as pbar:
+                for itinerary_dict in one_way_itineraries:
+                    pool.apply_async(
+                        self.run_scraper,
+                        args=(itinerary_dict,),
+                        callback=lambda result: self.collect_result(result, all_flights_multiprocess, progress_counter, pbar),
+                    )
+
+                pool.close()
+                pool.join()
+
+        flight_df = pd.concat(all_flights_multiprocess)
+        self.df = self.make_itinerary_df(flight_df, export_to)
+
+    def scrape_single_process(self, export_to: str = None):
         search_queries = self.create_search_queries_from_connections()
         one_way_itineraries = self.create_one_way_itineraries_from_search_queries(search_queries)
 
         n_total_connections = pd.DataFrame(one_way_itineraries)["connection_id"].nunique()
 
         one_way_itineraries_dfs = []
-        pbar = tqdm(one_way_itineraries, position=0)
+        pbar = tqdm(one_way_itineraries)
         for itinerary in pbar:
             pbar.set_description(f"Scraping connection {itinerary['connection_id']}/{n_total_connections}")
             try:
-                itinerary["itinerary"].scrape() # OneWayItinerary.scrape()
+                itinerary["itinerary"].scrape()  # OneWayItinerary.scrape()
                 df = itinerary["itinerary"].df
                 df["option"] = itinerary["connection_id"]
                 df["connection_leg"] = itinerary["connection_leg"]
@@ -257,9 +302,6 @@ class CrazyLayoverItinerary(BaseItinerary):
             except Exception as e:
                 print(f"Error in connection {itinerary['connection_id']}: {e}")
                 raise e
-
-            if itinerary["connection_id"] >= 3:
-                break
 
         flight_df = pd.concat(one_way_itineraries_dfs)
         self.df = self.make_itinerary_df(flight_df, export_to)
