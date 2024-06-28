@@ -31,7 +31,7 @@ class RoundTripScraper(BaseScraper):
         :return: URL string for the flight search
         """
         url = "https://www.google.com/travel/flights"
-        url += f"?q=Flights%20to%20{self.search_query.airport_arr.iata}"
+        url += f"?q=Flights%20to%20{self.search_query.airport_arr.iata}%20Airport"
         url += f"%20from%20{self.search_query.airport_dep.iata}"
         url += f"%20on%20{self.search_query.departure_date}%20through%20{self.search_query.return_date}"
 

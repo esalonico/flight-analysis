@@ -1,13 +1,14 @@
+import logging
 import os
 from collections import deque
 
 import pandas as pd
 
-from backend.utils.sheets_downloader import (
-    _download_airports_sheet,
-    _download_flightconnections_airport_codes_sheet,
-    _download_flightconnections_airport_connections_sheet,
-)
+import backend.utils.sheets_downloader as sheets_downloader
+from backend.utils.utils import setup_logging
+
+setup_logging()
+logger = logging.getLogger(os.path.basename(__file__))
 
 
 class Airport:
@@ -16,20 +17,20 @@ class Airport:
     _airports_flightconnections_connections_filepath = "backend/data/sheets/connections_flightconnections.csv"
 
     if not os.path.isfile(_airports_df_filepath):
-        _download_airports_sheet(force_download=True)
+        sheets_downloader._download_airports_sheet(force_download=True)
 
     if not os.path.isfile(_airports_flightconnections_codes_filepath):
-        _download_flightconnections_airport_codes_sheet(force_download=True)
+        sheets_downloader._download_flightconnections_airport_codes_sheet(force_download=True)
 
     if not os.path.isfile(_airports_flightconnections_connections_filepath):
-        _download_flightconnections_airport_connections_sheet(force_download=True)
+        sheets_downloader._download_flightconnections_airport_connections_sheet(force_download=True)
 
     _airports_df = pd.read_csv(_airports_df_filepath, index_col=0)
     _flightconnections_airport_codes_df = pd.read_csv(_airports_flightconnections_codes_filepath, index_col=0)
     _flightconnections_airport_connections_df = pd.read_csv(_airports_flightconnections_connections_filepath)
     _aiports_connections_graph = _flightconnections_airport_connections_df.groupby("iata_code_from")["iata_code_to"].apply(list).to_dict()
 
-    def __init__(self, iata) -> None:
+    def __init__(self, iata):
         self.iata = self._validate_iata_code(iata)
         self.name = self._get_airport_name(iata)
         self.city = self._get_airport_city(iata)
@@ -38,6 +39,8 @@ class Airport:
         self.lat = self._get_airport_lat(iata)
         self.lon = self._get_airport_lon(iata)
         self.flightconnections_code = self._get_flightconnections_airport_code(iata)
+
+        logger.debug(self.__repr__())
 
     def __repr__(self) -> str:
         return f"Airport({self.iata}, {self.name}, {self.city}, {self.country})"
@@ -137,4 +140,5 @@ class Airport:
                     if next_airport not in path:  # Avoid cycles
                         queue.append((next_airport, path + [next_airport]))
 
+        logger.debug(f"Found {len(connections)} connections from {self.iata} to {dest_iata} with {max_stops} stops.")
         return connections

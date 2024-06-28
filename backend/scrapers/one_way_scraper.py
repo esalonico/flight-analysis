@@ -1,7 +1,7 @@
 from backend.scrapers.base_scraper import BaseScraper
 from backend.scrapers.search_query import SearchQuery
 
- 
+
 class OneWayScraper(BaseScraper):
     def __init__(self, search_query: SearchQuery, direct_only: bool, debug: bool = False):
         """
@@ -21,7 +21,7 @@ class OneWayScraper(BaseScraper):
         :return: URL string for the flight search
         """
         url = "https://www.google.com/travel/flights"
-        url += f"?q=Flights%20to%20{self.search_query.airport_arr.iata}"
+        url += f"?q=Flights%20to%20{self.search_query.airport_arr.iata}%20Airport"
         url += f"%20from%20{self.search_query.airport_dep.iata}"
 
         if self.direct_only:

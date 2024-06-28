@@ -2,11 +2,16 @@
 Downloads sheets needed for the scraping process if they are not there already.
 """
 
+import logging
 import os
 
 import pandas as pd
 
 import backend.utils.flightconnections as flightconnections
+from backend.utils.utils import setup_logging
+
+setup_logging()
+logger = logging.getLogger(os.path.basename(__file__))
 
 
 def _download_airports_sheet(force_download: bool = False) -> None:
@@ -21,6 +26,7 @@ def _download_airports_sheet(force_download: bool = False) -> None:
 
     # if file already exists, do nothing unless force_download is True
     if os.path.isfile(filepath) and not force_download:
+        logger.debug(f"File already exists: {filepath}")
         return
 
     df = pd.read_csv(url)
@@ -45,7 +51,7 @@ def _download_airports_sheet(force_download: bool = False) -> None:
 
     # save file to csv
     df.to_csv(filepath, encoding="utf-8")
-    print(f"Downloaded file: {filepath}")
+    logger.info(f"Downloaded file: {filepath}")
 
 
 def _download_countries_sheet(force_download: bool = False) -> None:
@@ -60,6 +66,7 @@ def _download_countries_sheet(force_download: bool = False) -> None:
 
     # if file already exists, do nothing unless force_download is True
     if os.path.isfile(filepath) and not force_download:
+        logger.debug(f"File already exists: {filepath}")
         return
 
     df = pd.read_csv(url)
@@ -75,7 +82,7 @@ def _download_countries_sheet(force_download: bool = False) -> None:
 
     # save file to csv
     df.to_csv(filepath)
-    print(f"Downloaded file: {filepath}")
+    logger.info(f"Downloaded file: {filepath}")
 
 
 def _download_flightconnections_airport_codes_sheet(force_download: bool = False) -> None:
@@ -83,6 +90,7 @@ def _download_flightconnections_airport_codes_sheet(force_download: bool = False
 
     # if file already exists, do nothing unless force_download is True
     if os.path.isfile(filepath) and not force_download:
+        logger.debug(f"File already exists: {filepath}")
         return
 
     iata_airports_filepath = "backend/data/sheets/airports.csv"
@@ -94,7 +102,7 @@ def _download_flightconnections_airport_codes_sheet(force_download: bool = False
 
     # export to csv
     df.to_csv(filepath, index=False)
-    print(f"Downloaded file: {filepath}")
+    logger.info(f"Downloaded file: {filepath}")
 
 
 def _download_flightconnections_airport_connections_sheet(force_download: bool = False) -> None:
@@ -102,12 +110,11 @@ def _download_flightconnections_airport_connections_sheet(force_download: bool =
 
     # if file already exists, do nothing unless force_download is True
     if os.path.isfile(filepath) and not force_download:
+        logger.debug(f"File already exists: {filepath}")
         return
 
     flightconnections_codes_filepath = "backend/data/sheets/airports_flightconnections.csv"
-    assert os.path.isfile(
-        flightconnections_codes_filepath
-    ), "airports_flightconnections.csv file not found. Please download it first."
+    assert os.path.isfile(flightconnections_codes_filepath), "airports_flightconnections.csv file not found. Please download it first."
     flightconnections_codes_df = pd.read_csv(flightconnections_codes_filepath)
 
     # scrape
@@ -115,7 +122,7 @@ def _download_flightconnections_airport_connections_sheet(force_download: bool =
 
     # export to csv
     df.to_csv(filepath, index=False)
-    print(f"Downloaded file: {filepath}")
+    logger.info(f"Downloaded file: {filepath}")
 
 
 def download_all_sheets(force_download: bool = False):
@@ -124,6 +131,7 @@ def download_all_sheets(force_download: bool = False):
 
     :param force_download: if True, the files will be downloaded even if they already exist
     """
+    logger.debug("Downloading all sheets...")
     _download_airports_sheet(force_download)
     _download_countries_sheet(force_download)
     _download_flightconnections_airport_codes_sheet(force_download)

@@ -1,3 +1,5 @@
+import logging.config
+import os
 import re
 from datetime import date, datetime, timedelta
 
@@ -116,3 +118,55 @@ def move_pandas_column_to_front(df: pd.DataFrame, column_name: str) -> pd.DataFr
     cols = df.columns.tolist()
     cols.insert(0, cols.pop(cols.index(column_name)))
     return df[cols]
+
+
+class CustomFormatter(logging.Formatter):
+    def __init__(self, fmt=None, datefmt=None, max_filename_length=30):
+        super().__init__(fmt, datefmt)
+        self.max_filename_length = max_filename_length
+
+    def format(self, record):
+        # Remove .py at the end of the filename
+        record.filename = record.filename.replace(".py", "")
+
+        # Calculate the padding needed to align the filenames
+        padding = " " * (self.max_filename_length - len(record.filename))
+        record.filename = f"{record.filename}{padding}"
+        return super().format(record)
+
+
+def setup_logging(logging_config_file: str = "logging.conf"):
+    """
+    Setup logging configuration from the logging.conf file.
+
+    Basically, this function reads the logging configuration from the logging.conf file and sets up the logging system.
+    It also sets the level to ERROR for loggers that do not have a corresponding .py version (i.e. external modules).
+    # TODO: document better
+
+    :param logging_config_file: Path to the logging configuration file.
+    """
+    assert os.path.isfile(logging_config_file), "logging.conf file not found."
+
+    logging.config.fileConfig("logging.conf", disable_existing_loggers=False)
+
+    # Create the custom formatter
+    formatter = CustomFormatter("%(asctime)s - %(filename)s - %(levelname)s - %(message)s", "%Y-%m-%d %H:%M:%S", max_filename_length=18)
+
+    # Get the console handler from the root logger and set the custom formatter
+    console_handler = logging.getLogger().handlers[0]
+    console_handler.setFormatter(formatter)
+
+    # collect all logger names
+    logger_names = list(logging.root.manager.loggerDict.keys())
+
+    # identify loggers with and without .py extension
+    modules_to_disable = set()
+    for logger_name in logger_names:
+        if logger_name.endswith(".py"):
+            base_name = logger_name[:-3]  # Remove the .py extension
+            modules_to_disable.add(base_name)
+
+    # set level to ERROR for loggers not having corresponding .py version
+    for logger_name in logger_names:
+        if logger_name not in modules_to_disable and not logger_name.endswith(".py"):
+            logging.getLogger(logger_name).setLevel(logging.ERROR)

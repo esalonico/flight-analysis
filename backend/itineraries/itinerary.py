@@ -1,4 +1,6 @@
+import logging
 import multiprocessing
+import os
 from datetime import timedelta
 
 import pandas as pd
@@ -9,6 +11,11 @@ from backend.scrapers.one_way_scraper import OneWayScraper
 from backend.scrapers.round_trip_scraper import RoundTripScraper
 from backend.scrapers.search_query import SearchQuery, SingleItemSearchQuery
 from backend.utils import utils
+from backend.utils.utils import setup_logging
+
+setup_logging()
+logger = logging.getLogger(os.path.basename(__file__))
+logger.debug("Itinerary module loaded.")
 
 
 class BaseItinerary:
@@ -35,6 +42,7 @@ class OneWayItinerary(BaseItinerary):
         pbar = tqdm(self.search_query.combinations, position=1, leave=False)
         for combination in pbar:
             pbar.set_description(f"Scraping {combination}")
+            logger.debug(f"Scraping {combination}")
             scraper = OneWayScraper(combination, self.direct_only)
             scraper.scrape()
             df = scraper.make_flights_df()
@@ -169,19 +177,41 @@ class RoundTripItinerary(BaseItinerary):
 
 
 class CrazyLayoverItinerary(BaseItinerary):
-    def __init__(self, search_query, direct_only, max_stops: int = 2, min_layover_time: timedelta = timedelta(hours=2)):
+    # TODO: also include regular flights maybe?
+    def __init__(
+        self,
+        search_query,
+        direct_only,
+        max_stops: int = 2,
+        min_layover_time: timedelta = timedelta(hours=2),
+        max_layover_time: timedelta = timedelta(hours=6),
+    ):
         # TODO: maybe have n_layovers as a parameter in the SearchQuery object?
         assert max_stops in [2, 3], "Number of max stops must be 2 (one layover) or 3 (two layovers)."
         assert search_query.return_dates is None, "CrazyLayoverItinerary only supports one-way flights."
+        assert max_layover_time > min_layover_time, "Max layover time must be greater than min layover time."
+        assert max_layover_time < timedelta(hours=24), "Max layover time must be less than 24 hours."
 
         self.max_stops = max_stops
         self.min_layover_time = min_layover_time
+        self.max_layover_time = max_layover_time  # TODO: use this parameter
 
         super().__init__(search_query, direct_only)
 
     def create_search_queries_from_connections(self) -> list[dict]:
         """
-        Create a list of Single Item Search Queries from all possible connections.
+        Create a list of SingleItemSearchQueries from all possible connections.
+
+        Example:
+
+        [
+            {
+                "connection_id": 1,
+                "connection_leg": 1,
+                "search_query": SingleItemSearchQuery(FCO, FMM, 2024-07-25)
+            },
+            ...
+        ]
         """
         connections = []
         for dep_airport in self.search_query.airports_dep:
@@ -212,7 +242,7 @@ class CrazyLayoverItinerary(BaseItinerary):
 
         return search_queries
 
-    def create_one_way_itineraries_from_search_queries(self, search_queries: list[dict]) -> list[OneWayItinerary]:
+    def create_one_way_itineraries_from_search_queries(self, search_queries: list[dict]) -> dict:
         """
         Create a list of OneWayItinerary objects from a list of search queries.
 
@@ -254,13 +284,29 @@ class CrazyLayoverItinerary(BaseItinerary):
             progress_bar.update(1)
 
     def scrape(self, multiprocess: bool, num_processes: int = 10, export_to: str = None):
+        """
+        Scrape the flights for all the possible connections.
+
+        :param multiprocess: Boolean to indicate if the scraping should be done in parallel.
+        :param num_processes: Number of processes to use in parallel scraping.
+        :param export_to: Optional string with the filename to export the DataFrame to a CSV file.
+        """
         if multiprocess:
             self.scrape_multiprocess(num_processes, export_to)
         else:
             self.scrape_single_process(export_to)
 
     def scrape_multiprocess(self, num_processes: int, export_to: str = None):
+        """
+        Scrape the flights for all the possible connections using multiprocessing.
+
+        :param num_processes: Number of processes to use in parallel scraping.
+        :param export_to: Optional string with the filename to export the DataFrame to a CSV file.
+        """
+        # create search queries from all possible connections
         search_queries = self.create_search_queries_from_connections()
+
+        # create list one-way itineraries from search queries
         one_way_itineraries = self.create_one_way_itineraries_from_search_queries(search_queries)
 
         manager = multiprocessing.Manager()
@@ -281,6 +327,7 @@ class CrazyLayoverItinerary(BaseItinerary):
                 pool.join()
 
         flight_df = pd.concat(all_flights_multiprocess)
+        # TODO: maybe add extra scraping stuff here for flights that could have a layover in the following day due to the max_layover_time parameter
         self.df = self.make_itinerary_df(flight_df, export_to)
 
     def scrape_single_process(self, export_to: str = None):
@@ -300,7 +347,7 @@ class CrazyLayoverItinerary(BaseItinerary):
                 df["connection_leg"] = itinerary["connection_leg"]
                 one_way_itineraries_dfs.append(df)
             except Exception as e:
-                print(f"Error in connection {itinerary['connection_id']}: {e}")
+                logger.error(f"Error in connection {itinerary['connection_id']}: {e}")
                 raise e
 
         flight_df = pd.concat(one_way_itineraries_dfs)

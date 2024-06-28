@@ -34,7 +34,7 @@ class BaseScraper:
         return f"{self.__class__.__name__}({self.url})"
 
     def __del__(self):
-        if self.driver:
+        if hasattr(self, "driver") and self.driver:
             self.driver.quit()
 
     def _create_driver(self) -> webdriver.Chrome:
@@ -47,9 +47,7 @@ class BaseScraper:
         options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
 
-        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
-
-        return driver
+        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     def _build_url() -> str:
         raise NotImplementedError("This method must be implemented in a subclass.")

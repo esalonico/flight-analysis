@@ -1,37 +1,36 @@
+import logging
+import os
 from datetime import date
 from itertools import product
 from typing import List, Optional
 
 from backend.objects.airport import Airport
 from backend.utils import utils
+from backend.utils.utils import setup_logging
+
+setup_logging()
+logger = logging.getLogger(os.path.basename(__file__))
 
 
 class SingleItemSearchQuery:
-    def __init__(self, airport_dep: Airport, airport_arr: Airport, departure_date: date, return_date: Optional[date] = None, debug: bool = False):
+    def __init__(self, airport_dep: Airport, airport_arr: Airport, departure_date: date, return_date: Optional[date] = None):
         self.airport_dep = airport_dep
         self.airport_arr = airport_arr
         self.departure_date = departure_date
         self.return_date = return_date
-
         self.combinations = [self]
 
-        if debug:
-            print(self)
+        logger.debug(self.__repr__())
 
     def __repr__(self) -> str:
         return f"SingleItemSearchQuery({self.airport_dep}, {self.airport_arr}, {self.departure_date}, {self.return_date})"
 
 
 class SearchQuery:
-    # TODO: maybe add direct_only parameter here?
     def __init__(
-        self,
-        airports_dep: List[Airport],
-        airports_arr: List[Airport],
-        departure_dates: List[date],
-        return_dates: Optional[List[date]] = None,
-        debug: bool = False,
+        self, airports_dep: List[Airport], airports_arr: List[Airport], departure_dates: List[date], return_dates: Optional[List[date]] = None
     ):
+        # TODO: maybe add direct_only parameter here?
         """
         Initialize the SearchQuery object.
 
@@ -39,7 +38,6 @@ class SearchQuery:
         :param airport_arr: List of arrival airports (Airport objects)
         :param departure_date: List of departure dates (date objects)
         :param return_date: Optional list of return dates (date objects)
-        :param debug: Whether to print the object representation or not
         """
         self._check_dates_validity(departure_dates, return_dates)
         self._check_airports_validity(airports_dep, airports_arr)
@@ -49,10 +47,9 @@ class SearchQuery:
         self.departure_dates = departure_dates
         self.return_dates = return_dates
 
-        self.combinations = self.make_single_items_combinations(debug)
+        self.combinations = self.make_single_items_combinations()
 
-        if debug:
-            print(self)
+        logger.debug(self.__repr__())
 
     def __repr__(self) -> str:
         # handle dates as list
@@ -112,7 +109,7 @@ class SearchQuery:
         if any(airport in airports_arr for airport in airports_dep):
             raise ValueError("Departure and arrival airports must be different.")
 
-    def make_single_items_combinations(self, debug: bool = False):
+    def make_single_items_combinations(self):
         if self.return_dates:
             return_dates = self.return_dates
         else:
@@ -121,6 +118,6 @@ class SearchQuery:
         unique_combinations = set(combinations)
 
         return [
-            SingleItemSearchQuery(airport_dep, airport_arr, departure_date, return_date, debug=debug)
+            SingleItemSearchQuery(airport_dep, airport_arr, departure_date, return_date)
             for airport_dep, airport_arr, departure_date, return_date in unique_combinations
         ]
