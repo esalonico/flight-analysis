@@ -127,7 +127,7 @@ def _download_flightconnections_airport_connections_sheet(force_download: bool =
 
 def download_all_sheets(force_download: bool = False):
     """
-    Downloads all sheets.
+    Downloads all data sheets.
 
     :param force_download: if True, the files will be downloaded even if they already exist
     """

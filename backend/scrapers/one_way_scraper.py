@@ -3,7 +3,7 @@ from backend.scrapers.search_query import SearchQuery
 
 
 class OneWayScraper(BaseScraper):
-    def __init__(self, search_query: SearchQuery, direct_only: bool, debug: bool = False):
+    def __init__(self, search_query: SearchQuery, direct_only: bool):
         """
         Initialize the OneWayScraper.
 
@@ -12,7 +12,7 @@ class OneWayScraper(BaseScraper):
         """
         self.direct_only = direct_only
 
-        super().__init__(search_query, debug=debug)
+        super().__init__(search_query)
 
     def _build_url(self) -> str:
         """

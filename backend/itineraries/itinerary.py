@@ -15,7 +15,6 @@ from backend.utils.utils import setup_logging
 
 setup_logging()
 logger = logging.getLogger(os.path.basename(__file__))
-logger.debug("Itinerary module loaded.")
 
 
 class BaseItinerary:
@@ -42,9 +41,9 @@ class OneWayItinerary(BaseItinerary):
         pbar = tqdm(self.search_query.combinations, position=1, leave=False)
         for combination in pbar:
             pbar.set_description(f"Scraping {combination}")
-            logger.debug(f"Scraping {combination}")
             scraper = OneWayScraper(combination, self.direct_only)
-            scraper.scrape()
+            logger.debug(f"Scraping OneWayScraper {combination}")
+            scraper.scrape()  # OneWayScraper.scrape()
             df = scraper.make_flights_df()
             if not df.empty and not df.isna().all(axis=None):
                 combination_flights.append(df)
@@ -97,10 +96,15 @@ class RoundTripItinerary(BaseItinerary):
         for combination in pbar:
             pbar.set_description(f"Scraping {combination}")
             scraper = RoundTripScraper(combination, self.direct_only)
-            scraper.scrape()
+            logger.debug(f"Scraping RoundTripScraper {combination}")
+            scraper.scrape()  # RoundTripScraper.scrape()
             df = scraper.make_flights_df()
             if not df.empty and not df.isna().all(axis=None):
                 combination_flights.append(df)
+
+        if not combination_flights:
+            self.df = pd.DataFrame()
+            return
 
         flight_df = pd.concat(combination_flights)
         self.df = self.make_itinerary_df(flight_df, export_to)

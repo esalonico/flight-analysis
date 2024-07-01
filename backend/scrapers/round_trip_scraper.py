@@ -60,11 +60,23 @@ class RoundTripScraper(BaseScraper):
         - Element with title "Other departing flights"
 
         :return: WebElement representing the <ul> with the flight list
-        :raises ValueError: If no flight list is found
+        :raises ValueError: If no flight is found
         """
         try:
-            # basically wait until the footer is loaded
-            self._wait_for_text_on_page("Currency")
+            WebDriverWait(self.driver, 8).until(
+                lambda s: "Search results" in s.page_source
+                or "Best flights" in s.page_source
+                or "Departing flights" in s.page_source
+                or "Best departing flights" in s.page_source
+                or "Other departing flights" in s.page_source
+                or "All flights" in s.page_source
+                or "No nonstop flights found" in s.page_source
+            )
+
+            if "Sort by:" not in self.driver.page_source:
+                WebDriverWait(self.driver, 8).until(lambda s: "Sort by:" in s.page_source)
+                # self.driver.save_screenshot("emanuele.png")
+
         except Exception as e:
             WebDriverWait(self.driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "ul")))
 
@@ -72,6 +84,7 @@ class RoundTripScraper(BaseScraper):
         ul_flights_list = [ul for ul in ul_elements if "€" in ul.get_attribute("outerHTML")]
 
         if not ul_flights_list:
+            # self.driver.save_screenshot("emanuele3.png")
             raise ValueError("No flights found.")
 
         return ul_flights_list
@@ -106,7 +119,6 @@ class RoundTripScraper(BaseScraper):
         try:
             ul_sections_containig_flights = self._get_flight_lists()
         except ValueError:
-            print("No flights found.")
             self.driver.quit()
             return
 
@@ -155,9 +167,10 @@ class RoundTripScraper(BaseScraper):
             # wait for the page to load
             try:
                 # eturning flights instead of returning flights to handle both cases
-                self._wait_for_text_on_page("eturning flights")
+                self._wait_for_text_on_page("eturning flights", timeout=10)
             except TimeoutException as e:
                 self.driver.save_screenshot(f"TimeoutException_{i}.png")
+                # TODO: logger
                 print("TimeoutException:", e)
                 continue
 

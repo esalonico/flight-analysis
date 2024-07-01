@@ -1,5 +1,8 @@
+import logging
+import os
 import re
 from datetime import datetime
+from typing import List, Optional, Tuple
 from uuid import UUID
 
 import pandas as pd
@@ -15,10 +18,14 @@ from webdriver_manager.chrome import ChromeDriverManager
 from backend.objects.flight import Flight
 from backend.scrapers.search_query import SearchQuery
 from backend.utils import utils
+from backend.utils.utils import setup_logging
+
+setup_logging()
+logger = logging.getLogger(os.path.basename(__file__))
 
 
 class BaseScraper:
-    def __init__(self, search_query: SearchQuery, datetime_access: datetime = datetime.now(), debug: bool = False):
+    def __init__(self, search_query: SearchQuery, datetime_access: datetime = datetime.now()):
         self.search_query = search_query
         self.datetime_access = datetime_access
         self.flights = None
@@ -26,9 +33,6 @@ class BaseScraper:
 
         self.driver = self._create_driver()
         self.url = self._build_url()
-
-        if debug:
-            print(self)
 
     def __repr__(self) -> str:
         return f"{self.__class__.__name__}({self.url})"
@@ -40,7 +44,8 @@ class BaseScraper:
     def _create_driver(self) -> webdriver.Chrome:
         """
         Creates a Chrome webdriver instance.
-        Returns: Chrome webdriver.
+
+        :return: Chrome webdriver instance.
         """
         options = Options()
         options.add_argument("--no-sandbox")
@@ -55,9 +60,9 @@ class BaseScraper:
     def scrape(self) -> None:
         raise NotImplementedError("This method must be implemented in a subclass.")
 
-    def _skip_google_terms_page(self, driver: webdriver.Chrome, timeout: int = 15) -> None:
+    def _skip_google_terms_page(self, driver: webdriver.Chrome, timeout: int = 15):
         """
-        Returns True if the page html represent Google's Terms and Conditions page.
+        Skips the Google terms page that sometimes appears when using Selenium.
         """
         if "Before you continue to Google" not in driver.page_source:
             return
@@ -68,42 +73,55 @@ class BaseScraper:
         # click on accept terms button
         WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all')]"))).click()
 
-    def _get_raw_flight_results(self) -> list:
+    def _get_raw_flight_results(self) -> List[Optional[str]]:
         """
         Extracts the raw flight results from the page.
+
+        :return: List of strings representing the raw results. Can be empty.
         """
         try:
             # wait for the page to load
-            # WebDriverWait(self.driver, 5).until(lambda s: "€" in s.page_source)  # wait for the page to load
-            WebDriverWait(self.driver, 5).until(lambda s: "Search results" in s.page_source or "Best flights" in s.page_source)
+            WebDriverWait(self.driver, 8).until(
+                lambda s: "Search results" in s.page_source
+                or "Best flights" in s.page_source
+                or "eparting flights" in s.page_source # to make it case insensitive
+                or "All flights" in s.page_source
+                or "No nonstop flights found" in s.page_source
+            )
+
+            if "No nonstop flights found" in self.driver.page_source:
+                logger.debug("No nonstop flights found.")
+                return []
+
         except TimeoutException as e:
             self.driver.save_screenshot(f"TimeoutException.png")
-            # save s.page_source to a file
-            with open("page_source.html", "w") as f:
-                f.write(self.driver.page_source)
-            print("TimeoutException:", e)
-            print(self.driver.current_url)
+            logger.error("TimeoutException:", e)
+            logger.error(self.driver.current_url)
             return []
 
         return self.driver.find_element(by=By.XPATH, value='//body[@id = "yDmH0d"]').text.split("\n")
 
-    def _search_has_no_flights(self, results_raw: list) -> bool:
+    def _search_has_no_flights(self, results_raw: List[str]) -> bool:
         """
-        Returns True if the search has no flights.
+        Returns True if the search has no flights. False otherwise.
+
+        :param results_raw: List of strings representing the raw results.
+        :return: True if the search has no flights, False otherwise.
         """
         return len([a for a in results_raw if "No nonstop flights found" in a]) > 0
 
-    def _filter_raw_results(self, results_raw: list) -> list:
+    def _filter_raw_results(self, results_raw: List[str]) -> List[str]:
         """
         Filters the raw results to only include the flights-related elements of the list.
         This is done by identifying the start and end index of the flights-related elements.
-        Returns: Cleaned list of flights-related elements.
+
+        :param results_raw: List of strings representing the raw results.
+        :return: Cleaned list of flights-related elements.
         """
         # case: no flights found for that search --> return empty list
         if self._search_has_no_flights(results_raw):
             return []
 
-        # TODO: there is a string here that says "X results found.". Maybe use it to double check later steps.
         start_regex = re.compile("Sort by:")
         end_regex = re.compile("Language")
 
@@ -146,10 +164,12 @@ class BaseScraper:
 
         return filtered
 
-    def _get_flight_search_metadata(self, results_raw: list) -> dict:
+    def _get_flight_search_metadata(self, results_raw: List[str]) -> dict:
         """
         Extracts the flight search metadata from the raw results.
-        Returns: Flight search metadata as dict.
+
+        :param results_raw: List of strings representing the raw results.
+        :return: Dictionary of metadata.
         """
         metadata = dict()
 
@@ -175,10 +195,13 @@ class BaseScraper:
 
         return metadata
 
-    def _split_raw_results_into_flights(self, results_raw: list) -> list:
+    def _split_raw_results_into_flights(self, results_raw: List[str]) -> List[List[str]]:
         """
         Splits the raw results into individual flights.
-        Returns: List of flights (list of lists)
+
+        :param results_raw: List of strings representing the raw results.
+
+        :return: List of lists, each list representing a flight.
         """
         # case: no flights found for that search --> return empty list
         if not results_raw:
@@ -216,9 +239,10 @@ class BaseScraper:
 
         return flights
 
-    def _clean_flight_details(self, flight_list: list, sq: SearchQuery) -> dict:
+    def _clean_flight_details(self, flight_list: List[str], sq: SearchQuery) -> dict:
         """
         From a list of strings (representing a flight), return a dictionary of flights details after cleaning.
+
         :param flight_list: List of strings representing a flight.
         :param sq: SearchQuery object.
         :return: Dictionary of flight details.
@@ -298,7 +322,7 @@ class BaseScraper:
             return False
         return True
 
-    def get_airports_from_txt(self, txt: str) -> tuple:
+    def get_airports_from_txt(self, txt: str) -> Tuple[Optional[str], Optional[str]]:
         """
         Extracts the departure and arrival airports from a string.
         :param txt: String containing the 2 airports (ex. FCOMAD, MUCFCO).
@@ -312,15 +336,23 @@ class BaseScraper:
             return airport1, airport2
         return None, None
 
-    def check_if_flights_exist(self, results_raw: list) -> bool:
+    def check_if_flights_exist(self, results_raw: List[str]) -> bool:
         """
         Check if flights are found in the search.
+
+        :param results_raw: List of strings representing the raw flights results.
+        :return: True if flights are found, False otherwise.
         """
-        if not results_raw:
+        if not results_raw or len(results_raw) == 0:
             return False
 
         results_joined = " ".join(results_raw)
-        if "No results returned" in results_joined or "No options matching your search" in results_joined:
+        if (
+            "No results returned" in results_joined
+            or "No options matching your search" in results_joined
+            or "No nonstop flights found" in results_joined
+            or not "€" in results_joined
+        ):
             return False
         return True
 
@@ -331,17 +363,19 @@ class BaseScraper:
         :return: List of Flight objects
         """
         self._skip_google_terms_page(self.driver)
-        results_raw = self._get_raw_flight_results()
 
+        results_raw = self._get_raw_flight_results()
         flights_exist = self.check_if_flights_exist(results_raw)
+
         if not flights_exist:
-            # TODO: add logging (debug level) for this
-            # print(f"No flights found for this search ({url}).")
+            logger.debug(f"No flights found for this search ({url}).")
             return []
 
         try:
             results_raw_filtered = self._filter_raw_results(results_raw)
         except Exception as e:
+            logger.error("Error filtering results.")
+            logger.error(e)
             self.driver.save_screenshot("error_filtering_results.png")
             raise e
 
@@ -358,8 +392,8 @@ class BaseScraper:
                 flight_dict = self._clean_flight_details(flight_list, self.search_query)
             except Exception as e:
                 self.driver.save_screenshot("error_cleaning_flight.png")
-                print("FLIGHT LIST")
-                print(flight_list)
+                logger.error("FLIGHT LIST")
+                logger.error(flight_list)
                 raise e
             if flight_dict is None:
                 continue
@@ -374,7 +408,9 @@ class BaseScraper:
 
     def make_flights_df(self) -> pd.DataFrame:
         """
-        Returns a DataFrame of the flights.
+        Returns a DataFrame of the flights from the current scrape.
+
+        :return: DataFrame of the flights.
         """
         if self.flights is None or len(self.flights) == 0:
             return pd.DataFrame()
