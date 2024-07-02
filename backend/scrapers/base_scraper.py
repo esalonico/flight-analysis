@@ -94,6 +94,7 @@ class BaseScraper:
                 return []
 
         except TimeoutException as e:
+            print("TimeoutException:", e) # TODO: to be removed
             self.driver.save_screenshot(f"TimeoutException.png")
             logger.error("TimeoutException:", e)
             logger.error(self.driver.current_url)
@@ -374,6 +375,7 @@ class BaseScraper:
         try:
             results_raw_filtered = self._filter_raw_results(results_raw)
         except Exception as e:
+            print("Error filtering results.") # TODO: to be removed
             logger.error("Error filtering results.")
             logger.error(e)
             self.driver.save_screenshot("error_filtering_results.png")
@@ -391,6 +393,7 @@ class BaseScraper:
             try:
                 flight_dict = self._clean_flight_details(flight_list, self.search_query)
             except Exception as e:
+                print("Error cleaning flight.") # TODO: to be removed
                 self.driver.save_screenshot("error_cleaning_flight.png")
                 logger.error("FLIGHT LIST")
                 logger.error(flight_list)

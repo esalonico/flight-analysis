@@ -1,7 +1,7 @@
 import logging
 import multiprocessing
 import os
-from datetime import date, datetime, timedelta
+from datetime import date, timedelta
 from typing import List
 
 import pandas as pd
@@ -43,6 +43,7 @@ class OneWayItinerary(BaseItinerary):
         for combination in pbar:
             pbar.set_description(f"Scraping {combination}")
             scraper = OneWayScraper(combination, self.direct_only)
+            logger.debug(f"Scraping OneWayScraper {combination}")
             scraper.scrape(combination)  # OneWayScraper.scrape()
             df = scraper.make_flights_df()
             if not df.empty and not df.isna().all(axis=None):
@@ -118,27 +119,10 @@ class RoundTripItinerary(BaseItinerary):
 
         :return: DataFrame with the flights information.
         """
-
-        def compute_flight_leg_within_itinerary(sq: SearchQuery, flight: pd.Series) -> str:
-            """
-            In a given roundtrip itinerary, compute the flight leg (either departing or returning) that a given flight belongs to.
-
-            :param sq: SearchQuery object with the search parameters
-            :param flight: pd.Series representing a flight
-
-            :return: String with the leg of the flight within the itinerary.
-            """
-            if flight["airport_dep"] in [a.iata for a in sq.airports_dep]:
-                return "departing"
-            elif flight["airport_dep"] in [a.iata for a in sq.airports_arr]:
-                return "returning"
-            else:
-                return "unknown"
-
         df_in = flights_df.copy()
 
         # compute column for the flight leg (departing or returning)
-        df_in["leg"] = df_in.apply(lambda x: compute_flight_leg_within_itinerary(self.search_query, x), axis=1)
+        df_in["leg"] = df_in.apply(lambda x: self._compute_flight_leg_within_itinerary(self.search_query, x), axis=1)
 
         # assign each departing flight an ID of itself
         df_in["departing_flight_id"] = df_in["departing_flight_id"].fillna(df_in["_id"])
@@ -180,8 +164,25 @@ class RoundTripItinerary(BaseItinerary):
 
         return sorted_df
 
+    def _compute_flight_leg_within_itinerary(self, sq: SearchQuery, flight: pd.Series) -> str:
+        """
+        In a given roundtrip itinerary, compute the flight leg (either departing or returning) that a given flight belongs to.
+
+        :param sq: SearchQuery object with the search parameters
+        :param flight: pd.Series representing a flight
+
+        :return: String with the leg of the flight within the itinerary.
+        """
+        if flight["airport_dep"] in [a.iata for a in sq.airports_dep]:
+            return "departing"
+        elif flight["airport_dep"] in [a.iata for a in sq.airports_arr]:
+            return "returning"
+        else:
+            return "unknown"
+
 
 class CrazyLayoverItinerary(BaseItinerary):
+    # TODO: also include regular flights maybe?
     def __init__(
         self,
         search_query,
@@ -208,7 +209,7 @@ class CrazyLayoverItinerary(BaseItinerary):
         arrival_airports: List[Airport],
         departure_dates=List[date],
         max_stops: int = 2,
-    ) -> list[SingleItemSearchQuery]:
+    ) -> list[dict]:
         """
         Create a list of SingleItemSearchQueries from all possible connections.
 
@@ -218,19 +219,32 @@ class CrazyLayoverItinerary(BaseItinerary):
         :param max_stops: Maximum number of stops allowed in the connection.
 
         :return: List of SingleItemSearchQueries.
+
+        Example:
+
+        [
+            {
+                "connection_id": 1,
+                "connection_leg": 1,
+                "search_query": SingleItemSearchQuery(FCO, FMM, 2024-07-25)
+            },
+            ...
+        ]
         """
-        # get all possible connections between the departure and arrival airports
         connections = []
         for dep_airport in departure_aiports:
             for arr_airport in arrival_airports:
                 connections += dep_airport.get_all_connections(arr_airport.iata, max_stops)
 
         search_queries = []
+        connection_id = 0
 
         # for each possible connection
         for connection in connections:
+
             # for each possible departure date
             for dep_date in departure_dates:
+
                 # for each airport in the connection
                 for airport_idx in range(len(connection)):
                     if airport_idx == len(connection) - 1:
@@ -239,34 +253,64 @@ class CrazyLayoverItinerary(BaseItinerary):
                     sq = SingleItemSearchQuery(
                         airport_dep=Airport(connection[airport_idx]), airport_arr=Airport(connection[airport_idx + 1]), departure_date=dep_date
                     )
-                    search_queries.append(sq)
+                    data = {"connection_id": connection_id, "connection_leg": airport_idx + 1, "search_query": sq}
+                    search_queries.append(data)
+
+                connection_id += 1
 
         return search_queries
 
-    def create_one_way_itineraries_from_search_queries(self, search_queries: List[SingleItemSearchQuery]) -> List[OneWayItinerary]:
+    def create_one_way_itineraries_from_search_queries(self, search_queries: list[dict]) -> dict:
         """
         Create a list of OneWayItinerary objects from a list of search queries.
 
         :param search_queries: List of search queries.
 
         :return: List of OneWayItinerary objects.
-        """
-        return [OneWayItinerary(search_query, direct_only=True) for search_query in search_queries]
 
-    def run_scraper(self, itinerary: OneWayItinerary) -> pd.DataFrame:
-        print(f"Scraping connection {itinerary.search_query}")
-        itinerary.scrape()
-        return itinerary.df.copy()
+        Example of return:
+        [
+            {
+                "itinerary": OneWayItinerary,
+                "connection_id": 1,
+                "connection_leg": 1,
+                "search_query": SingleItemSearchQuery(FCO, FMM, 2024-07-25)
+            },
+            ...
+        ]
+        """
+        one_way_itineraries = []
+        for search_query in search_queries:
+            itinerary = OneWayItinerary(search_query["search_query"], direct_only=True)
+            data = {"itinerary": itinerary} | search_query
+            one_way_itineraries.append(data)
+
+        return one_way_itineraries
+
+    def run_scraper(self, itinerary_dict: dict) -> pd.DataFrame:
+        print(f"Scraping connection {itinerary_dict['itinerary']["search_query"]}")
+        itinerary_dict["itinerary"].scrape()  # OneWayItinerary.scrape()
+        df = itinerary_dict["itinerary"].df.copy() # TODO: is the copy necessary?
+        df["option"] = itinerary_dict["connection_id"]
+        df["connection_leg"] = itinerary_dict["connection_leg"]
+        return df
+
+    @staticmethod
+    def collect_result(result, all_flights_multiprocess: list, progress_counter, progress_bar):
+        all_flights_multiprocess.append(result)
+        with progress_counter.get_lock():
+            progress_counter.value += 1
+            progress_bar.update(1)
 
     def create_search_queries_from_first_scrape_df(
-        self, first_df: pd.DataFrame, arrival_airports: List[Airport], min_layover_time: timedelta, max_layover_time: timedelta
-    ) -> List[SingleItemSearchQuery]:
+        self, first_df: pd.DataFrame, min_layover_time: timedelta, max_layover_time: timedelta
+    ) -> list[dict]:
         """
         :param df: DataFrame with the flights information from the first scrape.
         :param min_layover_time: Minimum layover time.
         :param max_layover_time: Maximum layover time.
 
-        :return: List of SingleItemSearchQuery.
+        :return: List of search queries.
         """
         df = first_df.copy()
 
@@ -274,7 +318,7 @@ class CrazyLayoverItinerary(BaseItinerary):
         df.datetime_arr = pd.to_datetime(df.datetime_arr)
 
         # get leg 2 or more
-        df = df.loc[df.airport_arr.isin([a.iata for a in arrival_airports])]
+        df = df.loc[df.connection_leg > 1]
 
         df["possible_layover_up_to"] = df.datetime_arr + min_layover_time + max_layover_time
         df["possible_layover_up_to"] = df["possible_layover_up_to"].dt.strftime("%Y-%m-%d")
@@ -284,15 +328,13 @@ class CrazyLayoverItinerary(BaseItinerary):
 
         search_queries = []
         for _, row in df.iterrows():
-            departure_datetime = datetime.strptime(row.possible_layover_up_to, "%Y-%m-%d")
-            departure_date = date(departure_datetime.year, departure_datetime.month, departure_datetime.day)
-            
             sq = SingleItemSearchQuery(
                 airport_dep=Airport(row.airport_dep),
                 airport_arr=Airport(row.airport_arr),
-                departure_date=departure_date,
+                departure_date=row.possible_layover_up_to,
             )
-            search_queries.append(sq)
+            data = {"connection_id": row.option, "connection_leg": row.connection_leg, "search_query": sq}
+            search_queries.append(data)
 
         return search_queries
 
@@ -330,7 +372,7 @@ class CrazyLayoverItinerary(BaseItinerary):
         first_scrape_df = self.do_scrape(first_search_queries, num_processes, debug_name="first")
 
         # second scrape
-        second_search_queries = self.create_search_queries_from_first_scrape_df(first_scrape_df, arrival_airports, min_layover_time, max_layover_time)
+        second_search_queries = self.create_search_queries_from_first_scrape_df(first_scrape_df, min_layover_time, max_layover_time)
         print("SECOND SEARCH QUERIES: ", second_search_queries)
         second_scrape_df = self.do_scrape(second_search_queries, num_processes, debug_name="second")
 
@@ -339,20 +381,43 @@ class CrazyLayoverItinerary(BaseItinerary):
         if export_to:
             full_df.to_csv(export_to, index=True)
 
-    def do_scrape(self, search_queries: List[SingleItemSearchQuery], num_processes: int, debug_name=None) -> pd.DataFrame:
+    def do_scrape(self, search_queries: List[dict], num_processes: int, debug_name=None) -> pd.DataFrame:
+        """
+        Scrape the flights for all the possible connections using multiprocessing.
+
+        :param search_queries: List of search queries.
+        :param num_processes: Number of processes to use in parallel scraping.
+        """
+        # Validate the search queries
+        required_keys = ["connection_id", "connection_leg", "search_query"]
+        for sq in search_queries:
+            for key in required_keys:
+                assert key in sq.keys(), f"Key {key} not found in query {sq}"
+
+        # Create list of one-way itineraries from search queries
         one_way_itineraries = self.create_one_way_itineraries_from_search_queries(search_queries)
 
+        # Setup multiprocessing manager and shared variables
         manager = multiprocessing.Manager()
         all_flights_multiprocess = manager.list()
+        progress_counter = multiprocessing.Value("i", 0)
 
-        def collect_result(result):
-            all_flights_multiprocess.append(result)
-
-        with multiprocessing.Pool(processes=num_processes) as pool:
-            results = [pool.apply_async(self.run_scraper, args=(itinerary_dict,), callback=collect_result) for itinerary_dict in one_way_itineraries]
-            pool.close()
-            pool.join()
+        try:
+            with multiprocessing.Pool(processes=num_processes) as pool:
+                with tqdm(total=len(one_way_itineraries), position=0, leave=True) as pbar:
+                    for itinerary_dict in one_way_itineraries:
+                        pool.apply_async(
+                            self.run_scraper,
+                            args=(itinerary_dict,),
+                            callback=lambda result: self.collect_result(result, all_flights_multiprocess, progress_counter, pbar),
+                        )
+                    pool.close()
+                    pool.join()
+        except Exception as e:
+            print("Error in multiprocessing: ", e)
             pool.terminate()
+            pool.join()
+            raise e
 
         print("All flights scraped. Length: ", len(all_flights_multiprocess))
 
@@ -361,6 +426,7 @@ class CrazyLayoverItinerary(BaseItinerary):
             flight_df.to_csv(f"flights_df_{debug_name}.csv", index=False)
 
         # return self.make_itinerary_df(flight_df)
+
         return flight_df
 
     def make_itinerary_df(self, flights_df: pd.DataFrame) -> pd.DataFrame:

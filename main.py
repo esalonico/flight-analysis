@@ -26,6 +26,10 @@ if __name__ == "__main__":
     # search_query = SearchQuery(airports_dep, airports_arr, departure_dates, return_dates)
 
     # Case 1: Direct one-way
+    # airports_dep = [Airport("IST")]
+    # airports_arr = [Airport("TAS")]
+    # departure_dates = [date(2024, 9, 17)]
+    # search_query = SearchQuery(airports_dep, airports_arr, departure_dates)
     # direct_one_way_itinerary = OneWayItinerary(search_query, direct_only=True)
     # direct_one_way_itinerary.scrape(export_to="miani.csv")
     # print(direct_one_way_itinerary.df)
@@ -47,8 +51,12 @@ if __name__ == "__main__":
 
     # Case 5: Crazy layover
     airports_dep = [Airport("FCO")]
-    airports_arr = [Airport("TAS"), Airport("SKD")]
-    departure_dates = [date(2024, 9, 16), date(2024, 9, 17)]
+    # airports_arr = [Airport("TAS"), Airport("SKD")]
+    airports_arr = [Airport("SKD")]
+
+    # departure_dates = [date(2024, 9, 16), date(2024, 9, 17)]
+    departure_dates = [date(2024, 9, 16)]
+
     search_query = SearchQuery(airports_dep, airports_arr, departure_dates)
     itinerary = CrazyLayoverItinerary(
         search_query,
@@ -57,4 +65,4 @@ if __name__ == "__main__":
         min_layover_time=timedelta(hours=2, minutes=30),
         max_layover_time=timedelta(hours=18),
     )
-    itinerary.scrape(multiprocess=True, num_processes=30, export_to="uzbekistan.csv")
+    itinerary.scrape(num_processes=20, export_to="uzbekistan3.csv")

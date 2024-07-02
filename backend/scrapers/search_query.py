@@ -14,6 +14,10 @@ logger = logging.getLogger(os.path.basename(__file__))
 
 class SingleItemSearchQuery:
     def __init__(self, airport_dep: Airport, airport_arr: Airport, departure_date: date, return_date: Optional[date] = None):
+        assert isinstance(departure_date, date), f"Departure date must be a date object, not {type(departure_date)}"
+        if return_date:
+            assert isinstance(return_date, date), f"Return date must be a date object, not {type(return_date)}"
+
         self.airport_dep = airport_dep
         self.airport_arr = airport_arr
         self.departure_date = departure_date
