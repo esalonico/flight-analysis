@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 import streamlit as st
 
+import src.flights.utils.utils as utils
 from src.flights.models.models import Airport, SearchParameters
 
 MAX_INPUT_AIRPORTS = 5
@@ -20,8 +21,10 @@ def build_search_object():
     st.session_state.search_parameters.destinations = [
         Airport(iata.split()[0]) for iata in destinations
     ]
-    # TODO: make range of dates
-    st.session_state.search_parameters.departure_dates = departure_dates
+    st.session_state.search_parameters.departure_dates = (
+        utils.generate_date_range_between_dates(*departure_dates)
+    )
+    st.session_state.search_parameters.direct_only = direct_only
 
 
 # INPUTS
@@ -47,6 +50,7 @@ departure_dates = st.date_input(
     min_value=datetime.today(),
     format="DD-MM-YYYY",
 )
+direct_only = st.checkbox("Direct flights only", value=True)
 
 # apply button
 st.button("Apply", on_click=lambda: build_search_object())

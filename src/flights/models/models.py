@@ -2,7 +2,7 @@ import json
 from datetime import date
 from typing import List, Optional
 
-from pydantic import BaseModel
+from pydantic import BaseModel, computed_field
 
 DATA_FOLDER = "src/flights/data"
 
@@ -41,7 +41,30 @@ class Airport(BaseModel):
         return [f"{k} ({v['name']})" for k, v in AIRPORTS_DATA.items()]
 
 
+class SearchItem(BaseModel):
+    origin: Airport
+    destination: Airport
+    departure_date: date
+    direct_only: bool
+
+
 class SearchParameters(BaseModel):
     origins: Optional[List[Airport]] = None
     destinations: Optional[List[Airport]] = None
     departure_dates: Optional[List[date]] = None
+    direct_only: Optional[bool] = None
+
+    @computed_field
+    @property
+    def search_items(self) -> List[SearchItem]:
+        return [
+            SearchItem(
+                origin=origin,
+                destination=destination,
+                departure_date=departure_date,
+                direct_only=self.direct_only,
+            )
+            for origin in self.origins
+            for destination in self.destinations
+            for departure_date in self.departure_dates
+        ]

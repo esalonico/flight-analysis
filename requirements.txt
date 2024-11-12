@@ -3,3 +3,5 @@ numpy
 pydantic
 ipykernel
 pandas
+selenium
+webdriver_manager
