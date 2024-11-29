@@ -19,10 +19,10 @@ if __name__ == "__main__":
     download_all_sheets(force_download=False)
 
     # SearchQuery
-    # airports_dep = [Airport("FCO")]
-    # airports_arr = [Airport("TAS"), Airport("SKD")]
-    # departure_dates = [date(2024, 9, 16), date(2024, 9, 17)]
-    # return_dates = [date(2024, 9, 23), date(2024, 9, 24)]
+    # airports_dep = [Airport("FMM"), Airport("MUC")]
+    # airports_arr = [Airport("SCQ"), Airport("LCG")]
+    # departure_dates = [date(2024, 8, 22), date(2024, 8, 23)]
+    # return_dates = [date(2024, 8, 25)]
     # search_query = SearchQuery(airports_dep, airports_arr, departure_dates, return_dates)
 
     # Case 1: Direct one-way
@@ -46,23 +46,21 @@ if __name__ == "__main__":
 
     # Case 4: Layover round-trip
     # layover_round_trip_itinerary = RoundTripItinerary(search_query, direct_only=False)
-    # layover_round_trip_itinerary.scrape(export_to="miani.csv")
+    # layover_round_trip_itinerary.scrape(export_to="galicia_roundtrip_layover.csv")
     # print(layover_round_trip_itinerary.df)
 
     # Case 5: Crazy layover
-    airports_dep = [Airport("FCO")]
-    # airports_arr = [Airport("TAS"), Airport("SKD")]
-    airports_arr = [Airport("SKD")]
+    airports_dep = [Airport("SCQ")]
+    airports_arr = [Airport("MUC"), Airport("FMM")]
 
-    # departure_dates = [date(2024, 9, 16), date(2024, 9, 17)]
-    departure_dates = [date(2024, 9, 16)]
+    departure_dates = [date(2024, 8, 25), date(2024, 8, 26)]
 
     search_query = SearchQuery(airports_dep, airports_arr, departure_dates)
     itinerary = CrazyLayoverItinerary(
         search_query,
         direct_only=False,
         max_stops=2,
-        min_layover_time=timedelta(hours=2, minutes=30),
-        max_layover_time=timedelta(hours=18),
+        min_layover_time=timedelta(hours=1, minutes=30),
+        max_layover_time=timedelta(hours=23),
     )
-    itinerary.scrape(num_processes=20, export_to="uzbekistan3.csv")
+    itinerary.scrape(num_processes=20, export_to="galicia_ritorno.csv")

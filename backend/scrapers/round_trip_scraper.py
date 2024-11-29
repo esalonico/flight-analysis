@@ -75,7 +75,6 @@ class RoundTripScraper(BaseScraper):
 
             if "Sort by:" not in self.driver.page_source:
                 WebDriverWait(self.driver, 8).until(lambda s: "Sort by:" in s.page_source)
-                # self.driver.save_screenshot("emanuele.png")
 
         except Exception as e:
             WebDriverWait(self.driver, 15).until(EC.presence_of_element_located((By.TAG_NAME, "ul")))
@@ -84,7 +83,6 @@ class RoundTripScraper(BaseScraper):
         ul_flights_list = [ul for ul in ul_elements if "€" in ul.get_attribute("outerHTML")]
 
         if not ul_flights_list:
-            # self.driver.save_screenshot("emanuele3.png")
             raise ValueError("No flights found.")
 
         return ul_flights_list

@@ -46,8 +46,5 @@ class OneWayScraper(BaseScraper):
         # save flight objects to class
         self.flights = flight_objects
         
-        self.driver.save_screenshot(f"export/screens/scrape_{combination}.png")
-
-
         # close the driver
         self.driver.quit()

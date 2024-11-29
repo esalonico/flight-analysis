@@ -254,7 +254,7 @@ class CrazyLayoverItinerary(BaseItinerary):
         return [OneWayItinerary(search_query, direct_only=True) for search_query in search_queries]
 
     def run_scraper(self, itinerary: OneWayItinerary) -> pd.DataFrame:
-        print(f"Scraping connection {itinerary.search_query}")
+        # print(f"Scraping connection {itinerary.search_query}")
         itinerary.scrape()
         return itinerary.df.copy()
 
@@ -286,7 +286,7 @@ class CrazyLayoverItinerary(BaseItinerary):
         for _, row in df.iterrows():
             departure_datetime = datetime.strptime(row.possible_layover_up_to, "%Y-%m-%d")
             departure_date = date(departure_datetime.year, departure_datetime.month, departure_datetime.day)
-            
+
             sq = SingleItemSearchQuery(
                 airport_dep=Airport(row.airport_dep),
                 airport_arr=Airport(row.airport_arr),
@@ -326,20 +326,23 @@ class CrazyLayoverItinerary(BaseItinerary):
 
         # first scrape
         first_search_queries = self.create_search_queries_from_connections(departure_aiprorts, arrival_airports, departure_dates, max_stops)
-        print("FIRST SEARCH QUERIES: ", first_search_queries)
+        print("FIRST SEARCH QUERIES: ", len(first_search_queries))
         first_scrape_df = self.do_scrape(first_search_queries, num_processes, debug_name="first")
 
         # second scrape
         second_search_queries = self.create_search_queries_from_first_scrape_df(first_scrape_df, arrival_airports, min_layover_time, max_layover_time)
-        print("SECOND SEARCH QUERIES: ", second_search_queries)
+        print("SECOND SEARCH QUERIES: ", len(second_search_queries))
         second_scrape_df = self.do_scrape(second_search_queries, num_processes, debug_name="second")
 
         full_df = pd.concat([first_scrape_df, second_scrape_df])
 
+        # TODO: process the full_df to remove unwanted flights/impossible connections and
+        # to group the possible options
+
         if export_to:
             full_df.to_csv(export_to, index=True)
 
-    def do_scrape(self, search_queries: List[SingleItemSearchQuery], num_processes: int, debug_name=None) -> pd.DataFrame:
+    def do_scrape(self, search_queries: List[SingleItemSearchQuery], num_processes: int, debug_name: str = None) -> pd.DataFrame:
         one_way_itineraries = self.create_one_way_itineraries_from_search_queries(search_queries)
 
         manager = multiprocessing.Manager()
