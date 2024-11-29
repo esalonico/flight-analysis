@@ -3,28 +3,22 @@ from datetime import datetime, timedelta
 import streamlit as st
 
 import src.flights.utils.utils as utils
-from src.flights.models.models import Airport, SearchParameters
+from src.flights.models.models import Airport, CompositeSearch
 
 MAX_INPUT_AIRPORTS = 5
 
 # configure streamlit
 st.set_page_config(layout="wide")
-if "search_parameters" not in st.session_state:
-    st.session_state.search_parameters = SearchParameters()
+if "search" not in st.session_state:
+    st.session_state.search = CompositeSearch()
 
 
 # FUNCTIONS
 def build_search_object():
-    st.session_state.search_parameters.origins = [
-        Airport(iata.split()[0]) for iata in origins
-    ]
-    st.session_state.search_parameters.destinations = [
-        Airport(iata.split()[0]) for iata in destinations
-    ]
-    st.session_state.search_parameters.departure_dates = (
-        utils.generate_date_range_between_dates(*departure_dates)
-    )
-    st.session_state.search_parameters.direct_only = direct_only
+    st.session_state.search.origins = [Airport(iata.split()[0]) for iata in origins]
+    st.session_state.search.destinations = [Airport(iata.split()[0]) for iata in destinations]
+    st.session_state.search.departure_dates = utils.generate_date_range_between_dates(*departure_dates)
+    st.session_state.search.direct_only = direct_only
 
 
 # INPUTS
@@ -61,4 +55,10 @@ with st.sidebar:
 
 
 # debug
-st.write(st.session_state)
+st.write("COMPOSITE SEARCH")
+st.write(st.session_state.search)
+
+if "search" in st.session_state:
+    if st.session_state.search.single_searches:
+        st.write("SINGLE SEARCHES")
+        st.write(st.session_state.search.single_searches)

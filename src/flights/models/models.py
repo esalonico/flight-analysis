@@ -41,14 +41,21 @@ class Airport(BaseModel):
         return [f"{k} ({v['name']})" for k, v in AIRPORTS_DATA.items()]
 
 
-class SearchItem(BaseModel):
+class SingleSearch(BaseModel):
+    """Single search item (one origin, one destination, one departure date)"""
+
     origin: Airport
     destination: Airport
     departure_date: date
     direct_only: bool
 
 
-class SearchParameters(BaseModel):
+class CompositeSearch(BaseModel):
+    """
+    Collection of search items.
+    Multiple origins, destinations, and departure dates can be combined.
+    """
+
     origins: Optional[List[Airport]] = None
     destinations: Optional[List[Airport]] = None
     departure_dates: Optional[List[date]] = None
@@ -56,9 +63,12 @@ class SearchParameters(BaseModel):
 
     @computed_field
     @property
-    def search_items(self) -> List[SearchItem]:
+    def single_searches(self) -> Optional[List[SingleSearch]]:
+        if self.origins is None or self.destinations is None or self.departure_dates is None:
+            return None
+
         return [
-            SearchItem(
+            SingleSearch(
                 origin=origin,
                 destination=destination,
                 departure_date=departure_date,

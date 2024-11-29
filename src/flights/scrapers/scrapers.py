@@ -3,15 +3,19 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
-from src.flights.models.models import SearchItem
+from src.flights.models.models import SingleSearch
 
 
 class BaseScraper:
-    def __init__(self, search_item: SearchItem) -> None:
+    def __init__(self, search_item: SingleSearch) -> None:
         self.search_item = search_item
 
         self.driver = self._create_driver()
         self.url = self._build_url()
+
+    def __del__(self):
+        if hasattr(self, "driver") and self.driver:
+            self.driver.quit()
 
     def _create_driver(self) -> webdriver.Chrome:
         """
@@ -24,9 +28,7 @@ class BaseScraper:
         options.add_argument("--headless")
         options.add_argument("--window-size=1920,1080")
 
-        return webdriver.Chrome(
-            service=Service(ChromeDriverManager().install()), options=options
-        )
+        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
     def _build_url(self) -> str:
         raise NotImplementedError("Method must be implemented in subclass.")

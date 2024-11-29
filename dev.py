@@ -1,8 +1,8 @@
 from datetime import datetime, timedelta
-from src.flights.models.models import Airport, SearchItem
+from src.flights.models.models import Airport, SingleSearch
 from src.flights.scrapers.scrapers import OneWayScraper
 
-search_item = SearchItem(
+search_item = SingleSearch(
     origin=Airport("FCO"),
     destination=Airport("MUC"),
     departure_date=datetime.today().date() + timedelta(days=10),
