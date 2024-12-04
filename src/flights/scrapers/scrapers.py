@@ -1,4 +1,5 @@
 import pprint
+from typing import List
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -6,7 +7,7 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
-from src.flights.models.models import SingleSearch
+from src.flights.models.models import Flight, SingleSearch
 from src.flights.scrapers import utils
 
 TIMEOUT = 15  # seconds
@@ -57,7 +58,7 @@ class OneWayScraper(BaseScraper):
 
         return f"{url}%20on%20{self.search_item.departure_date}%20oneway&curr=EUR&gl=IT"
 
-    def get_raw_flight_results(self):
+    def get_flights_objects(self) -> List[Flight]:
         """
         Get raw results from Google Flights page.
         """
@@ -80,16 +81,13 @@ class OneWayScraper(BaseScraper):
         # save element as screenshot
         for i, s in enumerate(flights_sections):
             s.screenshot(f"flights_section_{i+1}.png")
-
         print(self.driver.current_url)
 
-        # extract flight data from HTML sections
+        # extract flight data from HTML sections and return as a list of Flight objects
+        flights = []
         for section in flights_sections:
             for row in section.find_elements(By.TAG_NAME, "li"):
                 flight = utils.extract_flight_data_from_li(row, dep_date=self.search_item.departure_date)
-                print("Flight: ", flight)
-                pprint.pprint(flight.model_dump())
-                break
-            break
+                flights.append(flight)
 
-        return flights_sections
+        return flights

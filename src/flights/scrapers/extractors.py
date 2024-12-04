@@ -48,6 +48,12 @@ def extract_departure_and_arrival_datetimes(element: WebElement, dep_date: date)
     :return: Tuple of two datetime objects representing the departure and arrival datetimes.
     """
     data = element.find_element(By.CLASS_NAME, "mv1WYe").text
+    
+    # TODO: delete
+    if "+1" in data:
+        print("TO IMPLEMENT: handle +- days")
+        return datetime.today(), datetime.today()
+    
     dep_time, arr_time = data.replace("\n", "").replace("\u202f", "").split(" – ")
 
     dep_datetime = datetime.combine(dep_date, datetime.strptime(dep_time, "%I:%M%p").time())

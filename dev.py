@@ -2,6 +2,7 @@ from datetime import datetime, timedelta
 
 from src.flights.models.models import Airport, SingleSearch
 from src.flights.scrapers.scrapers import OneWayScraper
+import pandas as pd
 
 search_item = SingleSearch(
     origin=Airport("IST"),
@@ -11,4 +12,7 @@ search_item = SingleSearch(
 )
 scraper = OneWayScraper(search_item)
 
-scraper.get_raw_flight_results()
+flights = scraper.get_flights_objects()
+
+df = pd.DataFrame([f.model_dump() for f in flights])
+print(df)
