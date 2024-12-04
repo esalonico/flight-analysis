@@ -40,6 +40,10 @@ class Airport(BaseModel):
     def get_all_iatas_with_names(self) -> List[str]:
         return [f"{k} ({v['name']})" for k, v in AIRPORTS_DATA.items()]
 
+class Flight(BaseModel):
+    origin: Airport
+    destination: Airport
+    date: date
 
 class SingleSearch(BaseModel):
     """Single search item (one origin, one destination, one departure date)"""

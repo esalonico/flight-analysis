@@ -1,9 +1,14 @@
+import pickle
+
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from webdriver_manager.chrome import ChromeDriverManager
 
 from src.flights.models.models import SingleSearch
+from src.flights.scrapers import utils
+
+TIMEOUT = 15  # seconds
 
 
 class BaseScraper:
@@ -15,6 +20,7 @@ class BaseScraper:
 
     def __del__(self):
         if hasattr(self, "driver") and self.driver:
+            self.driver.save_screenshot("screenshot.png")  # TODO: delete line
             self.driver.quit()
 
     def _create_driver(self) -> webdriver.Chrome:
@@ -25,8 +31,8 @@ class BaseScraper:
         """
         options = Options()
         options.add_argument("--no-sandbox")
-        options.add_argument("--headless")
-        options.add_argument("--window-size=1920,1080")
+        # options.add_argument("--headless")
+        options.add_argument("--window-size=1200, 2000")
 
         return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
@@ -42,10 +48,38 @@ class OneWayScraper(BaseScraper):
         :return: URL string for the flight search
         """
         url = "https://www.google.com/travel/flights"
-        url += f"?q=Flights%20to%20{self.search_item.origin.iata}%20Airport"
-        url += f"%20from%20{self.search_item.destination.iata}"
+        url += f"?q=Flights%20to%20{self.search_item.destination.iata}%20Airport"
+        url += f"%20from%20{self.search_item.origin.iata}"
 
         if self.search_item.direct_only:
             return f"{url}%20on%20{self.search_item.departure_date}%20oneway%20direct&curr=EUR&gl=IT"
 
         return f"{url}%20on%20{self.search_item.departure_date}%20oneway&curr=EUR&gl=IT"
+
+    def get_raw_flight_results(self):
+        """
+        Get raw results from Google Flights page.
+        """
+        self.driver.get(self.url)
+
+        # handle google terms and conditions page
+        if utils.is_google_terms_and_conditions_page(self.driver.page_source):
+            utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
+
+        # click on "cheapest" tab
+        utils.click_on_cheapest_tab(self.driver, TIMEOUT)
+
+        # wait for the actual cheapest prices to load
+        utils.wait_for_cheapest_prices_to_load(self.driver, TIMEOUT)
+
+        # get the HTML section containing flight data
+        flights_sections = utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)
+
+        # TODO: delete
+        # save element as screenshot
+        for i, s in enumerate(flights_sections):
+            s.screenshot(f"flights_section_{i+1}.png")
+
+        print(self.driver.current_url)
+
+        return flights_sections
