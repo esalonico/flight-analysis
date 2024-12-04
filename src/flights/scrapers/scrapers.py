@@ -1,8 +1,9 @@
-import pickle
+import pprint
 
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
 from src.flights.models.models import SingleSearch
@@ -81,5 +82,14 @@ class OneWayScraper(BaseScraper):
             s.screenshot(f"flights_section_{i+1}.png")
 
         print(self.driver.current_url)
+
+        # extract flight data from HTML sections
+        for section in flights_sections:
+            for row in section.find_elements(By.TAG_NAME, "li"):
+                flight = utils.extract_flight_data_from_li(row, dep_date=self.search_item.departure_date)
+                print("Flight: ", flight)
+                pprint.pprint(flight.model_dump())
+                break
+            break
 
         return flights_sections

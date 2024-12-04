@@ -1,5 +1,5 @@
 import json
-from datetime import date
+from datetime import date, datetime
 from typing import List, Optional
 
 from pydantic import BaseModel, computed_field
@@ -9,6 +9,8 @@ DATA_FOLDER = "src/flights/data"
 with open(f"{DATA_FOLDER}/airports.json", "r") as f:
     AIRPORTS_DATA = json.load(f)
 
+
+# TODO: maybe have an Airline class? With: name, logo_url, iata
 
 class Airport(BaseModel):
     iata: str
@@ -40,10 +42,20 @@ class Airport(BaseModel):
     def get_all_iatas_with_names(self) -> List[str]:
         return [f"{k} ({v['name']})" for k, v in AIRPORTS_DATA.items()]
 
+
 class Flight(BaseModel):
     origin: Airport
     destination: Airport
-    date: date
+    dep_datetime: datetime
+    arr_datetime: datetime
+    airline: str
+    flight_time: int  # in minutes
+    n_stops: int
+    price: int
+    stops: Optional[List[str]] = None
+    only_hand_luggage: Optional[bool] = None
+    airline_logo_url: Optional[str] = None
+
 
 class SingleSearch(BaseModel):
     """Single search item (one origin, one destination, one departure date)"""

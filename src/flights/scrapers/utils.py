@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List
 
 from selenium import webdriver
@@ -6,6 +7,7 @@ from selenium.webdriver.remote.webdriver import WebDriver, WebElement
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+import src.flights.scrapers.extractors as extractors
 from src.flights.models.models import Flight
 
 
@@ -82,5 +84,23 @@ def get_html_sections_containing_flight_data(driver: WebDriver, timeout: int = 1
     return sections
 
 
-def extract_flight_objects_from_web_element(element: WebElement) -> List[Flight]:
-    pass
+def extract_flight_data_from_li(element: WebElement, dep_date: date) -> Flight:
+    """
+    Extract flight data from a <li> WebElement containing flight information.
+
+    :param element: <li> WebElement containing flight data.
+    :param dep_date: Departure date of the flight.
+    :return: Flight object containing the extracted data.
+    """
+    data = {}
+    data["origin"], data["destination"] = extractors.extract_origin_and_destination(element)
+    data["dep_datetime"], data["arr_datetime"] = extractors.extract_departure_and_arrival_datetimes(element, dep_date)
+    data["airline"] = extractors.extract_airline_name(element)
+    data["flight_time"] = extractors.extract_flight_time(element)
+    data["n_stops"] = extractors.extract_number_of_stops(element)
+    data["price"] = extractors.extract_price(element)
+    data["stops"] = extractors.extract_stops(element)
+    data["only_hand_luggage"] = extractors.extract_only_hand_luggage(element)
+    data["airline_logo_url"] = extractors.extract_airline_logo_url(element)
+
+    return Flight(**data)
