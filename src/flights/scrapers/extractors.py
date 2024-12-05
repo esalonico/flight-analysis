@@ -1,7 +1,7 @@
 """Extract flight data from WebElements containing flight information."""
 
 import re
-from datetime import date, datetime
+from datetime import date, datetime, timedelta
 from typing import List, Optional, Tuple
 
 from selenium.common.exceptions import NoSuchElementException
@@ -41,23 +41,28 @@ def extract_departure_and_arrival_datetimes(element: WebElement, dep_date: date)
     """
     Extract the departure and arrival datetimes from a <li> WebElement containing flight information.
 
-    # TODO: handle +- X days
-
     :param element: <li> WebElement containing flight data.
     :param dep_date: Departure date of the flight.
     :return: Tuple of two datetime objects representing the departure and arrival datetimes.
     """
     data = element.find_element(By.CLASS_NAME, "mv1WYe").text
-    
-    # TODO: delete
-    if "+1" in data:
-        print("TO IMPLEMENT: handle +- days")
-        return datetime.today(), datetime.today()
-    
+
+    # handle +- X days
+    if "+" in data:
+        delta_days = int(data.split("+")[-1])
+        arr_date = dep_date + timedelta(days=delta_days)
+        data = data.split("+")[0]
+    elif "-" in data:
+        delta_days = int(data.split("-")[-1])
+        arr_date = dep_date - timedelta(days=delta_days)
+        data = data.split("-")[0]
+    else:
+        arr_date = dep_date
+
     dep_time, arr_time = data.replace("\n", "").replace("\u202f", "").split(" – ")
 
     dep_datetime = datetime.combine(dep_date, datetime.strptime(dep_time, "%I:%M%p").time())
-    arr_datetime = datetime.combine(dep_date, datetime.strptime(arr_time, "%I:%M%p").time())
+    arr_datetime = datetime.combine(arr_date, datetime.strptime(arr_time, "%I:%M%p").time())
 
     return dep_datetime, arr_datetime
 
@@ -137,7 +142,7 @@ def extract_price(element: WebElement) -> int:
     :param element: <li> WebElement containing flight data.
     :return: Price (in €) as an int.
     """
-    price = element.find_element(By.CLASS_NAME, "BVAVmf").text
+    price = element.find_element(By.CSS_SELECTOR, ".YMlIz.FpEdX").text
     return int(price.replace("€", ""))
 
 

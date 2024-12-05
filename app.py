@@ -1,9 +1,11 @@
 from datetime import datetime, timedelta
 
+import pandas as pd
 import streamlit as st
 
 import src.flights.utils.utils as utils
-from src.flights.models.models import Airport, CompositeSearch
+from src.flights.models.models import Airport, CompositeSearch, SingleSearch
+from src.flights.scrapers.scrapers import OneWayScraper
 
 MAX_INPUT_AIRPORTS = 5
 
@@ -21,7 +23,55 @@ def build_search_object():
     st.session_state.search.direct_only = direct_only
 
 
+def render_df(df):
+    def format_flight_time(input_mins: int) -> str:
+        """
+        Format flight time in minutes to human-readable format.
+        :param input_mins: Flight time in minutes.
+        :return: Human-readable flight time.
+        """
+        hours = input_mins // 60
+        mins = input_mins % 60
+        if hours > 0:
+            return f"{hours} hr {mins} min" if mins > 0 else f"{hours} hr"
+        else:
+            return f"{mins} min"
+
+    df["flight_time"] = df["flight_time"].apply(format_flight_time)
+
+    st.dataframe(
+        df,
+        column_config={
+            "dep_datetime": st.column_config.DatetimeColumn(format="D MMM, HH:mm"),
+            "arr_datetime": st.column_config.DatetimeColumn(format="D MMM, HH:mm"),
+            "airline_logo_url": st.column_config.ImageColumn(label="", width=None),
+            "price": st.column_config.ProgressColumn(format="€%f", min_value=0, max_value=int(df.price.max())),
+        },
+        height=600 if len(df) > 10 else None,
+    )
+
+
+def run():
+    build_search_object()
+    # TODO: do this for all combinations of origins and destinations and dates
+    search_item = SingleSearch(
+        origin=st.session_state.search.origins[0],
+        destination=st.session_state.search.destinations[0],
+        departure_date=st.session_state.search.departure_dates[0],
+        direct_only=st.session_state.search.direct_only,
+    )
+    scraper = OneWayScraper(search_item)
+    flights = scraper.get_flights_objects()
+    df = scraper.make_flights_dataframe(flights)
+
+    render_df(df)
+
+
 # INPUTS
+# TODO: delete
+st.button("Render DF", on_click=lambda: render_df(pd.read_csv("flights.csv")))
+
+
 origins = st.multiselect(
     "Origin airport(s)",
     options=Airport.get_all_iatas_with_names(),
@@ -47,7 +97,7 @@ departure_dates = st.date_input(
 direct_only = st.checkbox("Direct flights only", value=True)
 
 # apply button
-st.button("Apply", on_click=lambda: build_search_object())
+st.button("Apply", on_click=lambda: run())
 
 # sidebar
 with st.sidebar:

@@ -1,14 +1,16 @@
 import pprint
 from typing import List
 
+import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from webdriver_manager.chrome import ChromeDriverManager
 
+import src.flights.utils.utils as utils
 from src.flights.models.models import Flight, SingleSearch
-from src.flights.scrapers import utils
+from src.flights.scrapers import utils as scraper_utils
 
 TIMEOUT = 15  # seconds
 
@@ -65,17 +67,17 @@ class OneWayScraper(BaseScraper):
         self.driver.get(self.url)
 
         # handle google terms and conditions page
-        if utils.is_google_terms_and_conditions_page(self.driver.page_source):
-            utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
+        if scraper_utils.is_google_terms_and_conditions_page(self.driver.page_source):
+            scraper_utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
 
         # click on "cheapest" tab
-        utils.click_on_cheapest_tab(self.driver, TIMEOUT)
+        scraper_utils.click_on_cheapest_tab(self.driver, TIMEOUT)
 
         # wait for the actual cheapest prices to load
-        utils.wait_for_cheapest_prices_to_load(self.driver, TIMEOUT)
+        scraper_utils.wait_for_cheapest_prices_to_load(self.driver, TIMEOUT)
 
         # get the HTML section containing flight data
-        flights_sections = utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)
+        flights_sections = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)
 
         # TODO: delete
         # save element as screenshot
@@ -87,7 +89,32 @@ class OneWayScraper(BaseScraper):
         flights = []
         for section in flights_sections:
             for row in section.find_elements(By.TAG_NAME, "li"):
-                flight = utils.extract_flight_data_from_li(row, dep_date=self.search_item.departure_date)
+                flight = scraper_utils.extract_flight_data_from_li(row, dep_date=self.search_item.departure_date)
                 flights.append(flight)
 
         return flights
+
+    def make_flights_dataframe(self, flights: List[Flight]) -> pd.DataFrame:
+        """
+        Generate a pandas DataFrame from a list of Flight objects.
+
+        :param flights: List of Flight objects.
+        :return: pandas DataFrame.
+        """
+        df = pd.DataFrame([f.model_dump() for f in flights])
+        df["origin"] = df.origin.apply(lambda x: x.get("iata"))
+        df["destination"] = df.destination.apply(lambda x: x.get("iata"))
+
+        # sort
+        df = df.sort_values(by=["price", "n_stops", "flight_time", "dep_datetime"], ascending=[True, True, True, True])
+
+        # move columns to the front
+        df = utils.move_column_to_position(df, "airline_logo_url", 0)
+
+        # reset index
+        df = df.reset_index(drop=True)
+
+        # export to csv
+        df.to_csv("flights.csv", index=False)
+
+        return df
