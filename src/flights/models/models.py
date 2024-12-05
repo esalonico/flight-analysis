@@ -51,7 +51,7 @@ class Flight(BaseModel):
     airline: str
     flight_time: int  # in minutes
     n_stops: int
-    price: int
+    price: Optional[int] = None
     stops: Optional[List[str]] = None
     only_hand_luggage: Optional[bool] = None
     airline_logo_url: Optional[str] = None

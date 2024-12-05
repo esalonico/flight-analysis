@@ -135,14 +135,19 @@ def extract_only_hand_luggage(element: WebElement) -> bool:
         return False
 
 
-def extract_price(element: WebElement) -> int:
+def extract_price(element: WebElement) -> Optional[int]:
     """
     Extract the price in EUR from a <li> WebElement containing flight information.
+    If the price is unavailable, return None.
 
     :param element: <li> WebElement containing flight data.
-    :return: Price (in €) as an int.
+    :return: Price (in €) as an int or None if price is unavailable.
     """
     price = element.find_element(By.CSS_SELECTOR, ".YMlIz.FpEdX").text
+    
+    if "Price unavailable" in price:
+        return None
+    
     return int(price.replace("€", ""))
 
 

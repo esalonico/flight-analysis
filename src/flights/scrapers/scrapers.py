@@ -1,5 +1,5 @@
 import pprint
-from typing import List
+from typing import List, Optional
 
 import pandas as pd
 from selenium import webdriver
@@ -60,15 +60,22 @@ class OneWayScraper(BaseScraper):
 
         return f"{url}%20on%20{self.search_item.departure_date}%20oneway&curr=EUR&gl=IT"
 
-    def get_flights_objects(self) -> List[Flight]:
+    def get_flights_objects(self) -> Optional[List[Flight]]:
         """
-        Get raw results from Google Flights page.
+        Get a list of Flight objects from the search results.
+        If no direct flights are found, an empty list is returned.
+
+        :return: List of Flight objects.
         """
         self.driver.get(self.url)
 
         # handle google terms and conditions page
         if scraper_utils.is_google_terms_and_conditions_page(self.driver.page_source):
             scraper_utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
+            
+        # check if there are nonstop flights available
+        if scraper_utils.no_nonstop_flights_found(self.driver, TIMEOUT):
+            return []
 
         # click on "cheapest" tab
         scraper_utils.click_on_cheapest_tab(self.driver, TIMEOUT)

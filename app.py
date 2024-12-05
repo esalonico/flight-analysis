@@ -62,6 +62,9 @@ def run():
     )
     scraper = OneWayScraper(search_item)
     flights = scraper.get_flights_objects()
+    if not flights:
+        st.warning("No direct flights found.")
+        return
     df = scraper.make_flights_dataframe(flights)
 
     render_df(df)

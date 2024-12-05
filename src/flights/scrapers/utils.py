@@ -11,6 +11,10 @@ import src.flights.scrapers.extractors as extractors
 from src.flights.models.models import Flight
 
 
+class NoNonstopFlightsFound(Exception):
+    pass
+
+
 def is_google_terms_and_conditions_page(page_source: str) -> bool:
     """
     Returns True if the page is Google's Terms and Conditions page.
@@ -31,6 +35,32 @@ def skip_google_terms_and_conditions_page(driver: webdriver.Chrome, timeout: int
     WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.XPATH, "//button[contains(., 'Accept all')]"))).click()
 
 
+def no_nonstop_flights_found(driver: WebDriver, timeout: int = 10) -> bool:
+    """
+    Returns True if there are NO nonstop flights available in the search results.
+
+    # TODO: improve logic and naming (avoid double negation)
+
+    :param driver: Chrome WebDriver instance.
+    :param timeout: Maximum time to wait
+    """
+    cheapest_tab_id = "M7sBEb"
+    no_flights_found_class = "QEk4oc"
+
+    # wait until one of the two elements is visible
+    WebDriverWait(driver, timeout).until(
+        EC.any_of(
+            EC.element_to_be_clickable((By.ID, cheapest_tab_id)),
+            EC.visibility_of_element_located((By.CLASS_NAME, no_flights_found_class)),
+        )
+    )
+    
+    # return True if the "no flights found" element is visible
+    return bool(driver.find_elements(By.CLASS_NAME, no_flights_found_class))
+    
+    
+
+
 def click_on_cheapest_tab(driver: WebDriver, timeout: int = 10):
     """
     Waits for and clicks on the element corresponding to the tab "cheapest" in Google Flights.
@@ -39,7 +69,8 @@ def click_on_cheapest_tab(driver: WebDriver, timeout: int = 10):
     :param timeout: Maximum time to wait for the element to be clickable, in seconds.
     """
     # wait until the element is clickable
-    element = WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.ID, "M7sBEb")))
+    cheapest_tab_id = "M7sBEb"
+    element = WebDriverWait(driver, timeout).until(EC.element_to_be_clickable((By.ID, cheapest_tab_id)))
 
     # click the element
     element.click()
