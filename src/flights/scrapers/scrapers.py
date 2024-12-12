@@ -1,11 +1,12 @@
-import pprint
 from typing import List, Optional
 
 import pandas as pd
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
+from selenium.webdriver.remote.webdriver import WebElement
 from webdriver_manager.chrome import ChromeDriverManager
 
 import src.flights.utils.utils as utils
@@ -67,12 +68,25 @@ class OneWayScraper(BaseScraper):
 
         :return: List of Flight objects.
         """
+
+        def is_li_element_view_more_flights(element: WebElement) -> bool:
+            """
+            Checks if a <li> WebElement is a "View more flights" element (menu to load more flights).
+
+            :param element: <li> WebElement to check.
+            :return: True if the element is a "View more flights" element, False otherwise.
+            """
+            try:
+                return bool(element.find_element(By.CSS_SELECTOR, ".zISZ5c.QB2Jof"))
+            except NoSuchElementException:
+                return False
+
         self.driver.get(self.url)
 
         # handle google terms and conditions page
         if scraper_utils.is_google_terms_and_conditions_page(self.driver.page_source):
             scraper_utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
-            
+
         # check if there are nonstop flights available
         if scraper_utils.no_nonstop_flights_found(self.driver, TIMEOUT):
             return []
@@ -96,6 +110,9 @@ class OneWayScraper(BaseScraper):
         flights = []
         for section in flights_sections:
             for row in section.find_elements(By.TAG_NAME, "li"):
+                # skip "View more flights" elements
+                if is_li_element_view_more_flights(row):
+                    continue
                 flight = scraper_utils.extract_flight_data_from_li(row, dep_date=self.search_item.departure_date)
                 flights.append(flight)
 

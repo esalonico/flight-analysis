@@ -12,6 +12,7 @@ with open(f"{DATA_FOLDER}/airports.json", "r") as f:
 
 # TODO: maybe have an Airline class? With: name, logo_url, iata
 
+
 class Airport(BaseModel):
     iata: str
     icao_code: Optional[str] = None
@@ -48,11 +49,12 @@ class Flight(BaseModel):
     destination: Airport
     dep_datetime: datetime
     arr_datetime: datetime
-    airline: str
+    airlines: List[str]
     flight_time: int  # in minutes
     n_stops: int
+    layover_location: Optional[List[str]] = None  # TODO: maybe list of airports?
+    layover_time: Optional[int] = None  # in minutes
     price: Optional[int] = None
-    stops: Optional[List[str]] = None
     only_hand_luggage: Optional[bool] = None
     airline_logo_url: Optional[str] = None
 

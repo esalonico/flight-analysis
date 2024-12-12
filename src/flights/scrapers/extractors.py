@@ -19,6 +19,7 @@ def extract_origin_and_destination(element: WebElement) -> Tuple[Airport, Airpor
     :return: Tuple of two Airport objects representing the origin and destination airports.
     """
     airport_codes = element.find_element(By.CSS_SELECTOR, ".PTuQse.sSHqwe.tPgKwe.ogfYpf").text
+
     origin, destination = airport_codes.split("–")
 
     return Airport(iata=origin), Airport(iata=destination)
@@ -67,16 +68,18 @@ def extract_departure_and_arrival_datetimes(element: WebElement, dep_date: date)
     return dep_datetime, arr_datetime
 
 
-def extract_airline_name(element: WebElement) -> str:
+def extract_airlines_names(element: WebElement) -> List[str]:
     """
     Extract the name of the airline from a <li> WebElement containing flight information.
 
-    # TODO: handle multiple airlines
+    # TODO: Fix "Operated by" or separator in airlines names.
 
     :param element: <li> WebElement containing flight data.
     :return: Name of the airline.
     """
-    return element.find_element(By.CSS_SELECTOR, ".sSHqwe.tPgKwe.ogfYpf").text
+    airlines = element.find_element(By.CSS_SELECTOR, ".sSHqwe.tPgKwe.ogfYpf").text
+    airlines = airlines.replace("Self transfer", "").strip()
+    return airlines.split(", ")
 
 
 def extract_flight_time(element: WebElement) -> int:
@@ -90,36 +93,45 @@ def extract_flight_time(element: WebElement) -> int:
     return get_duration_in_minutes_from_string(flight_time_str)
 
 
-def extract_number_of_stops(element: WebElement) -> int:
+def extract_layover_information(element: WebElement) -> Tuple[int, Optional[List[str]], Optional[int]]:
     """
-    Extract the number of stops from a <li> WebElement containing flight information.
-
-    # TODO: test multiple stops
+    Extracts layover information from a flight element.
 
     :param element: <li> WebElement containing flight data.
-    :return: Number of stops as an int.
+    :return:
+        - Number of stops (int)
+        - Layover location(s) Optional(List[str])
+        - Layover time (in minutes) Optional(int)
     """
-    n_stops = element.find_element(By.CLASS_NAME, "BbR8Ec").text
+    n_stops, layover_location, layover_time = None, None, None
 
-    # nonstop flights
-    if n_stops == "Nonstop":
-        return 0
+    layover_section = element.find_element(By.CLASS_NAME, "BbR8Ec")
+    layover_text_raw = layover_section.text
+    layover_text_list = layover_text_raw.split("\n")
 
-    # flights with stops
-    return int(n_stops.split(" ")[0])
+    # 1. number of stops
+    layover_stops_text = layover_text_list[0]
+    if layover_stops_text == "Nonstop":
+        return 0, None, None
+    else:
+        n_stops = int(layover_stops_text.split(" ")[0])
 
+    # 2. layover location
+    layover_time_and_location_text = layover_text_list[1]
+    location_match = re.search(r"([A-Z]{3}(?:, [A-Z]{3})*)$", layover_time_and_location_text)
+    layover_location = location_match.group().split(", ") if location_match else None
 
-def extract_stops(element: WebElement) -> Optional[List[str]]:
-    """
-    Extract the stops from a <li> WebElement containing flight information.
+    # 3. layover time
+    if n_stops >= 2:  # if there are 2 or more stops, layover time is not shown
+        return n_stops, layover_location, None
 
-    # TODO: implement
-    # TODO: stops as Airport objects?
+    if layover_location:
+        layover_location_str = ", ".join(layover_location)
+        layover_time_and_location_text = layover_time_and_location_text.replace(layover_location_str, "").strip()
 
-    :param element: <li> WebElement containing flight data.
-    :return: Stops as a string.
-    """
-    return None
+    layover_time = get_duration_in_minutes_from_string(layover_time_and_location_text)
+
+    return n_stops, layover_location, layover_time
 
 
 def extract_only_hand_luggage(element: WebElement) -> bool:
@@ -144,11 +156,11 @@ def extract_price(element: WebElement) -> Optional[int]:
     :return: Price (in €) as an int or None if price is unavailable.
     """
     price = element.find_element(By.CSS_SELECTOR, ".YMlIz.FpEdX").text
-    
+
     if "Price unavailable" in price:
         return None
-    
-    return int(price.replace("€", ""))
+
+    return int(price.replace("€", "").replace(",", ""))
 
 
 def get_duration_in_minutes_from_string(s: str) -> int:

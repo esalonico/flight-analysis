@@ -54,11 +54,9 @@ def no_nonstop_flights_found(driver: WebDriver, timeout: int = 10) -> bool:
             EC.visibility_of_element_located((By.CLASS_NAME, no_flights_found_class)),
         )
     )
-    
+
     # return True if the "no flights found" element is visible
     return bool(driver.find_elements(By.CLASS_NAME, no_flights_found_class))
-    
-    
 
 
 def click_on_cheapest_tab(driver: WebDriver, timeout: int = 10):
@@ -126,11 +124,10 @@ def extract_flight_data_from_li(element: WebElement, dep_date: date) -> Flight:
     data = {}
     data["origin"], data["destination"] = extractors.extract_origin_and_destination(element)
     data["dep_datetime"], data["arr_datetime"] = extractors.extract_departure_and_arrival_datetimes(element, dep_date)
-    data["airline"] = extractors.extract_airline_name(element)
+    data["airlines"] = extractors.extract_airlines_names(element)
     data["flight_time"] = extractors.extract_flight_time(element)
-    data["n_stops"] = extractors.extract_number_of_stops(element)
     data["price"] = extractors.extract_price(element)
-    data["stops"] = extractors.extract_stops(element)
+    data["n_stops"], data["layover_location"], data["layover_time"] = extractors.extract_layover_information(element)
     data["only_hand_luggage"] = extractors.extract_only_hand_luggage(element)
     data["airline_logo_url"] = extractors.extract_airline_logo_url(element)
 

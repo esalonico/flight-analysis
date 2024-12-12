@@ -1,5 +1,8 @@
+import ast
 from datetime import datetime, timedelta
+from typing import Optional
 
+import numpy as np
 import pandas as pd
 import streamlit as st
 
@@ -24,20 +27,26 @@ def build_search_object():
 
 
 def render_df(df):
-    def format_flight_time(input_mins: int) -> str:
+    def format_flight_time(input_mins: Optional[int]) -> Optional[str]:
         """
         Format flight time in minutes to human-readable format.
         :param input_mins: Flight time in minutes.
-        :return: Human-readable flight time.
+
+        :return: Human-readable flight time e.g. "2 hr 30 min". Returns None if input is None.
         """
-        hours = input_mins // 60
-        mins = input_mins % 60
+        if not input_mins or np.isnan(input_mins):
+            return None
+
+        hours = int(input_mins // 60)
+        mins = int(input_mins % 60)
+
         if hours > 0:
             return f"{hours} hr {mins} min" if mins > 0 else f"{hours} hr"
         else:
             return f"{mins} min"
 
     df["flight_time"] = df["flight_time"].apply(format_flight_time)
+    df["layover_time"] = df["layover_time"].apply(format_flight_time)
 
     st.dataframe(
         df,
@@ -68,23 +77,33 @@ def run():
     df = scraper.make_flights_dataframe(flights)
 
     render_df(df)
+    # time.sleep(1000)
 
 
 # INPUTS
 # TODO: delete
-st.button("Render DF", on_click=lambda: render_df(pd.read_csv("flights.csv")))
+def read_flights_csv(filepath: str = "flights.csv") -> pd.DataFrame:
+    df = pd.read_csv(filepath)
+    df["airlines"] = df["airlines"].apply(ast.literal_eval)
+    df["layover_location"] = df["layover_location"].apply(ast.literal_eval)
+    return df
+
+
+st.button("Render DF", on_click=lambda: render_df(read_flights_csv()))
 
 
 origins = st.multiselect(
     "Origin airport(s)",
     options=Airport.get_all_iatas_with_names(),
-    default=["FCO (Rome\u2013Fiumicino Leonardo da Vinci International Airport)"],
+    # default=["FCO (Rome\u2013Fiumicino Leonardo da Vinci International Airport)"],
+    default=["MIA (Miami International Airport)"],
     max_selections=MAX_INPUT_AIRPORTS,
 )
 destinations = st.multiselect(
     "Destination airport(s)",
     options=Airport.get_all_iatas_with_names(),
-    default=["MUC (Munich Airport)"],
+    # default=["MUC (Munich Airport)"],
+    default=["LAX (Los Angeles International Airport)"],
     max_selections=MAX_INPUT_AIRPORTS,
 )
 
@@ -97,7 +116,7 @@ departure_dates = st.date_input(
     min_value=datetime.today(),
     format="DD-MM-YYYY",
 )
-direct_only = st.checkbox("Direct flights only", value=True)
+direct_only = st.checkbox("Direct flights only", value=False)
 
 # apply button
 st.button("Apply", on_click=lambda: run())
