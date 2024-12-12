@@ -7,7 +7,7 @@ import pandas as pd
 import streamlit as st
 
 import src.flights.utils.utils as utils
-from src.flights.models.models import Airport, CompositeSearch, SingleSearch
+from src.flights.models.models import Airport, CompositeSearch
 from src.flights.scrapers.scrapers import OneWayScraper
 
 MAX_INPUT_AIRPORTS = 5
@@ -62,22 +62,23 @@ def render_df(df):
 
 def run():
     build_search_object()
-    # TODO: do this for all combinations of origins and destinations and dates
-    search_item = SingleSearch(
-        origin=st.session_state.search.origins[0],
-        destination=st.session_state.search.destinations[0],
-        departure_date=st.session_state.search.departure_dates[0],
-        direct_only=st.session_state.search.direct_only,
-    )
-    scraper = OneWayScraper(search_item)
-    flights = scraper.get_flights_objects()
-    if not flights:
-        st.warning("No direct flights found.")
-        return
-    df = scraper.make_flights_dataframe(flights)
+    all_flights = []
+    # TODO: do it better, share driver not like this!
+    for search_item in st.session_state.search.single_searches[0]:
+        try:
+            scraper = OneWayScraper(search_item)
+            flights = scraper.get_flights_objects()
+            all_flights.extend(flights)
+        except Exception as e:
+            st.error(f"Error while scraping: {e}")
+            continue
 
+        if not flights:
+            st.warning("No flights found for this single search.")
+            continue
+
+    df = scraper.make_flights_dataframe(all_flights)
     render_df(df)
-    # time.sleep(1000)
 
 
 # INPUTS
