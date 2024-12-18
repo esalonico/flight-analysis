@@ -1,3 +1,4 @@
+from datetime import date
 from typing import List, Optional
 
 import pandas as pd
@@ -7,6 +8,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebElement
+from tqdm import tqdm
 from webdriver_manager.chrome import ChromeDriverManager
 
 import src.flights.utils.utils as utils
@@ -17,143 +19,197 @@ TIMEOUT = 15  # seconds
 
 
 class BaseScraper:
+    """
+    Base class for flight scrapers.
+    Initializes a Selenium Chrome driver and provides a common interface for derived scraper classes.
+    """
+
     def __init__(self, composite_search: CompositeSearch) -> None:
         self.composite_search = composite_search
-
         self.driver = self._create_driver()
 
     def __del__(self):
         if hasattr(self, "driver") and self.driver:
-            self.driver.save_screenshot("debug/screenshot.png")  # TODO: delete line
             self.driver.quit()
 
     def _create_driver(self) -> webdriver.Chrome:
         """
-        Creates a Chrome webdriver instance.
+        Create and return a configured Chrome WebDriver instance.
 
-        :return: Chrome webdriver instance.
+        :return: Chrome WebDriver instance.
         """
         options = Options()
         options.add_argument("--no-sandbox")
         # options.add_argument("--headless")
-        options.add_argument("--window-size=1200, 2000")
+        options.add_argument("--window-size=1200,2000")
 
-        return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
+        driver.set_page_load_timeout(TIMEOUT)
 
-    def build_single_search_url(self, single_search_obj: SingleSearch) -> str:
-        raise NotImplementedError("Method must be implemented in subclass.")
+        return driver
+
+    def construct_search_url(self, single_search_obj: SingleSearch) -> str:
+        """
+        Construct the URL for a given single search object. Must be implemented by subclasses.
+        """
+        raise NotImplementedError("Subclasses must implement this method.")
 
 
 class OneWayScraper(BaseScraper):
-    def build_single_search_url(self, single_search_obj: SingleSearch) -> str:
+    """
+    Scraper class for one-way flights searches, both direct and with layovers.
+    """
+
+    def construct_search_url(self, single_search_obj: SingleSearch) -> str:
         """
-        Build the URL for the flight search of a single search item.
+        Construct the URL for the given single search item.
 
-        :return: URL string for the single item flight search
+        :param single_search_obj: SingleSearch object.
+        :return: URL string.
         """
-        url = "https://www.google.com/travel/flights"
-        url += f"?q=Flights%20to%20{single_search_obj.destination.iata}%20Airport"
-        url += f"%20from%20{single_search_obj.origin.iata}"
+        base_url = "https://www.google.com/travel/flights"
 
-        if single_search_obj.direct_only:
-            return f"{url}%20on%20{single_search_obj.departure_date}%20oneway%20direct&curr=EUR&gl=IT"
+        url = f"{base_url}?q=Flights%20to%20{single_search_obj.destination.iata}%20Airport%20from%20{single_search_obj.origin.iata}"
 
-        return f"{url}%20on%20{single_search_obj.departure_date}%20oneway&curr=EUR&gl=IT"
+        direct_str = "%20direct" if single_search_obj.direct_only else ""
+        url += f"%20on%20{single_search_obj.departure_date}%20oneway{direct_str}&curr=EUR&gl=IT"
 
-    def scrape_all_flights(self) -> Optional[List[Flight]]:
+        return url
+
+    def fetch_flights_for_search(self, single_search_obj: SingleSearch) -> Optional[List[Flight]]:
         """
-        Scrape all flights for the given search items.
-        Combines all flights from all search items into a single list.
+        Fetch flights for a single search scenario.
 
-        :return: List of Flight objects.
+        :return: List of Flight objects or an empty list if no flights found.
         """
+        # build and navigate to the search URL
+        url = self.construct_search_url(single_search_obj)
+        self.driver.get(url)
+
+        # handle Google terms and conditions if present
+        self._handle_google_terms_and_conditions_page()
+
+        # check if any direct flights are available
+        if scraper_utils.no_nonstop_flights_found(self.driver, TIMEOUT):
+            print("No flights found for this search.")
+            return []
+
+        # click on "Cheapest" tab
+        scraper_utils.click_on_cheapest_tab(self.driver, TIMEOUT)
+        scraper_utils.wait_for_cheapest_prices_to_load(self.driver, TIMEOUT)
+
+        # extract flight sections from the page
+        flight_sections = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)
+        if not flight_sections:
+            print("No flight sections found.")
+            return []
+
+        # extract flights from each section
+        flights = self._extract_flights_from_webelements_sections(flight_sections, single_search_obj.departure_date)
+
+        return flights
+
+    def scrape_all_searches(self) -> Optional[List[Flight]]:
+        """
+        Scrape flights for all SingleSearch objects in the CompositeSearch.
+
+        :return: Combined list of Flight objects from all searches.
+        """
+        if not self.composite_search.single_searches:
+            print("No single searches found in the composite search (list is empty).")
+            return []
+
         all_flights = []
-        for single_search_obj in self.composite_search.single_searches:
-            flights = self.get_flights_objects(single_search_obj)
-            all_flights.extend(flights)
+        for single_search_obj in tqdm(self.composite_search.single_searches):
+            flights = self.fetch_flights_for_search(single_search_obj)
+            if flights:
+                all_flights.extend(flights)
 
         return all_flights
 
-    def get_flights_objects(self, single_search_obj: SingleSearch) -> Optional[List[Flight]]:
+    def _handle_google_terms_and_conditions_page(self) -> None:
         """
-        Get a list of Flight objects from a single search item.
-        If no direct flights are found, an empty list is returned.
-
-        :return: List of Flight objects.
+        If the Google terms and conditions page is displayed, handle it by clicking 'I agree' or the relevant button.
         """
-
-        def is_li_element_view_more_flights(element: WebElement) -> bool:
-            """
-            Checks if a <li> WebElement is a "View more flights" element (menu to load more flights).
-
-            :param element: <li> WebElement to check.
-            :return: True if the element is a "View more flights" element, False otherwise.
-            """
-            try:
-                return bool(element.find_element(By.CSS_SELECTOR, ".zISZ5c.QB2Jof"))
-            except NoSuchElementException:
-                return False
-
-        # build and open the URL
-        url = self.build_single_search_url(single_search_obj)
-        self.driver.get(url)
-
-        # handle google terms and conditions page
         if scraper_utils.is_google_terms_and_conditions_page(self.driver.page_source):
             scraper_utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
 
-        # check if there are nonstop flights available
-        if scraper_utils.no_nonstop_flights_found(self.driver, TIMEOUT):
-            return []
+    def _extract_flights_from_webelements_sections(self, sections: List[WebElement], departure_date: date) -> List[Flight]:
+        """
+        Extract flight data from a list of WebElement sections.
 
-        # click on "cheapest" tab
-        scraper_utils.click_on_cheapest_tab(self.driver, TIMEOUT)
-
-        # wait for the actual cheapest prices to load
-        scraper_utils.wait_for_cheapest_prices_to_load(self.driver, TIMEOUT)
-
-        # get the HTML section containing flight data
-        flights_sections = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)
-
-        # TODO: delete
-        # save element as screenshot
-        for i, s in enumerate(flights_sections):
-            s.screenshot(f"debug/flights_section_{i+1}.png")
-        print(self.driver.current_url)
-
-        # extract flight data from HTML sections and return as a list of Flight objects
+        :param sections: List of WebElement sections containing flight data.
+        :param departure_date: Departure date for the search.
+        :return: List of Flight objects.
+        """
         flights = []
-        for section in flights_sections:
-            for row in section.find_elements(By.TAG_NAME, "li"):
-                # skip "View more flights" elements
-                if is_li_element_view_more_flights(row):
-                    continue
-                flight = scraper_utils.extract_flight_data_from_li(row, dep_date=single_search_obj.departure_date)
+        for section in sections:
+            section_flights = self._parse_flight_section(section, departure_date)
+            flights.extend(section_flights)
+
+        return flights
+
+    def _parse_flight_section(self, section: WebElement, departure_date: date) -> List[Flight]:
+        """
+        Parse a single flight section (list of <li> elements) for flight data.
+
+        :param section: WebElement section containing flight data.
+        :param departure_date: Departure date for the search.
+        :return: List of Flight objects
+        """
+        flights = []
+        # find all <li> elements in the section
+        li_elements = section.find_elements(By.TAG_NAME, "li")
+
+        # iterate over each <li> element and extract flight data
+        for li_element in li_elements:
+            # skip the "View more flights" element (end of the list)
+            if self._is_view_more_flights_element(li_element):
+                continue
+
+            flight = scraper_utils.extract_flight_data_from_li(li_element, dep_date=departure_date)
+
+            if flight:
                 flights.append(flight)
 
         return flights
 
-    def make_flights_dataframe(self, flights: List[Flight]) -> pd.DataFrame:
+    @staticmethod
+    def _is_view_more_flights_element(element: WebElement) -> bool:
         """
-        Generate a pandas DataFrame from a list of Flight objects.
+        Check if a <li> WebElement is the "View more flights" element.
+
+        :param element: WebElement to check.
+        :return: True if the element is the "View more flights" element, False otherwise.
+        """
+        try:
+            element.find_element(By.CSS_SELECTOR, ".zISZ5c.QB2Jof")
+            return True
+        except NoSuchElementException:
+            return False
+
+    def build_flights_dataframe(self, flights: List[Flight]) -> pd.DataFrame:
+        """
+        Convert a list of Flight objects into a pandas DataFrame with sorting and formatting.
 
         :param flights: List of Flight objects.
-        :return: pandas DataFrame.
+        :return: DataFrame with flight data.
         """
+        if not flights:
+            print("No flights to convert to DataFrame.")
+            return pd.DataFrame()
+
+        # build df and unnest origin and destination objects
         df = pd.DataFrame([f.model_dump() for f in flights])
         df["origin"] = df.origin.apply(lambda x: x.get("iata"))
         df["destination"] = df.destination.apply(lambda x: x.get("iata"))
 
-        # sort
+        # sort and format columns
         df = df.sort_values(by=["price", "n_stops", "flight_time", "dep_datetime"], ascending=[True, True, True, True])
-
-        # move columns to the front
         df = utils.move_column_to_position(df, "airline_logo_url", 0)
+        df.reset_index(drop=True, inplace=True)
 
-        # reset index
-        df = df.reset_index(drop=True)
-
-        # export to csv
+        # TODO: remove: save to CSV for debugging
         df.to_csv("debug/flights.csv", index=False)
 
         return df

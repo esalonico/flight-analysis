@@ -72,14 +72,17 @@ def extract_airlines_names(element: WebElement) -> List[str]:
     """
     Extract the name of the airline from a <li> WebElement containing flight information.
 
-    # TODO: Fix "Operated by" or separator in airlines names.
-
     :param element: <li> WebElement containing flight data.
     :return: Name of the airline.
     """
     airlines = element.find_element(By.CSS_SELECTOR, ".sSHqwe.tPgKwe.ogfYpf").text
     airlines = airlines.replace("Self transfer", "").strip()
-    return airlines.split(", ")
+    airlines_list = airlines.split(", ")
+
+    # remove 'Operated by'
+    airlines_list = [a.split("Operated by")[0] for a in airlines_list]
+
+    return airlines_list
 
 
 def extract_flight_time(element: WebElement) -> int:

@@ -64,13 +64,13 @@ def run():
     build_search_object()
 
     scraper = OneWayScraper(st.session_state.search)
-    all_flights = scraper.scrape_all_flights()
+    all_flights = scraper.scrape_all_searches()
 
     if not all_flights:
         st.warning("No flights found for this single search.")
         return
 
-    df = scraper.make_flights_dataframe(all_flights)
+    df = scraper.build_flights_dataframe(all_flights)
     render_df(df)
 
 
