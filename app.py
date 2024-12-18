@@ -62,20 +62,13 @@ def render_df(df):
 
 def run():
     build_search_object()
-    all_flights = []
-    # TODO: do it better, share driver not like this!
-    for search_item in st.session_state.search.single_searches[0]:
-        try:
-            scraper = OneWayScraper(search_item)
-            flights = scraper.get_flights_objects()
-            all_flights.extend(flights)
-        except Exception as e:
-            st.error(f"Error while scraping: {e}")
-            continue
 
-        if not flights:
-            st.warning("No flights found for this single search.")
-            continue
+    scraper = OneWayScraper(st.session_state.search)
+    all_flights = scraper.scrape_all_flights()
+
+    if not all_flights:
+        st.warning("No flights found for this single search.")
+        return
 
     df = scraper.make_flights_dataframe(all_flights)
     render_df(df)
@@ -83,7 +76,7 @@ def run():
 
 # INPUTS
 # TODO: delete
-def read_flights_csv(filepath: str = "flights.csv") -> pd.DataFrame:
+def read_flights_csv(filepath: str = "debug/flights.csv") -> pd.DataFrame:
     df = pd.read_csv(filepath)
     df["airlines"] = df["airlines"].apply(ast.literal_eval)
     df["layover_location"] = df["layover_location"].apply(ast.literal_eval)
@@ -121,17 +114,3 @@ direct_only = st.checkbox("Direct flights only", value=False)
 
 # apply button
 st.button("Apply", on_click=lambda: run())
-
-# sidebar
-with st.sidebar:
-    st.write("Sidebar")
-
-
-# debug
-st.write("COMPOSITE SEARCH")
-st.write(st.session_state.search)
-
-if "search" in st.session_state:
-    if st.session_state.search.single_searches:
-        st.write("SINGLE SEARCHES")
-        st.write(st.session_state.search.single_searches)

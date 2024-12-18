@@ -10,22 +10,21 @@ from selenium.webdriver.remote.webdriver import WebElement
 from webdriver_manager.chrome import ChromeDriverManager
 
 import src.flights.utils.utils as utils
-from src.flights.models.models import Flight, SingleSearch
+from src.flights.models.models import CompositeSearch, Flight, SingleSearch
 from src.flights.scrapers import utils as scraper_utils
 
 TIMEOUT = 15  # seconds
 
 
 class BaseScraper:
-    def __init__(self, search_item: SingleSearch) -> None:
-        self.search_item = search_item
+    def __init__(self, composite_search: CompositeSearch) -> None:
+        self.composite_search = composite_search
 
         self.driver = self._create_driver()
-        self.url = self._build_url()
 
     def __del__(self):
         if hasattr(self, "driver") and self.driver:
-            self.driver.save_screenshot("screenshot.png")  # TODO: delete line
+            self.driver.save_screenshot("debug/screenshot.png")  # TODO: delete line
             self.driver.quit()
 
     def _create_driver(self) -> webdriver.Chrome:
@@ -41,29 +40,43 @@ class BaseScraper:
 
         return webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=options)
 
-    def _build_url(self) -> str:
+    def build_single_search_url(self, single_search_obj: SingleSearch) -> str:
         raise NotImplementedError("Method must be implemented in subclass.")
 
 
 class OneWayScraper(BaseScraper):
-    def _build_url(self) -> str:
+    def build_single_search_url(self, single_search_obj: SingleSearch) -> str:
         """
-        Build the URL for the flight search.
+        Build the URL for the flight search of a single search item.
 
-        :return: URL string for the flight search
+        :return: URL string for the single item flight search
         """
         url = "https://www.google.com/travel/flights"
-        url += f"?q=Flights%20to%20{self.search_item.destination.iata}%20Airport"
-        url += f"%20from%20{self.search_item.origin.iata}"
+        url += f"?q=Flights%20to%20{single_search_obj.destination.iata}%20Airport"
+        url += f"%20from%20{single_search_obj.origin.iata}"
 
-        if self.search_item.direct_only:
-            return f"{url}%20on%20{self.search_item.departure_date}%20oneway%20direct&curr=EUR&gl=IT"
+        if single_search_obj.direct_only:
+            return f"{url}%20on%20{single_search_obj.departure_date}%20oneway%20direct&curr=EUR&gl=IT"
 
-        return f"{url}%20on%20{self.search_item.departure_date}%20oneway&curr=EUR&gl=IT"
+        return f"{url}%20on%20{single_search_obj.departure_date}%20oneway&curr=EUR&gl=IT"
 
-    def get_flights_objects(self) -> Optional[List[Flight]]:
+    def scrape_all_flights(self) -> Optional[List[Flight]]:
         """
-        Get a list of Flight objects from the search results.
+        Scrape all flights for the given search items.
+        Combines all flights from all search items into a single list.
+
+        :return: List of Flight objects.
+        """
+        all_flights = []
+        for single_search_obj in self.composite_search.single_searches:
+            flights = self.get_flights_objects(single_search_obj)
+            all_flights.extend(flights)
+
+        return all_flights
+
+    def get_flights_objects(self, single_search_obj: SingleSearch) -> Optional[List[Flight]]:
+        """
+        Get a list of Flight objects from a single search item.
         If no direct flights are found, an empty list is returned.
 
         :return: List of Flight objects.
@@ -81,7 +94,9 @@ class OneWayScraper(BaseScraper):
             except NoSuchElementException:
                 return False
 
-        self.driver.get(self.url)
+        # build and open the URL
+        url = self.build_single_search_url(single_search_obj)
+        self.driver.get(url)
 
         # handle google terms and conditions page
         if scraper_utils.is_google_terms_and_conditions_page(self.driver.page_source):
@@ -103,7 +118,7 @@ class OneWayScraper(BaseScraper):
         # TODO: delete
         # save element as screenshot
         for i, s in enumerate(flights_sections):
-            s.screenshot(f"flights_section_{i+1}.png")
+            s.screenshot(f"debug/flights_section_{i+1}.png")
         print(self.driver.current_url)
 
         # extract flight data from HTML sections and return as a list of Flight objects
@@ -113,7 +128,7 @@ class OneWayScraper(BaseScraper):
                 # skip "View more flights" elements
                 if is_li_element_view_more_flights(row):
                     continue
-                flight = scraper_utils.extract_flight_data_from_li(row, dep_date=self.search_item.departure_date)
+                flight = scraper_utils.extract_flight_data_from_li(row, dep_date=single_search_obj.departure_date)
                 flights.append(flight)
 
         return flights
@@ -139,6 +154,6 @@ class OneWayScraper(BaseScraper):
         df = df.reset_index(drop=True)
 
         # export to csv
-        df.to_csv("flights.csv", index=False)
+        df.to_csv("debug/flights.csv", index=False)
 
         return df

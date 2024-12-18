@@ -16,5 +16,5 @@ scraper = OneWayScraper(search_item)
 flights = scraper.get_flights_objects()
 
 df = scraper.make_flights_dataframe(flights)
-df.to_csv("flights.csv", index=False)
+df.to_csv("debug/flights.csv", index=False)
 print(df)

@@ -130,7 +130,7 @@ def extract_flight_data_from_li(element: WebElement, dep_date: date) -> Flight:
     data["n_stops"], data["layover_location"], data["layover_time"] = extractors.extract_layover_information(element)
     data["only_hand_luggage"] = extractors.extract_only_hand_luggage(element)
     data["airline_logo_url"] = extractors.extract_airline_logo_url(element)
-    
+
     # TODO: also fetch the url of the Google Flight page
 
     return Flight(**data)
