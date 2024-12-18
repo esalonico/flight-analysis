@@ -113,12 +113,13 @@ def get_html_sections_containing_flight_data(driver: WebDriver, timeout: int = 1
     return sections
 
 
-def extract_flight_data_from_li(element: WebElement, dep_date: date) -> Flight:
+def extract_flight_data_from_li(element: WebElement, dep_date: date, url: str = None) -> Flight:
     """
     Extract flight data from a <li> WebElement containing flight information.
 
     :param element: <li> WebElement containing flight data.
     :param dep_date: Departure date of the flight.
+    :param url: URL of the flight search.
     :return: Flight object containing the extracted data.
     """
     data = {}
@@ -130,7 +131,6 @@ def extract_flight_data_from_li(element: WebElement, dep_date: date) -> Flight:
     data["n_stops"], data["layover_location"], data["layover_time"] = extractors.extract_layover_information(element)
     data["only_hand_luggage"] = extractors.extract_only_hand_luggage(element)
     data["airline_logo_url"] = extractors.extract_airline_logo_url(element)
-
-    # TODO: also fetch the url of the Google Flight page
+    data["url"] = url
 
     return Flight(**data)

@@ -166,8 +166,8 @@ class OneWayScraper(BaseScraper):
             # skip the "View more flights" element (end of the list)
             if self._is_view_more_flights_element(li_element):
                 continue
-
-            flight = scraper_utils.extract_flight_data_from_li(li_element, dep_date=departure_date)
+            
+            flight = scraper_utils.extract_flight_data_from_li(li_element, dep_date=departure_date, url=self.driver.current_url)
 
             if flight:
                 flights.append(flight)

@@ -55,6 +55,7 @@ def render_df(df):
             "arr_datetime": st.column_config.DatetimeColumn(format="D MMM, HH:mm"),
             "airline_logo_url": st.column_config.ImageColumn(label="", width=None),
             "price": st.column_config.ProgressColumn(format="€%f", min_value=0, max_value=int(df.price.max())),
+            "url": st.column_config.LinkColumn(display_text="URL"),
         },
         height=600 if len(df) > 10 else None,
     )
@@ -79,7 +80,7 @@ def run():
 def read_flights_csv(filepath: str = "debug/flights.csv") -> pd.DataFrame:
     df = pd.read_csv(filepath)
     df["airlines"] = df["airlines"].apply(ast.literal_eval)
-    df["layover_location"] = df["layover_location"].apply(ast.literal_eval)
+    df["layover_location"] = df["layover_location"].apply(lambda x: ast.literal_eval(x) if pd.notna(x) else None)
     return df
 
 

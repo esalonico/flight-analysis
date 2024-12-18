@@ -57,6 +57,7 @@ class Flight(BaseModel):
     price: Optional[int] = None
     only_hand_luggage: Optional[bool] = None
     airline_logo_url: Optional[str] = None
+    url: Optional[str] = None
 
 
 class SingleSearch(BaseModel):
