@@ -54,6 +54,13 @@ class BaseScraper:
         """
         raise NotImplementedError("Subclasses must implement this method.")
 
+    def _handle_google_terms_and_conditions_page(self) -> None:
+        """
+        If the Google terms and conditions page is displayed, handle it by clicking 'I agree' or the relevant button.
+        """
+        if scraper_utils.is_google_terms_and_conditions_page(self.driver.page_source):
+            scraper_utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
+
 
 class OneWayScraper(BaseScraper):
     """
@@ -127,13 +134,6 @@ class OneWayScraper(BaseScraper):
 
         return all_flights
 
-    def _handle_google_terms_and_conditions_page(self) -> None:
-        """
-        If the Google terms and conditions page is displayed, handle it by clicking 'I agree' or the relevant button.
-        """
-        if scraper_utils.is_google_terms_and_conditions_page(self.driver.page_source):
-            scraper_utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
-
     def _extract_flights_from_webelements_sections(self, sections: List[WebElement], departure_date: date) -> List[Flight]:
         """
         Extract flight data from a list of WebElement sections.
@@ -166,7 +166,7 @@ class OneWayScraper(BaseScraper):
             # skip the "View more flights" element (end of the list)
             if self._is_view_more_flights_element(li_element):
                 continue
-            
+
             flight = scraper_utils.extract_flight_data_from_li(li_element, dep_date=departure_date, url=self.driver.current_url)
 
             if flight:
@@ -213,3 +213,44 @@ class OneWayScraper(BaseScraper):
         df.to_csv("debug/flights.csv", index=False)
 
         return df
+
+
+class ReturnScraper(BaseScraper):
+    """
+    Scraper class for return flights searches, both direct and with layovers.
+    """
+
+    def construct_search_url(self, single_search_obj: SingleSearch) -> str:
+        """
+        Construct the URL for the given single search item.
+
+        :param single_search_obj: SingleSearch object.
+        :return: URL string.
+        """
+        base_url = "https://www.google.com/travel/flights"
+
+        url = f"{base_url}?q=Flights%20to%20{single_search_obj.destination.iata}%20Airport%20from%20{single_search_obj.origin.iata}"
+
+        direct_str = "%20direct" if single_search_obj.direct_only else ""
+        url += f"%20from%20{single_search_obj.departure_date}%20to%20{single_search_obj.return_date}%20return{direct_str}&curr=EUR&gl=IT"
+
+        return url
+
+
+    def scrape_all_searches(self) -> Optional[List[Flight]]:
+        """
+        Scrape flights for all SingleSearch objects in the CompositeSearch.
+
+        :return: Combined list of Flight objects from all searches.
+        """
+        if not self.composite_search.single_searches:
+            print("No single searches found in the composite search (list is empty).")
+            return []
+
+        all_flights = []
+        for single_search_obj in tqdm(self.composite_search.single_searches):
+            print(single_search_obj)
+            break
+            # TODO: CONTINUE
+
+        return all_flights
