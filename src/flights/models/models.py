@@ -60,12 +60,27 @@ class Flight(BaseModel):
     url: Optional[str] = None
 
 
+class ReturnFlight(Flight):
+    return_origin: Airport
+    return_destination: Airport
+    return_dep_datetime: datetime
+    return_arr_datetime: datetime
+    return_airlines: List[str]
+    return_flight_time: int  # in minutes
+    return_n_stops: int
+    return_layover_location: Optional[List[str]] = None
+    return_layover_time: Optional[int] = None
+    return_airline_logo_url: Optional[str] = None
+    return_url: Optional[str] = None
+
+
 class SingleSearch(BaseModel):
     """Single search item (one origin, one destination, one departure date)"""
 
     origin: Airport
     destination: Airport
     departure_date: date
+    return_date: Optional[date] = None
     direct_only: bool
 
 
@@ -78,6 +93,7 @@ class CompositeSearch(BaseModel):
     origins: Optional[List[Airport]] = None
     destinations: Optional[List[Airport]] = None
     departure_dates: Optional[List[date]] = None
+    return_dates: Optional[List[date]] = None
     direct_only: Optional[bool] = None
 
     @computed_field
@@ -91,9 +107,11 @@ class CompositeSearch(BaseModel):
                 origin=origin,
                 destination=destination,
                 departure_date=departure_date,
+                return_date=return_date,
                 direct_only=self.direct_only,
             )
             for origin in self.origins
             for destination in self.destinations
             for departure_date in self.departure_dates
+            for return_date in self.return_dates
         ]

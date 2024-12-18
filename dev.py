@@ -1,20 +1,19 @@
 from datetime import datetime, timedelta
 
-from src.flights.models.models import Airport, SingleSearch
-from src.flights.scrapers.scrapers import OneWayScraper
-import pandas as pd
+from src.flights.models.models import Airport, CompositeSearch
+from src.flights.scrapers.scrapers import ReturnScraper
 
-search_item = SingleSearch(
-    origin=Airport("JFK"),
-    destination=Airport("FCO"),
-    departure_date=datetime.today().date() + timedelta(days=10),
-    direct_only=True,
+composite_search = CompositeSearch(
+    origins=[Airport("LHR"), Airport("LGW")],
+    destinations=[Airport("CDG"), Airport("ORY")],
+    departure_dates=[datetime.now().date() + timedelta(days=i) for i in range(1, 3)],
+    return_dates=[datetime.now().date() + timedelta(days=i) for i in range(8, 10)],
+    direct_only=False,
 )
 
-scraper = OneWayScraper(search_item)
 
-flights = scraper.get_flights_objects()
-
-df = scraper.make_flights_dataframe(flights)
-df.to_csv("debug/flights.csv", index=False)
-print(df)
+if __name__ == "__main__":
+    scraper = ReturnScraper(composite_search)
+    flights = scraper.scrape_all_searches()
+    
+    print(flights)
