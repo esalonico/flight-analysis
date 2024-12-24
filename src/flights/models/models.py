@@ -99,9 +99,14 @@ class CompositeSearch(BaseModel):
     @computed_field
     @property
     def single_searches(self) -> Optional[List[SingleSearch]]:
-        if self.origins is None or self.destinations is None or self.departure_dates is None:
+        # if any of the required fields is not set, return None
+        if not (self.origins and self.destinations and self.departure_dates):
             return None
 
+        # if return_dates is not set, set it to [None]
+        return_dates = self.return_dates or [None]
+
+        # generate all possible combinations of SingleSearch objects
         return [
             SingleSearch(
                 origin=origin,
@@ -113,5 +118,5 @@ class CompositeSearch(BaseModel):
             for origin in self.origins
             for destination in self.destinations
             for departure_date in self.departure_dates
-            for return_date in self.return_dates
+            for return_date in return_dates
         ]

@@ -1,3 +1,4 @@
+import os
 from datetime import date
 from typing import List, Optional
 
@@ -210,6 +211,8 @@ class OneWayScraper(BaseScraper):
         df.reset_index(drop=True, inplace=True)
 
         # TODO: remove: save to CSV for debugging
+        if not os.path.exists("debug"):
+            os.makedirs("debug")
         df.to_csv("debug/flights.csv", index=False)
 
         return df
@@ -235,7 +238,6 @@ class ReturnScraper(BaseScraper):
         url += f"%20from%20{single_search_obj.departure_date}%20to%20{single_search_obj.return_date}%20return{direct_str}&curr=EUR&gl=IT"
 
         return url
-
 
     def scrape_all_searches(self) -> Optional[List[Flight]]:
         """

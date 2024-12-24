@@ -23,6 +23,7 @@ def build_search_object():
     st.session_state.search.origins = [Airport(iata.split()[0]) for iata in origins]
     st.session_state.search.destinations = [Airport(iata.split()[0]) for iata in destinations]
     st.session_state.search.departure_dates = utils.generate_date_range_between_dates(*departure_dates)
+    # st.session_state.search.return_dates = utils.generate_date_range_between_dates(*return_dates) TODO: handle none
     st.session_state.search.direct_only = direct_only
 
 
