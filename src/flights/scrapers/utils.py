@@ -1,7 +1,9 @@
+import re
 from datetime import date
-from typing import List
+from typing import List, Optional
 
 from selenium import webdriver
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException, TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.remote.webdriver import WebDriver, WebElement
 from selenium.webdriver.support import expected_conditions as EC
@@ -84,12 +86,13 @@ def wait_for_cheapest_prices_to_load(driver: WebDriver, timeout: int = 10):
     WebDriverWait(driver, timeout).until(EC.visibility_of_element_located((By.CLASS_NAME, "m2B2uc")))
     WebDriverWait(driver, timeout).until(EC.invisibility_of_element((By.CLASS_NAME, "m2B2uc")))
 
-    # also wait until the text "Top options" or "Top flights" or "All flights" is visible
+    # also wait until the text matching the regex "Top (departing|returning)? options" or "Top flights" or "All flights" is visible
     WebDriverWait(driver, timeout).until(
-        lambda d: any(
-            text in d.find_element(By.XPATH, "//div[contains(., 'Top options') or contains(., 'Top flights') or contains(., 'All flights')]").text
-            for text in ["Top options", "Top flights", "All flights"]
+        lambda d: re.search(
+            r"(Top|All|Other)+ (departing|returning)* (options|flights)+",
+            d.find_element(By.XPATH, "//div[contains(., 'Top')]").text,
         )
+        is not None
     )
 
 
@@ -113,24 +116,79 @@ def get_html_sections_containing_flight_data(driver: WebDriver, timeout: int = 1
     return sections
 
 
-def extract_flight_data_from_li(element: WebElement, dep_date: date, url: str = None) -> Flight:
+def get_list_of_li_elements_from_section(sections: List[WebElement]) -> List[WebElement]:
+    """
+    Returns a list of all <li> elements containing flight data from a section.
+
+    :param section: <ul> WebElement containing flight data.
+    :return: A list of <li> WebElements.
+    """
+    if all(type(x) is WebElement for x in sections):
+        return [li.find_elements(By.TAG_NAME, "li") for li in sections]
+
+    return [li for section in sections for li in section.find_elements(By.TAG_NAME, "li")]
+
+
+def is_li_element_view_more_flights_row(driver, element: WebElement, timeout: int = 5) -> bool:
+    """
+    Check if a <li> WebElement is the "View more flights" element/row.
+
+    :param element: WebElement to check.
+    :return: True if the element is the "View more flights" element, False otherwise.
+    """
+    try:
+        # wait for element to be visible
+        if WebDriverWait(driver, timeout).until(EC.visibility_of_element_located((By.CSS_SELECTOR, ".zISZ5c.QB2Jof"))):
+            element.find_element(By.CSS_SELECTOR, ".zISZ5c.QB2Jof")
+            return True
+        return False
+    
+    except NoSuchElementException:
+        return False
+    except TimeoutException:
+        return False
+    except StaleElementReferenceException: # artifically added to avoid the error
+        return True
+
+
+
+
+def wait_until_all_lis_loaded(driver, timeout: int = 10):
+    """ """
+    WebDriverWait(driver, timeout).until(EC.presence_of_all_elements_located((By.TAG_NAME, "li")))
+
+
+def find_all_li_elements_in_section(driver, section: WebElement, timeout: int = 10) -> List[WebElement]:
+    return WebDriverWait(driver, timeout).until(lambda d: section.find_elements(By.TAG_NAME, "li"))
+
+
+def extract_flight_data_from_li(driver, element: WebElement, dep_date: date, url: str = None) -> Optional[Flight]:
     """
     Extract flight data from a <li> WebElement containing flight information.
 
     :param element: <li> WebElement containing flight data.
     :param dep_date: Departure date of the flight.
     :param url: URL of the flight search.
-    :return: Flight object containing the extracted data.
+    :return: Flight object containing the extracted data. None if the element is the "View more flights" row.
     """
-    data = {}
-    data["origin"], data["destination"] = extractors.extract_origin_and_destination(element)
-    data["dep_datetime"], data["arr_datetime"] = extractors.extract_departure_and_arrival_datetimes(element, dep_date)
-    data["airlines"] = extractors.extract_airlines_names(element)
-    data["flight_time"] = extractors.extract_flight_time(element)
-    data["price"] = extractors.extract_price(element)
-    data["n_stops"], data["layover_location"], data["layover_time"] = extractors.extract_layover_information(element)
-    data["only_hand_luggage"] = extractors.extract_only_hand_luggage(element)
-    data["airline_logo_url"] = extractors.extract_airline_logo_url(element)
-    data["url"] = url
+    # if the element is the "View more flights" row, return None
+    if is_li_element_view_more_flights_row(driver, element):
+        return None
 
-    return Flight(**data)
+    try:
+        data = {}
+        data["origin"], data["destination"] = extractors.extract_origin_and_destination(element)
+        data["dep_datetime"], data["arr_datetime"] = extractors.extract_departure_and_arrival_datetimes(element, dep_date)
+        data["airlines"] = extractors.extract_airlines_names(element)
+        data["flight_time"] = extractors.extract_flight_time(element)
+        data["price"] = extractors.extract_price(element)
+        data["n_stops"], data["layover_location"], data["layover_time"] = extractors.extract_layover_information(element)
+        data["only_hand_luggage"] = extractors.extract_only_hand_luggage(element)
+        data["airline_logo_url"] = extractors.extract_airline_logo_url(element)
+        data["url"] = url
+
+        return Flight(**data)
+
+    except StaleElementReferenceException:
+        print("STALE ELEMENT EXCEPTION")
+        return None

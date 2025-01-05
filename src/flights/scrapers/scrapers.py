@@ -1,10 +1,11 @@
 import os
+import time
 from datetime import date
 from typing import List, Optional
 
 import pandas as pd
 from selenium import webdriver
-from selenium.common.exceptions import NoSuchElementException
+from selenium.common.exceptions import NoSuchElementException, StaleElementReferenceException
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
@@ -13,7 +14,7 @@ from tqdm import tqdm
 from webdriver_manager.chrome import ChromeDriverManager
 
 import src.flights.utils.utils as utils
-from src.flights.models.models import CompositeSearch, Flight, SingleSearch
+from src.flights.models.models import CompositeSearch, Flight, ReturnFlight, SingleSearch
 from src.flights.scrapers import utils as scraper_utils
 
 TIMEOUT = 15  # seconds
@@ -61,6 +62,23 @@ class BaseScraper:
         """
         if scraper_utils.is_google_terms_and_conditions_page(self.driver.page_source):
             scraper_utils.skip_google_terms_and_conditions_page(self.driver, TIMEOUT)
+
+    @staticmethod
+    def _is_view_more_flights_element(element: WebElement) -> bool:
+        """
+        Check if a <li> WebElement is the "View more flights" element.
+
+        :param element: WebElement to check.
+        :return: True if the element is the "View more flights" element, False otherwise.
+        """
+        try:
+            element.find_element(By.CSS_SELECTOR, ".zISZ5c.QB2Jof")
+            return True
+        except NoSuchElementException:
+            return False
+        except StaleElementReferenceException as e:
+            print("STALEEEEEEEE")
+            raise e
 
 
 class OneWayScraper(BaseScraper):
@@ -160,7 +178,7 @@ class OneWayScraper(BaseScraper):
         """
         flights = []
         # find all <li> elements in the section
-        li_elements = section.find_elements(By.TAG_NAME, "li")
+        li_elements = scraper_utils.find_all_li_elements_in_section(self.driver, section, TIMEOUT)
 
         # iterate over each <li> element and extract flight data
         for li_element in li_elements:
@@ -168,26 +186,12 @@ class OneWayScraper(BaseScraper):
             if self._is_view_more_flights_element(li_element):
                 continue
 
-            flight = scraper_utils.extract_flight_data_from_li(li_element, dep_date=departure_date, url=self.driver.current_url)
+            flight = scraper_utils.extract_flight_data_from_li(self.driver, li_element, dep_date=departure_date, url=self.driver.current_url)
 
             if flight:
                 flights.append(flight)
 
         return flights
-
-    @staticmethod
-    def _is_view_more_flights_element(element: WebElement) -> bool:
-        """
-        Check if a <li> WebElement is the "View more flights" element.
-
-        :param element: WebElement to check.
-        :return: True if the element is the "View more flights" element, False otherwise.
-        """
-        try:
-            element.find_element(By.CSS_SELECTOR, ".zISZ5c.QB2Jof")
-            return True
-        except NoSuchElementException:
-            return False
 
     def build_flights_dataframe(self, flights: List[Flight]) -> pd.DataFrame:
         """
@@ -250,9 +254,133 @@ class ReturnScraper(BaseScraper):
             return []
 
         all_flights = []
-        for single_search_obj in tqdm(self.composite_search.single_searches):
-            print(single_search_obj)
+        # for single_search_obj in tqdm(self.composite_search.single_searches):
+        for single_search_obj in self.composite_search.single_searches:
+            self.set_up_scraping(single_search_obj)
+            flights = self.scrape_return_flights(single_search_obj)
+            all_flights.extend(flights)
             break
-            # TODO: CONTINUE
 
         return all_flights
+
+    def set_up_scraping(self, single_search_obj: SingleSearch) -> None:
+        # build and navigate to the search URL
+        url = self.construct_search_url(single_search_obj)
+        self.driver.get(url)
+
+        # handle Google terms and conditions if present
+        self._handle_google_terms_and_conditions_page()
+
+        # check if any direct flights are available
+        if scraper_utils.no_nonstop_flights_found(self.driver, TIMEOUT):
+            print("No flights found for this search.")
+            return []
+
+        # click on "Cheapest" tab
+        scraper_utils.click_on_cheapest_tab(self.driver, TIMEOUT)
+        scraper_utils.wait_for_cheapest_prices_to_load(self.driver, TIMEOUT)
+
+    def scrape_return_flights(self, single_search_obj: SingleSearch) -> Optional[List[ReturnFlight]]:
+        """ """
+        all_return_flights = []
+
+        # for each departing flight section
+        # TODO: enable multiple sections
+        dep_sections = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)
+        # dep_sections = [scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)[0]]
+        
+        for dep_sect_idx in range(len(dep_sections)):
+            print(f"Departing section {dep_sect_idx}/{len(dep_sections)}")
+            dep_section = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)[dep_sect_idx]
+            dep_li_elements = scraper_utils.find_all_li_elements_in_section(self.driver, dep_section, TIMEOUT)
+
+            # for each departing flight
+            for dep_li_elem_idx in range(len(dep_li_elements)):
+                print(f"Departing flight {dep_li_elem_idx}/{len(dep_li_elements)}")
+                dep_section = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)[dep_sect_idx]
+                dep_li_elem = scraper_utils.find_all_li_elements_in_section(self.driver, dep_section, TIMEOUT)[dep_li_elem_idx]
+
+                # create departing flight object
+                dep_flight = scraper_utils.extract_flight_data_from_li(
+                    self.driver,
+                    dep_li_elem,
+                    dep_date=single_search_obj.departure_date,
+                    url=self.driver.current_url,
+                )
+                if not dep_flight:
+                    continue
+
+                # click on the departing flight to see the return flights
+                dep_li_elem.click()
+                # wait for the return sections to reload
+                scraper_utils.wait_until_all_lis_loaded(self.driver, TIMEOUT)
+
+                # for each returning flight section
+                ret_sections = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)
+                for ret_sect_idx in range(len(ret_sections)):
+                    print(f"Returning section {ret_sect_idx}/{len(ret_sections)}")
+                    ret_section = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)[ret_sect_idx]
+                    ret_li_elements = scraper_utils.find_all_li_elements_in_section(self.driver, ret_section, TIMEOUT)
+
+                    # for each returning flight
+                    for ret_li_elem_idx in range(len(ret_li_elements)):
+                        print(f"Returning flight {ret_li_elem_idx}/{len(ret_li_elements)}")
+                        ret_section = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)[ret_sect_idx]
+                        ret_li_elem = scraper_utils.find_all_li_elements_in_section(self.driver, ret_section, TIMEOUT)
+                        try:
+                            ret_li_elem = ret_li_elem[ret_li_elem_idx]
+                        except IndexError:
+                            print("IndexError")
+                            continue
+
+                        # build return flight object
+                        ret_flight = scraper_utils.extract_flight_data_from_li(
+                            self.driver,
+                            ret_li_elem,
+                            dep_date=single_search_obj.return_date,
+                            url=self.driver.current_url,
+                        )
+
+                        if not ret_flight:
+                            continue
+
+                        # create ReturnFlight object
+                        full_return_flight = ReturnFlight(
+                            origin=dep_flight.origin,
+                            destination=dep_flight.destination,
+                            dep_datetime=dep_flight.dep_datetime,
+                            arr_datetime=dep_flight.arr_datetime,
+                            airlines=dep_flight.airlines,
+                            flight_time=dep_flight.flight_time,
+                            n_stops=dep_flight.n_stops,
+                            layover_location=dep_flight.layover_location,
+                            layover_time=dep_flight.layover_time,
+                            only_hand_luggage=dep_flight.only_hand_luggage,
+                            airline_logo_url=dep_flight.airline_logo_url,
+                            url=dep_flight.url,
+                            return_origin=ret_flight.origin,
+                            return_destination=ret_flight.destination,
+                            return_dep_datetime=ret_flight.dep_datetime,
+                            return_arr_datetime=ret_flight.arr_datetime,
+                            return_airlines=ret_flight.airlines,
+                            return_flight_time=ret_flight.flight_time,
+                            return_n_stops=ret_flight.n_stops,
+                            return_layover_location=ret_flight.layover_location,
+                            return_layover_time=ret_flight.layover_time,
+                            return_airline_logo_url=ret_flight.airline_logo_url,
+                            return_url=ret_flight.url,
+                            price=ret_flight.price,
+                        )
+                        print("Full return flight:", full_return_flight)
+                        all_return_flights.append(full_return_flight)
+
+                        # save pydantic model to json
+                        with open(f"debug/returns/return_flight_{dep_sect_idx}_{dep_li_elem_idx}_{ret_sect_idx}_{ret_li_elem_idx}.json", "w") as f:
+                            f.write(full_return_flight.model_dump_json())
+
+                # go back to the departing flights page
+                self.driver.back()
+                self.driver.refresh()
+                print("_____________________________")
+
+        return all_return_flights
