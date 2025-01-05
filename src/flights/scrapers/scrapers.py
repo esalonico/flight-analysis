@@ -287,7 +287,6 @@ class ReturnScraper(BaseScraper):
         # for each departing flight section
         # TODO: enable multiple sections
         dep_sections = scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)
-        # dep_sections = [scraper_utils.get_html_sections_containing_flight_data(self.driver, TIMEOUT)[0]]
         
         for dep_sect_idx in range(len(dep_sections)):
             print(f"Departing section {dep_sect_idx}/{len(dep_sections)}")
